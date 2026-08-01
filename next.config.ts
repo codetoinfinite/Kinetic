@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   // three/gsap/ogl ship untranspiled ESM that Turbopack handles natively, but
   // the transitive `three/examples/jsm/*` deep imports need to stay external
   // from the server graph — none of them are used during SSR.
-  serverExternalPackages: ['three', 'ogl', 'matter-js', 'lottie-web'],
+  serverExternalPackages: ['three', 'ogl'],
 
   typescript: {
     // `pnpm verify` runs `tsc --noEmit` as its own gate; letting the build

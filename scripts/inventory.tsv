@@ -117,4 +117,4 @@ compound-group-hover	Compound Group Hover Card	primitive	css	stack	-
 nav-dot-wave	Nav Dot Wave	primitive	css	wave	-
 looping-scroll-cue	Looping Scroll Cue	primitive	css	wave	-
 browser-chrome-frame	Browser Chrome Frame	primitive	css	stack	-
-lottie-ratio-poster	Lottie Ratio And Poster	primitive	dom	stack	lottie-web
+lottie-ratio-poster	Lottie Ratio And Poster	primitive	dom	stack	-

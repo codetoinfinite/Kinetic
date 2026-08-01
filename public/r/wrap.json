@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "wrap",
+  "type": "registry:lib",
   "title": "wrap",
   "description": "Shared utility used by Kinetic components.",
   "dependencies": [],
@@ -8,10 +9,9 @@
   "files": [
     {
       "path": "registry/lib/wrap.ts",
-      "content": "/* ==========================================================================\n   Ring index arithmetic.\n   --------------------------------------------------------------------------\n   Anything that loops — a drum carousel, an infinite marquee, a cylinder of\n   image planes — needs to answer \"how far is item i from position p\" in a way\n   that treats the sequence as a circle. A plain `i - p` says item 0 is 18 away\n   from item 18 in a list of 19, when really it is 1 step back.\n   ========================================================================== */\n\n/** True modulo. Unlike `%`, the result is never negative. */\nexport function mod(n: number, m: number): number {\n  return ((n % m) + m) % m;\n}\n\n/**\n * Shortest signed distance from `position` to index `i` around a ring of\n * `count` items. Result is in `(-count/2, count/2]`; negative means \"behind\".\n *\n * This one function is what makes a finite array behave like an infinite one.\n */\nexport function wrappedOffset(i: number, position: number, count: number): number {\n  if (count <= 0) return 0;\n  let offset = mod(i - position, count);\n  if (offset > count / 2) offset -= count;\n  return offset;\n}\n\n/** Wrap `value` into `[min, max)`, e.g. an angle into `[-PI, PI)`. */\nexport function wrapRange(value: number, min: number, max: number): number {\n  const span = max - min;\n  if (span <= 0) return min;\n  return mod(value - min, span) + min;\n}\n\n/** Wrap an index into `[0, count)`. Accepts fractional and negative input. */\nexport function wrapIndex(i: number, count: number): number {\n  return count <= 0 ? 0 : mod(i, count);\n}\n\n/**\n * Shortest signed angular distance from `a` to `b` in radians, in `(-PI, PI]`.\n * Prevents a rotation tween from taking the long way round.\n */\nexport function shortestAngle(a: number, b: number): number {\n  return wrapRange(b - a, -Math.PI, Math.PI);\n}\n",
       "type": "registry:lib",
-      "target": "lib/wrap.ts"
+      "target": "lib/wrap.ts",
+      "content": "/* ==========================================================================\n   Ring index arithmetic.\n   --------------------------------------------------------------------------\n   Anything that loops — a drum carousel, an infinite marquee, a cylinder of\n   image planes — needs to answer \"how far is item i from position p\" in a way\n   that treats the sequence as a circle. A plain `i - p` says item 0 is 18 away\n   from item 18 in a list of 19, when really it is 1 step back.\n   ========================================================================== */\n\n/** True modulo. Unlike `%`, the result is never negative. */\nexport function mod(n: number, m: number): number {\n  return ((n % m) + m) % m;\n}\n\n/**\n * Shortest signed distance from `position` to index `i` around a ring of\n * `count` items. Result is in `(-count/2, count/2]`; negative means \"behind\".\n *\n * This one function is what makes a finite array behave like an infinite one.\n */\nexport function wrappedOffset(i: number, position: number, count: number): number {\n  if (count <= 0) return 0;\n  let offset = mod(i - position, count);\n  if (offset > count / 2) offset -= count;\n  return offset;\n}\n\n/** Wrap `value` into `[min, max)`, e.g. an angle into `[-PI, PI)`. */\nexport function wrapRange(value: number, min: number, max: number): number {\n  const span = max - min;\n  if (span <= 0) return min;\n  return mod(value - min, span) + min;\n}\n\n/** Wrap an index into `[0, count)`. Accepts fractional and negative input. */\nexport function wrapIndex(i: number, count: number): number {\n  return count <= 0 ? 0 : mod(i, count);\n}\n\n/**\n * Shortest signed angular distance from `a` to `b` in radians, in `(-PI, PI]`.\n * Prevents a rotation tween from taking the long way round.\n */\nexport function shortestAngle(a: number, b: number): number {\n  return wrapRange(b - a, -Math.PI, Math.PI);\n}\n"
     }
-  ],
-  "type": "registry:lib"
+  ]
 }

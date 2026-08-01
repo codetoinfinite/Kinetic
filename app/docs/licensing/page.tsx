@@ -10,15 +10,16 @@ export const metadata: Metadata = {
 /**
  * Read from each package's own `license` field rather than remembered, because a
  * licence stated wrongly is worse than one not stated at all.
+ *
+ * Only libraries something here actually imports. A dependency listed but never
+ * used is a licence obligation taken on for nothing, and it reads to anyone
+ * auditing this page as though the components need more than they do.
  */
 const DEPENDENCIES = [
   { name: 'gsap', license: "Standard 'no charge' license", note: 'See the section above.' },
   { name: 'three', license: 'MIT', note: 'Used by the WebGL components.' },
   { name: 'ogl', license: 'Unlicense', note: 'Lighter WebGL alternative to three.' },
   { name: 'lenis', license: 'MIT', note: 'Smooth-scroll driver.' },
-  { name: 'matter-js', license: 'MIT', note: '2D physics.' },
-  { name: 'lottie-web', license: 'MIT', note: 'Vector animation playback.' },
-  { name: 'split-type', license: 'ISC', note: 'Text splitting without GSAP.' },
   { name: 'shiki', license: 'MIT', note: 'Site only — never installed with a component.' },
   { name: 'fuse.js', license: 'Apache-2.0', note: 'Site only — powers search.' },
 ] as const;

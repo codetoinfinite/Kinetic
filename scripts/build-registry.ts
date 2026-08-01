@@ -1,15 +1,11 @@
-import { execFile } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { promisify } from 'node:util';
 
 import { SITE_ORIGIN, SITE_ORIGIN_IS_PLACEHOLDER, site } from '../site.config';
 import { buildPrompt, extractRegion } from './prompt-template';
 import { CATEGORIES, CATEGORY_BLURB, CATEGORY_LABEL, componentMeta, type ComponentMeta } from './schema';
-
-const execFileAsync = promisify(execFile);
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META_DIR = path.join(ROOT, 'registry', 'meta');
@@ -706,34 +702,55 @@ ${byCategory.join('\n\n')}
   );
 }
 
-/* -- 5. shadcn build ------------------------------------------------------- */
+/* -- 5. installable items -------------------------------------------------- */
 
-async function runShadcnBuild(): Promise<void> {
-  const bin = path.join(ROOT, 'node_modules', '.bin', 'shadcn');
-  if (!existsSync(bin)) {
-    throw new Error(`shadcn CLI not found at ${bin} — run pnpm install`);
-  }
+/** Metadata only. Declares the format; nothing fetches it at install time. */
+const ITEM_SCHEMA = 'https://ui.shadcn.com/schema/registry-item.json';
 
-  await execFileAsync(bin, ['build', 'registry.json', '--output', './public/r'], { cwd: ROOT });
+/**
+ * One JSON file per item under `public/r/`, each carrying its sources inlined.
+ * This is what `npx shadcn add <url>` downloads.
+ *
+ * This step used to shell out to the shadcn CLI. It does two things — add
+ * `$schema` and inline `content` — so doing it here costs a dozen lines and
+ * removes the last third-party executable from the build. The emitted shape is
+ * unchanged, so consumers keep installing with the same CLI: the format is a
+ * published contract, not a dependency.
+ *
+ * Imports are rewritten on the way out. On disk these files reach each other
+ * through `@/registry/*`, which is this repository's layout and not the
+ * consumer's; shipping them unrewritten produces components that import
+ * directories nobody else has.
+ */
+async function writeRegistryItems(): Promise<void> {
+  const registry = JSON.parse(await readFile(path.join(ROOT, 'registry.json'), 'utf8')) as {
+    items: Array<{ name: string; files: Array<{ path: string }> }>;
+  };
 
-  // shadcn inlines each file's contents but does NOT rewrite import paths, so
-  // everything it emitted still points at @/registry/*. Left alone, every
-  // `npx shadcn add` produces a component importing directories the consumer
-  // does not have.
   const outDir = path.join(PUBLIC_DIR, 'r');
-  const files = (await readdir(outDir)).filter((f) => f.endsWith('.json'));
+  await rm(outDir, { recursive: true, force: true });
+  await mkdir(outDir, { recursive: true });
 
-  for (const file of files) {
-    const abs = path.join(outDir, file);
-    const item = JSON.parse(await readFile(abs, 'utf8')) as {
-      files?: Array<{ content?: string; path?: string }>;
-    };
-    if (!item.files) continue;
-    for (const entry of item.files) {
-      if (typeof entry.content === 'string') entry.content = rewritePaths(entry.content);
-    }
-    await writeFile(abs, `${JSON.stringify(item, null, 2)}\n`);
-  }
+  await Promise.all(
+    registry.items.map(async (item) => {
+      const files = await Promise.all(
+        item.files.map(async (file) => ({
+          ...file,
+          content: rewritePaths(await readFile(path.join(ROOT, file.path), 'utf8')),
+        })),
+      );
+
+      await writeFile(
+        path.join(outDir, `${item.name}.json`),
+        `${JSON.stringify({ $schema: ITEM_SCHEMA, ...item, files }, null, 2)}\n`,
+      );
+    }),
+  );
+
+  // The index, served next to the items so the whole catalogue is reachable
+  // from one URL. File contents stay out of it — it is a directory, not a
+  // payload, and inlining 119 components would make it megabytes.
+  await writeFile(path.join(outDir, 'registry.json'), `${JSON.stringify(registry, null, 2)}\n`);
 }
 
 /* -- main ------------------------------------------------------------------ */
@@ -749,7 +766,7 @@ async function main(): Promise<void> {
   await writeRegistryJson(items, support);
   await writeGenerated(items, support);
   await writeMarkdown(items);
-  await runShadcnBuild();
+  await writeRegistryItems();
 
   const counts = CATEGORIES.map(
     (c) => `${c} ${items.filter((i) => i.meta.category === c).length}`,
