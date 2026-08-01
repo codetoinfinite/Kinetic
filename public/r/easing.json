@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "easing",
+  "title": "easing",
+  "description": "Shared utility used by Kinetic components.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/easing.ts",
+      "content": "/* ==========================================================================\n   Easing.\n   --------------------------------------------------------------------------\n   Plain functions on [0,1] so a component can ease without pulling in GSAP,\n   plus the matching `cubic-bezier()` strings for CSS. The two lists are the\n   same curves, so a component can animate in JS and its reduced-motion\n   fallback can animate in CSS without the timing changing character.\n   ========================================================================== */\n\nexport type EasingFn = (t: number) => number;\n\nexport const linear: EasingFn = (t) => t;\n\nexport const easeInQuad: EasingFn = (t) => t * t;\nexport const easeOutQuad: EasingFn = (t) => 1 - (1 - t) * (1 - t);\nexport const easeInOutQuad: EasingFn = (t) =>\n  t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;\n\nexport const easeInCubic: EasingFn = (t) => t * t * t;\nexport const easeOutCubic: EasingFn = (t) => 1 - Math.pow(1 - t, 3);\nexport const easeInOutCubic: EasingFn = (t) =>\n  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;\n\nexport const easeInQuart: EasingFn = (t) => t * t * t * t;\nexport const easeOutQuart: EasingFn = (t) => 1 - Math.pow(1 - t, 4);\nexport const easeInOutQuart: EasingFn = (t) =>\n  t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;\n\nexport const easeInExpo: EasingFn = (t) => (t === 0 ? 0 : Math.pow(2, 10 * t - 10));\nexport const easeOutExpo: EasingFn = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));\nexport const easeInOutExpo: EasingFn = (t) =>\n  t === 0\n    ? 0\n    : t === 1\n      ? 1\n      : t < 0.5\n        ? Math.pow(2, 20 * t - 10) / 2\n        : (2 - Math.pow(2, -20 * t + 10)) / 2;\n\n/** Overshoots past 1 then settles. `s` is the overshoot amount. */\nexport const backOut = (s = 1.70158): EasingFn => {\n  const c = s + 1;\n  return (t) => 1 + c * Math.pow(t - 1, 3) + s * Math.pow(t - 1, 2);\n};\n\nexport const elasticOut: EasingFn = (t) => {\n  const c = (2 * Math.PI) / 3;\n  return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c) + 1;\n};\n\n/** CSS equivalents of the curves above, for reduced-motion fallbacks. */\nexport const CSS_EASING = {\n  outQuad: 'cubic-bezier(0.5, 1, 0.89, 1)',\n  outCubic: 'cubic-bezier(0.33, 1, 0.68, 1)',\n  outQuart: 'cubic-bezier(0.25, 1, 0.5, 1)',\n  outExpo: 'cubic-bezier(0.16, 1, 0.3, 1)',\n  inOutQuart: 'cubic-bezier(0.76, 0, 0.24, 1)',\n  inOutExpo: 'cubic-bezier(0.87, 0, 0.13, 1)',\n} as const;\n",
+      "type": "registry:lib",
+      "target": "lib/easing.ts"
+    }
+  ],
+  "type": "registry:lib"
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "container-animation-reveals",
+  "title": "One Reveal Engine, Two Axes",
+  "description": "The same staggered line reveal fires for vertical sections and for panels on a horizontal track.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/container-animation-reveals.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\nimport { useEffect, useRef, type ReactNode, type RefObject } from 'react';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   One Reveal Engine, Two Axes\n   --------------------------------------------------------------------------\n   Most sites that mix a vertical page with a pinned horizontal section end up\n   with two reveal systems: one that watches scroll position, and a second,\n   parallel one that watches the horizontal timeline. They drift apart within\n   a week — someone tunes the stagger on the vertical copy and forgets the\n   horizontal copy exists.\n\n   ScrollTrigger's `containerAnimation` removes the need for the second\n   system. Given the tween that moves a strip sideways, a trigger measures its\n   element against that tween's progress instead of against scroll position.\n   The same builder therefore serves both axes: pass the strip's tween and the\n   reveals fire as panels cross the container; pass nothing and they fire as\n   sections cross the viewport. Identical choreography, one place to tune it.\n   ========================================================================== */\n\nif (typeof window !== 'undefined') {\n  gsap.registerPlugin(ScrollTrigger);\n}\n\nexport interface AxisRevealsProps {\n  children: ReactNode;\n  /** The scroll container the triggers read. Omit to use the document. */\n  scroller?: RefObject<HTMLElement | null>;\n  /**\n   * Three states, deliberately:\n   *   `undefined` — the content is in vertical flow, build vertical triggers.\n   *   `null`      — a horizontal timeline is coming but is not built yet; wait.\n   *   an animation — measure against that timeline's progress instead.\n   *\n   * The `null` state exists because the tween is created in a sibling's\n   * effect and arrives one render late. Treating it as \"vertical\" would build\n   * a full set of wrong triggers and tear them down on the next commit.\n   */\n  containerAnimation?: gsap.core.Animation | null;\n  /** Seconds of catch-up on the reveal itself. */\n  scrub?: number;\n  /** Start offset as a percentage of the element's own height. */\n  lift?: number;\n  /** Seconds between elements inside one group. */\n  stagger?: number;\n  className?: string;\n}\n\nconst START_OPACITY = 0.15;\n\n// #region critical\nexport function AxisReveals({\n  children,\n  scroller,\n  containerAnimation,\n  scrub = 0.4,\n  lift = 110,\n  stagger = 0.12,\n  className,\n}: AxisRevealsProps) {\n  const root = useRef<HTMLDivElement>(null);\n  const reduced = useReducedMotion();\n\n  useEffect(() => {\n    const rootEl = root.current;\n    if (!rootEl || reduced) return;\n    // Explicit \"not ready\": a sibling owns the timeline and has not built it.\n    if (containerAnimation === null) return;\n\n    const scrollerEl = scroller?.current ?? undefined;\n    const horizontal = containerAnimation !== undefined;\n\n    const ctx = gsap.context(() => {\n      const groups = Array.from(rootEl.querySelectorAll<HTMLElement>('[data-reveal-group]'));\n      // A subtree with no explicit groups reveals as one group.\n      const scopes = groups.length > 0 ? groups : [rootEl];\n\n      for (const group of scopes) {\n        const targets = Array.from(group.querySelectorAll<HTMLElement>('[data-reveal]'));\n        if (targets.length === 0) continue;\n\n        gsap.fromTo(\n          targets,\n          { yPercent: lift, opacity: START_OPACITY },\n          {\n            yPercent: 0,\n            opacity: 1,\n            ease: 'power3.out',\n            duration: 1,\n            stagger,\n            scrollTrigger: {\n              trigger: group,\n              scroller: scrollerEl,\n              // The line everyone gets wrong. With `containerAnimation` the\n              // trigger measures along the container's axis, so the position\n              // keywords must be horizontal. \"top 85%\" against a horizontal\n              // container resolves to a position the element never occupies,\n              // and the reveal silently never fires.\n              start: horizontal ? 'left 85%' : 'top 88%',\n              end: horizontal ? 'left 45%' : 'top 45%',\n              scrub,\n              // Spreading rather than passing `undefined`: ScrollTrigger\n              // branches on the key's presence, not on its value.\n              ...(containerAnimation ? { containerAnimation } : {}),\n            },\n          },\n        );\n      }\n    }, rootEl);\n\n    return () => ctx.revert();\n  }, [scroller, containerAnimation, scrub, lift, stagger, reduced]);\n  // #endregion critical\n\n  return (\n    <div ref={root} className={cn(className)}>\n      {children}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/container-animation-reveals.tsx"
+    }
+  ],
+  "meta": {
+    "category": "scroll",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "scrolltrigger",
+      "containeranimation",
+      "reveal",
+      "stagger"
+    ]
+  },
+  "categories": [
+    "scroll"
+  ],
+  "type": "registry:ui"
+}

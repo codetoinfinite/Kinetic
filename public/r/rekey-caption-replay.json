@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rekey-caption-replay",
+  "title": "Re-Key Caption Replay",
+  "description": "A caption block whose staggered entrance replays on every index change, restarted by a changed React key.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/rekey-caption-replay.tsx",
+      "content": "'use client';\n\nimport type { CSSProperties, ReactNode } from 'react';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   Re-Key Caption Replay\n   --------------------------------------------------------------------------\n   The problem: a slideshow caption must replay its entrance every time the\n   index changes. The usual solutions are both bad.\n\n     1. Toggle a class off and on. The browser coalesces both mutations into\n        one style recalculation and the animation never restarts, so you end up\n        writing `void el.offsetWidth` between them to force a reflow — a\n        deliberate layout thrash, in a comment nobody can justify later.\n     2. Tween it with a library. Now a fast prev/next leaves two opposing\n        tweens on the same node and the caption jitters.\n\n   The fix is to make the node itself new. `key={entryKey}` means React\n   unmounts the caption and mounts a different one, and a freshly mounted\n   element runs its CSS animation from frame zero. No reflow hack, no tween to\n   kill, and a fast index change cannot land in a half-finished state because\n   the half-finished node no longer exists.\n\n   `animation-fill-mode: both` is load-bearing. With a per-line delay, `both`\n   holds the from-frame through the delay; without it every line is painted at\n   full opacity for the length of its own delay and then snaps back to hidden\n   to start animating.\n   ========================================================================== */\n\n// #region critical\n/**\n * How many direct children get their own delay. Eight covers eyebrow, title,\n * two metadata rows and a counter with room to spare; children past the eighth\n * are pinned to the eighth's delay rather than falling back to zero, so an\n * overlong block degrades to \"the tail arrives together\" instead of \"the tail\n * arrives first\".\n */\nconst MAX_STAGGERED_LINES = 8;\n\nconst STAGGER_RULES = [\n  ...Array.from(\n    { length: MAX_STAGGERED_LINES },\n    (_, i) =>\n      `.kinetic-rekey > :nth-child(${i + 1}) { animation-delay: calc(var(--kx-rekey-stagger, 0.06s) * ${i}); }`,\n  ),\n  `.kinetic-rekey > :nth-child(n + ${MAX_STAGGERED_LINES + 1}) { animation-delay: calc(var(--kx-rekey-stagger, 0.06s) * ${MAX_STAGGERED_LINES - 1}); }`,\n].join('\\n');\n\nconst REKEY_CSS = `\n@keyframes kinetic-rekey-in {\n  from { opacity: 0; transform: translateY(var(--kx-rekey-from, 14px)); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n/* One keyframe covers both directions: the offset is a custom property, so\n   flipping its sign on the root turns a rise into a drop without a second\n   set of keyframes to keep in sync. */\n.kinetic-rekey > * {\n  animation: var(--kx-rekey-duration, 0.5s) cubic-bezier(0.22, 1, 0.36, 1)\n    both kinetic-rekey-in;\n}\n${STAGGER_RULES}\n@media (prefers-reduced-motion: reduce) {\n  /* The still state IS the destination: full opacity, no offset. Dropping the\n     animation re-exposes those as the base values, which is why there is\n     nothing to declare here beyond 'none'. A zero-duration animation would\n     instead hold whatever 'both' resolved and still fire animationend. */\n  .kinetic-rekey > * { animation: none; }\n}\n`;\n\nexport interface RekeyCaptionReplayProps {\n  /**\n   * Identity of the current caption. Any change replays the entrance — in a\n   * slideshow this is the slide index, in a filter it is the active facet.\n   */\n  entryKey: string | number;\n  /** Direct children each get their own delay, in source order. */\n  children: ReactNode;\n  /** Seconds one line's entrance lasts. */\n  duration?: number;\n  /** Pixels a line travels. Signed by `direction`. */\n  distance?: number;\n  /** Seconds between successive lines. 0 makes the block arrive as one piece. */\n  stagger?: number;\n  /**\n   * `up` enters from below — the default, and correct for advancing forward.\n   * `down` enters from above, which is what makes a step backward read as a\n   * step backward rather than as another step forward.\n   */\n  direction?: 'up' | 'down';\n  className?: string;\n}\n\nexport function RekeyCaptionReplay({\n  entryKey,\n  children,\n  duration = 0.5,\n  distance = 14,\n  stagger = 0.06,\n  direction = 'up',\n  className,\n}: RekeyCaptionReplayProps) {\n  const from = direction === 'up' ? distance : -distance;\n\n  return (\n    <>\n      <style href=\"kinetic-rekey-caption-replay\" precedence=\"medium\">\n        {REKEY_CSS}\n      </style>\n\n      {/* The key is on this wrapper, so every child is a new node on every\n          change and every child animation restarts. Putting the key on the\n          children individually would replay only the ones whose own identity\n          changed, which for a caption is usually none of them. */}\n      <div\n        key={entryKey}\n        className={cn('kinetic-rekey', className)}\n        style={\n          {\n            '--kx-rekey-duration': `${duration}s`,\n            '--kx-rekey-stagger': `${stagger}s`,\n            '--kx-rekey-from': `${from}px`,\n          } as CSSProperties\n        }\n      >\n        {children}\n      </div>\n    </>\n  );\n}\n// #endregion critical\n",
+      "type": "registry:ui",
+      "target": "components/motion/rekey-caption-replay.tsx"
+    }
+  ],
+  "meta": {
+    "category": "transition",
+    "cost": "css",
+    "tags": [
+      "react-key",
+      "css-animation",
+      "stagger",
+      "slideshow",
+      "caption"
+    ]
+  },
+  "categories": [
+    "transition"
+  ],
+  "type": "registry:ui"
+}

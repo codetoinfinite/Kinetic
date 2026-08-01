@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pointer-var-gradient",
+  "title": "Pointer-Variable Gradient",
+  "description": "A soft glow tracks the pointer through two CSS custom properties. No rAF, no tween, no string rebuilding.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/pointer-var-gradient.tsx",
+      "content": "'use client';\n\nimport { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   Pointer-Variable Gradient\n   --------------------------------------------------------------------------\n   The cheapest pointer effect there is, and the one most often built the\n   expensive way.\n\n   The gradient is declared ONCE in CSS and reads two custom properties for its\n   centre. JavaScript's entire job per event is two `setProperty` calls with a\n   percentage string. It never builds a `background` string, never touches a\n   transform, never schedules a frame, never runs a tween.\n\n   That matters because the alternative — reassembling\n   `background: radial-gradient(38rem 30rem at 41% 62%, ...), linear-gradient(...)`\n   in JS on every move — makes the browser re-parse the whole shorthand,\n   including the layer that never changes. Writing a custom property invalidates\n   only the paint of the gradient that consumes it.\n\n   There is deliberately no rAF here. A custom-property write is not a layout\n   read, so there is nothing to batch; the style change is coalesced into the\n   next paint by the browser regardless. Adding a frame loop would add a frame\n   of latency to buy nothing.\n   ========================================================================== */\n\nexport interface PointerVarGradientProps {\n  children?: ReactNode;\n  /** Horizontal size of the glow, any CSS length. */\n  glowWidth?: string;\n  /** Vertical size of the glow, any CSS length. */\n  glowHeight?: string;\n  /** Peak opacity of the glow at its centre, 0..1. */\n  intensity?: number;\n  className?: string;\n}\n\n// #region critical\n/** Where the glow sits before the pointer has ever been seen. */\nconst REST_X = '50%';\nconst REST_Y = '38%';\n\nexport function PointerVarGradient({\n  children,\n  glowWidth = '38rem',\n  glowHeight = '30rem',\n  intensity = 0.09,\n  className,\n}: PointerVarGradientProps) {\n  const root = useRef<HTMLDivElement>(null);\n\n  useEffect(() => {\n    const el = root.current;\n    if (!el) return;\n\n    /* Fine pointers only. On touch a `pointermove` exists only during a drag,\n       so the glow would be pinned under the finger that is scrolling the page\n       and then abandoned there on lift — worse than not moving at all. The\n       rest position set in the inline style stays, so touch users still get a\n       composed gradient. */\n    if (!window.matchMedia('(pointer: fine)').matches) return;\n\n    const onMove = (e: PointerEvent) => {\n      const rect = el.getBoundingClientRect();\n      /* Percentages, not px. The gradient position resolves against the\n         element box, so a percentage survives a resize with no listener and\n         no recalculation — the glow stays where it was relative to the panel\n         even if the panel changes size between moves. */\n      el.style.setProperty(\n        '--pointer-x',\n        `${((e.clientX - rect.left) / rect.width) * 100}%`,\n      );\n      el.style.setProperty(\n        '--pointer-y',\n        `${((e.clientY - rect.top) / rect.height) * 100}%`,\n      );\n    };\n\n    const onLeave = () => {\n      /* Removing the property rather than writing the rest value back lets the\n         inline `style` fallback take over, so the resting position is declared\n         in exactly one place. */\n      el.style.removeProperty('--pointer-x');\n      el.style.removeProperty('--pointer-y');\n    };\n\n    el.addEventListener('pointermove', onMove, { passive: true });\n    el.addEventListener('pointerleave', onLeave);\n\n    return () => {\n      el.removeEventListener('pointermove', onMove);\n      el.removeEventListener('pointerleave', onLeave);\n      el.style.removeProperty('--pointer-x');\n      el.style.removeProperty('--pointer-y');\n    };\n  }, []);\n\n  /* The gradient definition lives here and only here. The handler above never\n     mentions colours, sizes or stops — it only moves the centre.\n\n     No `transition`: an unregistered custom property is an untyped token, so\n     the browser cannot interpolate it and a transition on the gradient would\n     silently do nothing. Making the leave ease would mean registering the\n     properties with `@property { syntax: '<percentage>' }` in a stylesheet,\n     which is a real option but not a free one. The snap back is acceptable\n     here because the glow at rest is barely above the background. */\n  const style = {\n    '--pointer-x': REST_X,\n    '--pointer-y': REST_Y,\n    backgroundImage: `radial-gradient(${glowWidth} ${glowHeight} at var(--pointer-x) var(--pointer-y), color-mix(in oklab, var(--k-accent) ${Math.round(\n      intensity * 100,\n    )}%, transparent), transparent 68%)`,\n  } as CSSProperties;\n  // #endregion critical\n\n  return (\n    <div\n      ref={root}\n      style={style}\n      className={cn('relative isolate overflow-hidden bg-bg', className)}\n    >\n      {children}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/pointer-var-gradient.tsx"
+    }
+  ],
+  "meta": {
+    "category": "cursor",
+    "cost": "css",
+    "tags": [
+      "css",
+      "custom-properties",
+      "gradient",
+      "pointer",
+      "no-raf"
+    ]
+  },
+  "categories": [
+    "cursor"
+  ],
+  "type": "registry:ui"
+}

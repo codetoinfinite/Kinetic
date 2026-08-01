@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "manufactured-scroll-range",
+  "title": "Manufactured Scroll Range",
+  "description": "An empty box N screens tall turns a one-screen scene into a scrollable sequence, with progress as a CSS variable and the index as state.",
+  "dependencies": [],
+  "registryDependencies": [
+    "http://localhost:8927/r/damp.json",
+    "http://localhost:8927/r/use-raf.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/manufactured-scroll-range.tsx",
+      "content": "'use client';\n\nimport { useRef, useState, type ReactNode, type RefObject } from 'react';\nimport { useRaf } from '@/hooks/use-raf';\nimport { clamp } from '@/lib/damp';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   Manufactured Scroll Range\n   --------------------------------------------------------------------------\n   Sometimes the thing you want to scroll through has no height. A ring of\n   projects, a WebGL scene, a stack of captions — the content is one screen,\n   but the interaction wants to be a page.\n\n   So you manufacture the range: an empty box `count × viewports` screens\n   tall, a sticky viewport inside it, and `scrolled / scrollable` as the only\n   input. One screen of scroll then means exactly one item, forever, with no\n   per-item measurement and nothing to invalidate on resize.\n\n   The component emits two different signals because they have two different\n   costs. Continuous progress goes out as CSS custom properties and to an\n   `onFrame` callback — sixty times a second, never through React. The\n   discrete index goes through state, and only on the frame it actually\n   changes, which is a handful of times per page.\n   ========================================================================== */\n\nexport interface ScrollRangeState {\n  /** 0 → 1 across the whole manufactured range. */\n  progress: number;\n  /** Fractional item position, `progress * count`. */\n  position: number;\n  /** The item the viewport is showing. */\n  index: number;\n}\n\nexport interface ManufacturedScrollRangeProps {\n  /** How many items the range represents. */\n  count: number;\n  /** Screens of scroll per item. */\n  viewports?: number;\n  /** Rendered inside the sticky viewport; called again only when `index` changes. */\n  children: (state: { index: number; count: number }) => ReactNode;\n  /** Per-frame progress, for anything that must not go through React. */\n  onFrame?: (state: ScrollRangeState) => void;\n  /** Scroll container. Omit to auto-detect the nearest scrollable ancestor. */\n  scroller?: RefObject<HTMLElement | null>;\n  className?: string;\n}\n\n/**\n * Fraction of an item's slot the position must travel past a boundary before\n * the index commits. Without it, a trackpad resting on a boundary flips the\n * index back and forth every frame and React re-renders the viewport at 60 Hz.\n */\nconst HYSTERESIS = 0.04;\n\nconst SCROLLABLE = /(auto|scroll|overlay)/;\n\nfunction nearestScroller(el: HTMLElement): HTMLElement {\n  let node = el.parentElement;\n  while (node) {\n    if (SCROLLABLE.test(getComputedStyle(node).overflowY)) return node;\n    node = node.parentElement;\n  }\n  return document.documentElement;\n}\n\n// #region critical\nexport function ManufacturedScrollRange({\n  count,\n  viewports = 1,\n  children,\n  onFrame,\n  scroller,\n  className,\n}: ManufacturedScrollRangeProps) {\n  const root = useRef<HTMLDivElement>(null);\n  const viewport = useRef<HTMLDivElement>(null);\n\n  const [index, setIndex] = useState(0);\n  const indexRef = useRef(0);\n  const lastHeight = useRef(0);\n  const lastProgress = useRef('');\n\n  useRaf((_dt) => {\n    const rootEl = root.current;\n    const viewportEl = viewport.current;\n    if (!rootEl || !viewportEl || count <= 0) return;\n\n    const host = scroller?.current ?? nearestScroller(rootEl);\n    const hostIsRoot = host === document.documentElement;\n    const hostTop = hostIsRoot ? 0 : host.getBoundingClientRect().top;\n    const hostHeight = hostIsRoot ? window.innerHeight : host.clientHeight;\n    if (hostHeight === 0) return;\n\n    // The range is measured in the scroller's own pixels, not `vh`. Inside a\n    // scrollable box, viewport units describe a completely different element.\n    const total = Math.round(hostHeight * (1 + count * viewports));\n    if (total !== lastHeight.current) {\n      lastHeight.current = total;\n      rootEl.style.height = `${total}px`;\n      viewportEl.style.height = `${hostHeight}px`;\n    }\n\n    const travel = total - hostHeight;\n    const progress = travel > 0 ? clamp((hostTop - rootEl.getBoundingClientRect().top) / travel, 0, 1) : 0;\n    const position = progress * count;\n\n    // Continuous value: out as a custom property, never as state. Quantised\n    // so an idle scroller stops writing to the DOM entirely.\n    const text = progress.toFixed(4);\n    if (text !== lastProgress.current) {\n      lastProgress.current = text;\n      rootEl.style.setProperty('--range-progress', text);\n      rootEl.style.setProperty('--range-position', position.toFixed(3));\n    }\n\n    // Discrete value: equal slots, `floor` not `round`, so item i owns\n    // [i/count, (i+1)/count) and the last item owns the end of the range.\n    const candidate = clamp(Math.floor(position), 0, count - 1);\n    if (candidate !== indexRef.current) {\n      // Distance past the boundary being crossed — going forward that is the\n      // candidate's own edge, going back it is the current item's edge.\n      const boundary = candidate > indexRef.current ? candidate : indexRef.current;\n      if (Math.abs(position - boundary) > HYSTERESIS) {\n        indexRef.current = candidate;\n        setIndex(candidate);\n      }\n    }\n\n    onFrame?.({ progress, position, index: indexRef.current });\n  });\n  // #endregion critical\n\n  return (\n    <div ref={root} className={cn('relative w-full', className)}>\n      <div ref={viewport} className=\"sticky top-0 w-full overflow-hidden\">\n        {children({ index, count })}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/manufactured-scroll-range.tsx"
+    }
+  ],
+  "meta": {
+    "category": "scroll",
+    "cost": "dom",
+    "tags": [
+      "scroll",
+      "sticky",
+      "progress",
+      "index",
+      "css-variables"
+    ]
+  },
+  "categories": [
+    "scroll"
+  ],
+  "type": "registry:ui"
+}

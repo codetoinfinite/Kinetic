@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "seamless-marquee",
+  "title": "Pixels-Per-Second Marquee",
+  "description": "A marquee whose duration is derived from measured width and a px/second speed, so every strip moves at the same rate.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-in-view.json",
+    "http://localhost:8927/r/use-reduced-motion.json",
+    "http://localhost:8927/r/use-resize-observer.json",
+    "http://localhost:8927/r/use-visibility.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/seamless-marquee.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport { useCallback, useEffect, useRef, type ReactNode } from 'react';\nimport { cn } from '@/lib/utils';\nimport { useInView } from '@/hooks/use-in-view';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\nimport { useResizeObserver } from '@/hooks/use-resize-observer';\nimport { useVisibility } from '@/hooks/use-visibility';\n\n/* ==========================================================================\n   Pixels-Per-Second Marquee\n   --------------------------------------------------------------------------\n   Speed is px/second and duration is derived from it — never the other way\n   round. `duration: 20` means a 900 px strip crawls and a 4000 px strip\n   sprints, so two marquees on the same page visibly disagree about how fast\n   \"scrolling\" is, and adding one word to either changes its speed. Measure the\n   content, divide by the speed you want, and every marquee on the site moves\n   at the same rate regardless of what is in it.\n\n     duration = setWidth / speed      (seconds = px / (px/s))\n\n   Seamlessness comes from the loop distance being exactly one content set.\n   The track translates from 0 to -setWidth and repeats; at the wrap, copy 2 is\n   sitting precisely where copy 1 was, so the restart is invisible. Any other\n   distance produces a jump on every cycle.\n\n   Copies are computed, not guessed: `ceil(containerWidth / setWidth) + 1`. The\n   `+ 1` is the copy that covers the gap opened up by the translation itself —\n   with the exact ceiling you get a blank wedge at the right edge for the last\n   frame of every cycle.\n   ========================================================================== */\n\nexport interface SeamlessMarqueeProps {\n  /** One content set. Cloned as many times as the container needs. */\n  children: ReactNode;\n  /** Pixels per second. Identical for every marquee, whatever its width. */\n  speed?: number;\n  direction?: 'left' | 'right';\n  /** Pixels between items, and between the last item and the next copy. */\n  gap?: number;\n  pauseOnHover?: boolean;\n  className?: string;\n}\n\n// #region critical\nconst SPEED = 60;\nconst GAP = 48;\nconst HOVER_RAMP = 0.35;\n\nexport function SeamlessMarquee({\n  children,\n  speed = SPEED,\n  direction = 'left',\n  gap = GAP,\n  pauseOnHover = true,\n  className,\n}: SeamlessMarqueeProps) {\n  const root = useRef<HTMLDivElement>(null);\n  const track = useRef<HTMLDivElement>(null);\n  const copy = useRef<HTMLDivElement>(null);\n  const tween = useRef<gsap.core.Tween | null>(null);\n\n  const reduced = useReducedMotion();\n  const visible = useVisibility();\n  const { inView } = useInView(root);\n  const { width: rootWidth } = useResizeObserver(root);\n  const { width: copyWidth } = useResizeObserver(copy);\n\n  // The loop distance is one copy *plus* the gap that follows it — the gap is\n  // part of the repeating unit. Leave it out and the rhythm of the seam is one\n  // gap tighter than the rhythm everywhere else, which reads as a stutter.\n  const setWidth = copyWidth + gap;\n  const measured = copyWidth > 0;\n  const copies =\n    reduced || !measured ? 1 : Math.max(2, Math.ceil(rootWidth / setWidth) + 1);\n\n  useEffect(() => {\n    const el = track.current;\n    if (!el || reduced || !measured) return;\n\n    const duration = setWidth / speed;\n    const t = gsap.fromTo(\n      el,\n      { x: direction === 'left' ? 0 : -setWidth },\n      {\n        x: direction === 'left' ? -setWidth : 0,\n        duration,\n        ease: 'none',\n        repeat: -1,\n      },\n    );\n    tween.current = t;\n\n    return () => {\n      tween.current = null;\n      // Kill the hover timeScale tweens too — they target the tween object\n      // itself, so killTweensOf(el) would not reach them.\n      gsap.killTweensOf(t);\n      t.kill();\n      gsap.set(el, { clearProps: 'transform' });\n    };\n  }, [setWidth, measured, speed, direction, reduced]);\n\n  // Separate effect so a visibility flip pauses in place instead of rebuilding\n  // the tween, which would snap the strip back to its start position.\n  useEffect(() => {\n    const t = tween.current;\n    if (!t) return;\n    t.paused(!(visible && inView));\n  }, [visible, inView, setWidth, measured, speed, direction, reduced]);\n\n  const ramp = useCallback(\n    (to: number) => {\n      const t = tween.current;\n      if (!pauseOnHover || !t) return;\n      gsap.to(t, { timeScale: to, duration: HOVER_RAMP, overwrite: true });\n    },\n    [pauseOnHover],\n  );\n  // #endregion critical\n\n  return (\n    <div\n      ref={root}\n      className={cn('relative w-full overflow-hidden', className)}\n      onPointerEnter={() => ramp(0)}\n      onPointerLeave={() => ramp(1)}\n    >\n      <div\n        ref={track}\n        className=\"flex w-max will-change-transform\"\n        style={{ gap }}\n      >\n        {Array.from({ length: copies }, (_, i) => (\n          <div\n            key={i}\n            ref={i === 0 ? copy : undefined}\n            // Only the first copy is real content. The clones are decoration\n            // and would otherwise be read out three times in a row.\n            aria-hidden={i > 0 || undefined}\n            className=\"flex shrink-0 items-center\"\n            style={{ gap }}\n          >\n            {children}\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/seamless-marquee.tsx"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "marquee",
+      "loop",
+      "resize-observer",
+      "ticker"
+    ]
+  },
+  "categories": [
+    "text"
+  ],
+  "type": "registry:ui"
+}

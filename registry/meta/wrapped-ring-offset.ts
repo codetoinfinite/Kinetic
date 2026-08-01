@@ -1,0 +1,139 @@
+import type { ComponentMetaInput } from '@/scripts/schema';
+
+const meta: ComponentMetaInput = {
+  slug: 'wrapped-ring-offset',
+  title: 'Shortest Signed Ring Offset',
+  category: 'primitive',
+  tags: ['wrap', 'modulo', 'carousel', 'infinite', 'math'],
+  blurb: 'Ten dots on a ring, each showing its wrapped offset and the raw index difference it replaces.',
+  cost: 'dom',
+  motif: 'rings',
+
+  files: [
+    {
+      path: 'registry/ui/wrapped-ring-offset.tsx',
+      target: 'components/motion/wrapped-ring-offset.tsx',
+      type: 'registry:ui',
+      role: 'component',
+    },
+    {
+      path: 'registry/lib/wrap.ts',
+      target: 'lib/motion/wrap.ts',
+      type: 'registry:lib',
+      role: 'ring index arithmetic — wrappedOffset, mod, shortestAngle',
+    },
+    {
+      path: 'registry/lib/damp.ts',
+      target: 'lib/motion/damp.ts',
+      type: 'registry:lib',
+      role: 'frame-rate-independent damping and gaussian falloff',
+    },
+    {
+      path: 'registry/hooks/use-drag.ts',
+      target: 'hooks/use-drag.ts',
+      type: 'registry:hook',
+      role: 'pointer drag with capture and a dead zone',
+    },
+    {
+      path: 'registry/hooks/use-raf.ts',
+      target: 'hooks/use-raf.ts',
+      type: 'registry:hook',
+      role: 'shared rAF loop with clamped delta',
+    },
+    {
+      path: 'registry/hooks/use-reduced-motion.ts',
+      target: 'hooks/use-reduced-motion.ts',
+      type: 'registry:hook',
+      role: 'prefers-reduced-motion, SSR-safe',
+    },
+    {
+      path: 'registry/hooks/use-resize-observer.ts',
+      target: 'hooks/use-resize-observer.ts',
+      type: 'registry:hook',
+      role: 'element size from a shared ResizeObserver',
+    },
+  ],
+  dependencies: [],
+  registryDependencies: [],
+
+  summary:
+    'A ring of items laid out from `wrappedOffset(i, position, count)` — the shortest signed distance around the circle — with the naive `i - position` printed beside each one so the two can be compared while the ring turns. The dots move continuously through the seam; the raw numbers leap by a whole count at it. This is the single function that makes a finite array behave like an infinite one, and the only honest way to teach it is to show the version it replaces failing.',
+
+  mechanism: [
+    '`wrappedOffset(i, position, count)` computes `mod(i - position, count)` and then subtracts `count` when the result exceeds `count / 2`, producing a signed distance in `(-count/2, count/2]`. Negative means the item is behind the read head.',
+    'Each item is placed at `angle = (offset / count) * 2PI - PI/2`, so offset 0 sits under the notch at twelve o\'clock and the ring is symmetric about it. Because a ±count jump in the offset is exactly one full turn, the dot lands on the same pixel and the seam is invisible.',
+    'Focus is `gaussian(|offset|, 0.45)` — `exp(-(0.45·d)²)` — driving scale from 0.74 to 1.20 and opacity from 0.30 to 1.00. A continuous falloff with no thresholds is what makes the ring read as analogue rather than stepped.',
+    'Dragging converts the pointer to an angle about the ring centre with `atan2`, then advances the target position by `shortestAngle(previous, current) / 2PI * count`. `shortestAngle` is required here for the same reason `wrappedOffset` is required for the layout: `atan2` flips from +PI to -PI at nine o\'clock.',
+    'The ring position is eased with `damp(position, target, 0.0015, dt)` on the shared rAF loop, and every frame writes only `transform`, `opacity` and `z-index` — no layout reads, because width and height come from a ResizeObserver rather than `clientWidth`.',
+    'React re-renders only when `wrapIndex(Math.round(position), count)` changes, which is a couple of times a second; the sixty-times-a-second work is plain style writes on refs.',
+  ],
+
+  constants: [
+    {
+      name: 'count',
+      value: '10',
+      why: 'Items on the ring, and therefore the wrap threshold at count / 2 = 5. Ten keeps every raw label at most two characters wide, so the pills fit on a 320 px preview without colliding; above ~16 the labels overlap tangentially and the comparison becomes unreadable.',
+    },
+    {
+      name: 'FOCUS_FALLOFF',
+      value: '0.45',
+      why: 'Gaussian falloff on |offset|. Yields 1.00 / 0.82 / 0.44 / 0.16 / 0.04 at distances 0-4, so roughly four items read as "near" on a ten-item ring. At 1.0 only the centre item is lit and the ring looks broken; at 0.2 nothing falls off and there is no focus at all.',
+    },
+    {
+      name: 'SMOOTHING',
+      value: '0.0015',
+      why: 'Fraction of the remaining gap left after one second. Fast enough that the ring feels attached to the pointer, slow enough that releasing mid-drag reads as momentum rather than a cut. This is `damp`\'s smoothing argument, not a per-frame lerp constant — a per-frame constant converges twice as fast at 120 Hz.',
+    },
+    {
+      name: 'RADIUS_RATIO',
+      value: '0.36',
+      why: 'Ring radius as a fraction of the shorter container side. Above ~0.42 the 36 px pills clip the edges of a 16:10 frame; below ~0.30 adjacent pills touch.',
+    },
+    {
+      name: 'IDLE_DRIFT',
+      value: '0.22',
+      why: 'Ring positions per second before the first interaction, so the seam sweeps past roughly every 45 s and the component demonstrates itself without being touched. Faster than ~0.6 and the raw labels change too quickly to read.',
+    },
+    {
+      name: 'threshold (useDrag)',
+      value: '3',
+      why: 'Pixels of travel before a press becomes a rotation. Lower than the 8 px a carousel wants, because this ring has no click target to protect — it only has to reject hand tremor.',
+    },
+  ],
+
+  pitfalls: [
+    'Using `i - position` for layout. The ring still turns, but item 0 renders nine slots away from item 9 instead of one slot back, so the last item snaps across the entire ring every time the position passes zero. That snap is the seam, and it is the whole reason this function exists.',
+    'Using `%` instead of a true modulo. JavaScript\'s `%` returns a negative result for negative operands, so scrolling backwards past zero produces offsets outside `[0, count)` and half the ring inverts. `mod(n, m) = ((n % m) + m) % m` is the fix.',
+    'Comparing `offset > count / 2` with `>=`. On an even count that puts the antipodal item at `-count/2` instead of `+count/2`, and the item directly opposite the read head flickers between the two on alternate frames.',
+    'Taking `angle - previousAngle` when converting pointer motion to rotation. `atan2` wraps from +PI to -PI at nine o\'clock, so the raw difference there is a full turn and the ring spins backwards once per lap. `shortestAngle` wraps the difference into `(-PI, PI]`.',
+    'Reading `element.clientWidth` inside the rAF callback to compute the radius. The same loop has already written transforms, so every read forces a synchronous reflow — sixty per second, and it only shows up as jank once there are a few of these on a page. The size comes from a ResizeObserver instead.',
+    'Driving the per-item transforms through React state. Sixty commits a second for ten nodes is an order of magnitude more work than writing `style.transform` on refs, and it makes the labels — which change twice a second — re-render at frame rate for nothing.',
+  ],
+
+  notes: [
+    '`wrappedOffset` is the same three lines behind an infinite marquee, a drum carousel, a cylinder of image planes, and any "closest N to the playhead" query. Pair it with a scroll library set to `infinite: true` and the sequence has no beginning and no end.',
+    'The idle drift stops permanently at the first drag or arrow key. An ambient motion that resumes on top of a user\'s input reads as the component fighting them.',
+  ],
+
+  apiSignature:
+    'function WrappedRingOffset(props: { count?: number; drift?: number; className?: string }): JSX.Element',
+
+  props: [
+    { name: 'count', type: 'number', default: '10', description: 'Items on the ring. The wrap threshold is count / 2.' },
+    { name: 'drift', type: 'number', default: '0.22', description: 'Ring positions per second before the first interaction. 0 to sit still.' },
+    { name: 'className', type: 'string', description: 'Merged onto the outer element via `cn`.' },
+  ],
+
+  reducedMotion:
+    'The idle drift never starts and the `damp` easing is bypassed, so the ring tracks the drag one-to-one and stops dead on release. Dragging and the arrow keys still work, and the labels still update — the maths is the content here, so removing it would remove the component.',
+
+  cleanup:
+    '`useDrag` removes its five pointer listeners and releases any outstanding pointer capture; `useRaf` unsubscribes and cancels the shared frame when it was the last subscriber; `useResizeObserver` unobserves the root. No transforms are left behind because the nodes unmount with the component.',
+
+  acceptance:
+    'Leave it alone: the ring drifts and, as each item passes the six o\'clock antipode, its struck-through raw label flips sign by the full count while the dot itself does not move. Drag the ring in a full circle past nine o\'clock and it keeps turning in the same direction. Press ArrowRight and the position readout increments by one. Resize the frame and the ring re-radiuses without the dots drifting off-centre.',
+
+  criticalRegion: 'critical',
+};
+
+export default meta;

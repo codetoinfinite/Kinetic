@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ab-layer-crossfade",
+  "title": "A/B Layer Ping-Pong",
+  "description": "Two stacked layers alternate so any change crossfades, however fast you move between rows.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/ab-layer-crossfade.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport { useEffect, useRef, useState, type ReactNode } from 'react';\nimport { cn } from '@/lib/utils';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\n\n/* ==========================================================================\n   A/B Layer Ping-Pong\n   --------------------------------------------------------------------------\n   One element cannot crossfade with itself. Two stacked layers alternate:\n   the incoming content is always written into whichever layer is currently\n   at opacity 0, then the pair swap. However fast the key changes, a fade is\n   always available in both directions and the previous content is still on\n   screen to fade out of.\n\n   Every transition starts with `killTweensOf` on both layers. Without it,\n   moving quickly across a list stacks opposing opacity tweens on the same\n   nodes and the layers flicker instead of blending.\n   ========================================================================== */\n\nexport interface ABLayerCrossfadeProps {\n  /** Identity of the current content. A change starts a crossfade. */\n  contentKey: string;\n  /** Content for the current key. Captured into a layer when the key changes. */\n  children: ReactNode;\n  /** Crossfade length in seconds. */\n  duration?: number;\n  /** GSAP ease for both halves of the fade. */\n  ease?: string;\n  className?: string;\n}\n\ntype Slot = 'a' | 'b';\n\n// #region critical\nexport function ABLayerCrossfade({\n  contentKey,\n  children,\n  duration = 1,\n  ease = 'power2.inOut',\n  className,\n}: ABLayerCrossfadeProps) {\n  const aRef = useRef<HTMLDivElement>(null);\n  const bRef = useRef<HTMLDivElement>(null);\n  const reduced = useReducedMotion();\n\n  const [front, setFront] = useState<Slot>('a');\n  const [layers, setLayers] = useState<{ a: ReactNode; b: ReactNode }>({\n    a: children,\n    b: null,\n  });\n\n  const shownKey = useRef(contentKey);\n  const frontRef = useRef<Slot>('a');\n  const first = useRef(true);\n\n  // Write into the BACK layer, then flip. The back layer is already at\n  // opacity 0, so the new content mounts invisibly — no flash of it at full\n  // strength before the tween starts.\n  useEffect(() => {\n    if (shownKey.current === contentKey) return;\n    shownKey.current = contentKey;\n    const next: Slot = frontRef.current === 'a' ? 'b' : 'a';\n    frontRef.current = next;\n    setLayers((l) => ({ ...l, [next]: children }));\n    setFront(next);\n  }, [contentKey, children]);\n\n  useEffect(() => {\n    const inEl = front === 'a' ? aRef.current : bRef.current;\n    const outEl = front === 'a' ? bRef.current : aRef.current;\n    if (!inEl || !outEl) return;\n\n    if (first.current) {\n      first.current = false;\n      gsap.set(inEl, { opacity: 1 });\n      gsap.set(outEl, { opacity: 0 });\n      return;\n    }\n\n    // Kill first, always. Two rapid changes otherwise leave an old fade-out\n    // running on the layer the new fade-in is driving up.\n    gsap.killTweensOf([inEl, outEl]);\n\n    if (reduced) {\n      gsap.set(inEl, { opacity: 1 });\n      gsap.set(outEl, { opacity: 0 });\n      return;\n    }\n\n    gsap.to(inEl, { opacity: 1, duration, ease });\n    gsap.to(outEl, { opacity: 0, duration, ease });\n  }, [front, duration, ease, reduced]);\n\n  useEffect(\n    () => () => {\n      gsap.killTweensOf([aRef.current, bRef.current]);\n    },\n    [],\n  );\n  // #endregion critical\n\n  return (\n    <div className={cn('relative isolate overflow-hidden', className)}>\n      <div ref={aRef} className=\"absolute inset-0\" style={{ opacity: 1 }}>\n        {layers.a}\n      </div>\n      <div ref={bRef} className=\"absolute inset-0\" style={{ opacity: 0 }}>\n        {layers.b}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/ab-layer-crossfade.tsx"
+    }
+  ],
+  "meta": {
+    "category": "transition",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "crossfade",
+      "hover-preview",
+      "double-buffer",
+      "opacity"
+    ]
+  },
+  "categories": [
+    "transition"
+  ],
+  "type": "registry:ui"
+}

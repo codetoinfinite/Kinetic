@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- The wordmark's mark, sized for a 16px tab. Colours are literal hex
+       rather than the theme's oklch tokens: a favicon is fetched outside the
+       document and has no stylesheet to inherit from. #54B3FF is the sRGB
+       value of the dark theme's --k-accent, oklch(0.75 0.16 250). -->
+  <rect width="32" height="32" rx="7" fill="#0A0A0A"/>
+  <path d="M6 25C11 7 16 7 25 7" stroke="#FAFAFA" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <circle cx="25" cy="7" r="3.5" fill="#54B3FF"/>
+</svg>

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "looping-scroll-cue",
+  "title": "Looping Scroll Cue",
+  "description": "The hairline that dives down a hero. One keyframe pair, a hard ease, and a seamless loop.",
+  "dependencies": [],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/looping-scroll-cue.tsx",
+      "content": "'use client';\n\nimport type { CSSProperties } from 'react';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   Looping Scroll Cue\n   --------------------------------------------------------------------------\n   The hairline that dives down a hero and tells you the page continues. One\n   keyframe pair, one easing curve, and a clipping tube — no rAF, no\n   observer, no JavaScript running after mount at all.\n\n   The two numbers are the whole component.\n\n   The travel is -100% to 250%, measured against the LINE's own height rather\n   than the tube's. With the line at 40% of the tube, -100% puts its bottom\n   edge exactly on the top of the tube and 250% puts its top edge exactly on\n   the bottom: the line is fully outside the clip at both ends, so the jump\n   back to the start happens while nothing is on screen and the loop has no\n   seam. A cue that reappears at the top mid-fade is the tell that someone\n   animated 0% to 100%.\n\n   The easing is cubic-bezier(.76, 0, .24, 1) — a hard ease-in-out with almost\n   no linear middle. It is what turns a continuously moving line into a\n   gesture: the line hangs above the tube, dives through it, hangs below, and\n   the pause between dives is what reads as an instruction rather than as\n   decoration.\n\n   Reduced motion is handled twice on purpose. The media query is in the\n   stylesheet so the very first paint is already correct on the server-rendered\n   markup, and the hook drives `data-static` so the cue also responds when the\n   setting is changed while the page is open. Either way the static state is a\n   line parked in the middle of the tube — the animation's literal end state is\n   off-screen, so honouring reduced motion by \"rendering the end state\" would\n   render nothing at all.\n   ========================================================================== */\n\n// #region critical\nconst CUE_CSS = `\n@keyframes kx-scroll-cue-travel {\n  from { transform: translateY(-100%); }\n  to   { transform: translateY(250%); }\n}\n.kx-scroll-cue {\n  position: relative;\n  display: block;\n  overflow: hidden;\n  flex: none;\n  inline-size: var(--kx-cue-thickness, 1px);\n  block-size: var(--kx-cue-length, 3.5rem);\n  color: currentColor;\n}\n.kx-scroll-cue-line {\n  position: absolute;\n  inset-inline: 0;\n  top: 0;\n  block-size: var(--kx-cue-run, 40%);\n  background-color: currentColor;\n  /* Matches the keyframe start, so the line is already outside the clip\n     before the first frame and never flashes at rest. */\n  transform: translateY(-100%);\n  animation: var(--kx-cue-period, 1.8s) cubic-bezier(.76, 0, .24, 1) infinite\n    kx-scroll-cue-travel;\n  animation-delay: var(--kx-cue-delay, 0s);\n}\n/* Parked, not frozen. 'animation-play-state: paused' stops on whatever frame\n   it reached, and for roughly half the cycle that frame is off-screen — the\n   cue would simply vanish. */\n.kx-scroll-cue[data-static='true'] .kx-scroll-cue-line {\n  animation: none;\n  top: 50%;\n  transform: translateY(-50%);\n}\n@media (prefers-reduced-motion: reduce) {\n  .kx-scroll-cue .kx-scroll-cue-line {\n    animation: none;\n    top: 50%;\n    transform: translateY(-50%);\n  }\n}\n`;\n\nexport interface LoopingScrollCueProps {\n  /** Height of the tube. Any CSS length. */\n  length?: string;\n  /** Width of the line. Any CSS length. */\n  thickness?: string;\n  /** Height of the travelling segment, as a percentage of the tube. */\n  run?: string;\n  /** Seconds for one full dive. */\n  period?: number;\n  /** Seconds before the first dive. Stagger a row of cues with this. */\n  delay?: number;\n  /** Park the line in the middle instead of running it. */\n  paused?: boolean;\n  className?: string;\n}\n\nexport function LoopingScrollCue({\n  length = '3.5rem',\n  thickness = '1px',\n  run = '40%',\n  period = 1.8,\n  delay = 0,\n  paused = false,\n  className,\n}: LoopingScrollCueProps) {\n  const reduced = useReducedMotion();\n\n  return (\n    <>\n      {/* Hoisted once by React 19 regardless of how many cues are on the page. */}\n      <style href=\"kinetic-looping-scroll-cue\" precedence=\"medium\">\n        {CUE_CSS}\n      </style>\n      <span\n        aria-hidden\n        data-static={reduced || paused ? 'true' : 'false'}\n        className={cn('kx-scroll-cue', className)}\n        style={\n          {\n            '--kx-cue-length': length,\n            '--kx-cue-thickness': thickness,\n            '--kx-cue-run': run,\n            '--kx-cue-period': `${period}s`,\n            '--kx-cue-delay': `${delay}s`,\n          } as CSSProperties\n        }\n      >\n        <span className=\"kx-scroll-cue-line\" />\n      </span>\n    </>\n  );\n}\n// #endregion critical\n",
+      "type": "registry:ui",
+      "target": "components/motion/looping-scroll-cue.tsx"
+    }
+  ],
+  "meta": {
+    "category": "primitive",
+    "cost": "css",
+    "tags": [
+      "css",
+      "keyframes",
+      "scroll-cue",
+      "hero",
+      "loop"
+    ]
+  },
+  "categories": [
+    "primitive"
+  ],
+  "type": "registry:ui"
+}

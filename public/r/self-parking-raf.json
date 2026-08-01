@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "self-parking-raf",
+  "title": "Self-Parking RAF",
+  "description": "An epsilon snap lets a damped value reach its target exactly, so the frame loop hits its exit test and dies.",
+  "dependencies": [],
+  "registryDependencies": [
+    "http://localhost:8927/r/damp.json",
+    "http://localhost:8927/r/use-raf.json",
+    "http://localhost:8927/r/use-reduced-motion.json",
+    "http://localhost:8927/r/use-visibility.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/self-parking-raf.tsx",
+      "content": "'use client';\n\nimport { useCallback, useEffect, useRef, useState, type RefObject } from 'react';\nimport { damp, perFrameToSmoothing } from '@/lib/damp';\nimport { useRaf } from '@/hooks/use-raf';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\nimport { useVisibility } from '@/hooks/use-visibility';\n\n/* ==========================================================================\n   Self-Parking RAF\n   --------------------------------------------------------------------------\n   An eased value never arrives. `current += (target - current) * 0.12` closes\n   88% of the remaining gap every frame and therefore closes it 100% never:\n   the distance shrinks toward zero asymptotically and `current !== target`\n   stays true forever. A loop conditioned on that comparison runs for the life\n   of the page, burning a frame callback and a paint to move something by a\n   ten-thousandth of a pixel.\n\n   The fix is one line — an epsilon snap. Below a threshold, assign the target\n   exactly. Now the equality test can succeed, so the loop reaches its own\n   stopping condition and unsubscribes itself. Nothing outside has to know\n   when the motion ended; the motion knows.\n\n   This is the opposite of the usual always-on rAF. The loop exists only while\n   something is actually moving, which for a scrubber, a hover offset, or a\n   settling counter is a small fraction of the time the page is open.\n   ========================================================================== */\n\nexport interface SelfParkingOptions {\n  /**\n   * Fraction of the gap that REMAINS after one second. Smaller is snappier.\n   * Defaults to the frame-rate-independent equivalent of `* 0.12` per frame\n   * at 60fps.\n   */\n  smoothing?: number;\n  /**\n   * Distance below which `current` is assigned `target` outright. Must be\n   * scaled to the unit of the value — see the note on `epsilon` below.\n   */\n  epsilon?: number;\n  /**\n   * Called with the damped value every frame while running, and once more\n   * when it parks. Write to the DOM here; do not call `setState`.\n   */\n  onFrame: (value: number) => void;\n}\n\nexport interface SelfParkingValue {\n  /** True while the loop is alive. Goes false the frame it parks. */\n  running: boolean;\n  /** The live damped value, for reading inside another loop. */\n  value: RefObject<number>;\n  /** Assign `target` immediately and park, skipping the remaining travel. */\n  park: () => void;\n}\n\n// #region critical\n/**\n * `0.12` of the gap per frame, measured at 60fps, expressed as the retention\n * factor `damp` wants. Using the raw 0.12 with a per-frame multiply would run\n * twice as fast on a 120 Hz display; this converges in the same wall-clock\n * time on any refresh rate.\n */\nconst SMOOTHING = perFrameToSmoothing(0.12);\n/** The snap threshold. This single line is what allows the loop to end. */\nconst EPSILON = 0.0002;\n\n/**\n * A damped value that runs a frame loop only while it is moving.\n *\n * `target` is a plain prop: changing it wakes the loop, and the loop parks\n * itself once it arrives. There is no `start`, and there is no\n * `requestAnimationFrame` running when the value is at rest.\n */\nexport function useSelfParkingRaf(\n  target: number,\n  options: SelfParkingOptions,\n): SelfParkingValue {\n  const { smoothing = SMOOTHING, epsilon = EPSILON } = options;\n  const reduced = useReducedMotion();\n  const visible = useVisibility();\n\n  const value = useRef(target);\n  const [running, setRunning] = useState(false);\n\n  const config = useRef({ smoothing, epsilon, target, options });\n  config.current = { smoothing, epsilon, target, options };\n\n  const park = useCallback(() => {\n    const cfg = config.current;\n    value.current = cfg.target;\n    cfg.options.onFrame(value.current);\n    setRunning(false);\n  }, []);\n\n  // Waking the loop is the only thing a target change does. The guard matters:\n  // without it, any unrelated re-render that happens to pass the same target\n  // restarts a loop that had already parked.\n  useEffect(() => {\n    if (value.current === target) return;\n    // Nothing to interpolate: reduced motion wants the end state, and a hidden\n    // tab has no observer, so both arrive in one write instead of a loop.\n    if (reduced || !visible) {\n      park();\n      return;\n    }\n    setRunning(true);\n  }, [target, reduced, visible, park]);\n\n  useRaf((dt) => {\n    const cfg = config.current;\n    let next = damp(value.current, cfg.target, cfg.smoothing, dt);\n\n    // The whole technique. Asymptotic approach means `next` would otherwise\n    // never equal `cfg.target`, so the exit test below could never pass.\n    if (Math.abs(cfg.target - next) < cfg.epsilon) next = cfg.target;\n\n    value.current = next;\n    cfg.options.onFrame(next);\n\n    // Parking flips `running`, which drops the `useRaf` subscription. When the\n    // last subscriber goes, the shared loop cancels its frame entirely.\n    if (next === cfg.target) setRunning(false);\n  }, running);\n  // #endregion critical\n\n  return { running, value, park };\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/self-parking-raf.tsx"
+    }
+  ],
+  "meta": {
+    "category": "primitive",
+    "cost": "dom",
+    "tags": [
+      "raf",
+      "damping",
+      "epsilon",
+      "idle",
+      "performance"
+    ]
+  },
+  "categories": [
+    "primitive"
+  ],
+  "type": "registry:ui"
+}

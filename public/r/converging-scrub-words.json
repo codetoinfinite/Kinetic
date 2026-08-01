@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "converging-scrub-words",
+  "title": "Converging Headline Words",
+  "description": "Headline words slide in from opposite margins and lock into a sentence, pinned to scroll position.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/converging-scrub-words.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport ScrollTrigger from 'gsap/ScrollTrigger';\nimport { useEffect, useRef } from 'react';\nimport { cn } from '@/lib/utils';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\n\n/* ==========================================================================\n   Converging Headline Words\n   --------------------------------------------------------------------------\n   A two-word headline assembles out of the margins as you approach it. The\n   first word enters from -120% of its own width, the second from +120%, and\n   both land on zero at the same scrub position — they cross the frame in\n   opposite directions and lock into a sentence.\n\n   `ease: 'none'` on both tweens, deliberately. Under `scrub` the scroll\n   position *is* the easing curve; layering `power2.out` on top means the words\n   accelerate away from the scrollbar and then wait for it, which is the exact\n   sensation people describe as \"the scroll feels sticky\".\n\n   ±120%, not ±100%: at exactly 100% a word starts flush against the frame\n   edge and is already peeking in on the first pixel of scroll. The extra 20%\n   buys a moment of empty margin before it arrives.\n   ========================================================================== */\n\nexport interface ConvergingScrubWordsProps {\n  /** Even indices enter from the left, odd from the right. */\n  words: string[];\n  /** Percent of each word's own width. */\n  travel?: number;\n  /** Seconds of catch-up between the scrollbar and the words. */\n  scrub?: number;\n  /** ScrollTrigger `start`. */\n  start?: string;\n  /** ScrollTrigger `end`. */\n  end?: string;\n  /** Scroll container, when the headline is not in the document scroller. */\n  scroller?: Element | null;\n  className?: string;\n}\n\n// #region critical\nconst TRAVEL = 120;\nconst SCRUB = 1;\nconst START = 'top bottom';\nconst END = 'top 25%';\n\nexport function ConvergingScrubWords({\n  words,\n  travel = TRAVEL,\n  scrub = SCRUB,\n  start = START,\n  end = END,\n  scroller = null,\n  className,\n}: ConvergingScrubWordsProps) {\n  const root = useRef<HTMLDivElement>(null);\n  const reduced = useReducedMotion();\n\n  useEffect(() => {\n    const el = root.current;\n    // Reduced motion: the JSX below already renders the assembled headline at\n    // its final position, so declining to attach the trigger is the whole\n    // implementation. Nothing is hidden and nothing is left off-screen.\n    if (!el || reduced) return;\n\n    // Registered here rather than at module scope: registerPlugin touches\n    // window, and this file is still evaluated during server rendering.\n    gsap.registerPlugin(ScrollTrigger);\n\n    const wordEls = Array.from(el.querySelectorAll<HTMLElement>('[data-word]'));\n    if (wordEls.length === 0) return;\n\n    const ctx = gsap.context(() => {\n      const tl = gsap.timeline({\n        scrollTrigger: {\n          trigger: el,\n          scroller: scroller ?? undefined,\n          start,\n          end,\n          scrub,\n        },\n      });\n\n      wordEls.forEach((w, i) => {\n        // fromTo, not to. A bare `to` would read the start value off the DOM,\n        // and the DOM already says 0 because the inline style below is the\n        // final position for the no-JS and reduced-motion renders.\n        tl.fromTo(\n          w,\n          { xPercent: i % 2 === 0 ? -travel : travel },\n          { xPercent: 0, ease: 'none' },\n          0,\n        );\n      });\n    }, el);\n\n    return () => ctx.revert();\n  }, [words, travel, scrub, start, end, scroller, reduced]);\n  // #endregion critical\n\n  return (\n    // overflow-x: clip, not hidden. Both stop a word translated 120% to the\n    // right from adding a horizontal scrollbar to the whole document; only\n    // `clip` leaves vertical overflow alone, so descenders and any sticky\n    // ancestor keep working. `hidden` on one axis forces `auto` on the other.\n    <div\n      ref={root}\n      className={cn(\n        'w-full overflow-x-clip text-[clamp(44px,12vw,160px)] leading-[0.95] tracking-[-0.04em]',\n        className,\n      )}\n    >\n      {words.map((word, i) => (\n        <span\n          key={`${i}-${word}`}\n          data-word\n          className={cn(\n            'block will-change-transform',\n            i % 2 === 0 ? 'text-left' : 'text-right',\n          )}\n        >\n          {word}\n        </span>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/converging-scrub-words.tsx"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "scrolltrigger",
+      "scrub",
+      "headline",
+      "split"
+    ]
+  },
+  "categories": [
+    "text"
+  ],
+  "type": "registry:ui"
+}

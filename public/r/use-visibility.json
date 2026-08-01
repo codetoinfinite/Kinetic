@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-visibility",
+  "title": "use-visibility",
+  "description": "Shared hook used by Kinetic components.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/hooks/use-visibility.ts",
+      "content": "'use client';\n\nimport { useSyncExternalStore } from 'react';\n\n/* ==========================================================================\n   Document visibility, shared.\n   --------------------------------------------------------------------------\n   A backgrounded tab still runs `setInterval`, still holds WebGL contexts,\n   and — on some platforms — still gets throttled rAF ticks with multi-second\n   deltas. Anything expensive should stop when the tab is hidden and resume\n   when it comes back, rather than trying to catch up.\n\n   `useSyncExternalStore` with an explicit server snapshot so SSR markup and\n   the first client render agree.\n   ========================================================================== */\n\nfunction subscribe(onChange: () => void): () => void {\n  document.addEventListener('visibilitychange', onChange);\n  return () => document.removeEventListener('visibilitychange', onChange);\n}\n\nfunction getSnapshot(): boolean {\n  return document.visibilityState === 'visible';\n}\n\n/** Assume visible on the server: the alternative flashes a paused state. */\nfunction getServerSnapshot(): boolean {\n  return true;\n}\n\nexport function useVisibility(): boolean {\n  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);\n}\n",
+      "type": "registry:hook",
+      "target": "hooks/use-visibility.ts"
+    }
+  ],
+  "type": "registry:hook"
+}

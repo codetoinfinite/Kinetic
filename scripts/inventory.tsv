@@ -1,0 +1,120 @@
+slug	title	category	cost	motif	deps
+lenis-gsap-ticker	Lenis On The GSAP Ticker	scroll	dom	wave	gsap,lenis
+velocity-deform-cards	Velocity-Deformed Cards	scroll	dom	wave	-
+manufactured-scroll-range	Manufactured Scroll Range	scroll	dom	stack	-
+pinned-horizontal-track	Pinned Horizontal Track	scroll	dom	grid	gsap
+container-animation-reveals	One Reveal Engine, Two Axes	scroll	dom	split	gsap
+mixed-scrub-depth-layers	Mixed Scrub Depth Layers	scroll	dom	grid	gsap
+drag-to-pin-progress	Drag Mapped To Pin Progress	scroll	dom	grid	gsap
+knockout-zoom-pin	Knockout Zoom Pin	scroll	dom	stack	-
+scroll-scrubbed-video	Scroll-Scrubbed Video	scroll	dom	wave	-
+css-var-stagger-reveal	CSS Variable Stagger Reveal	scroll	css	stack	-
+io-reveal-lite	IntersectionObserver Reveal	scroll	css	stack	-
+batched-blur-reveal	Batched Blur Reveal	scroll	dom	stack	gsap
+dataset-parallax	Dataset-Driven Parallax	scroll	dom	wave	gsap
+banded-scrollspy-rail	Banded Scrollspy Rail	scroll	css	stack	-
+dual-direction-scrub-entrance	Dual-Direction Scrub Entrance	scroll	dom	split	gsap
+converging-flow-steps	Converging Flow Steps	scroll	dom	split	gsap
+scrub-timeline-spine	Scrub Timeline Spine	scroll	dom	split	gsap
+inverse-scroll-scale	Inverse Scroll Scale	scroll	dom	stack	-
+keyframe-param-object	Single Param Object Timeline	scroll	dom	stack	gsap
+throttled-scrub-state	Throttled Scrub To State	scroll	dom	wave	gsap
+drag-throw-scroll	Drag And Throw Scroll	scroll	dom	trail	lenis
+prescatter-horizontal-gallery	Pre-Scattered Gallery Reveal	scroll	dom	grid	gsap
+cylinder-gallery	Cylinder Gallery Drum	webgl	webgl	rings	three,gsap,lenis
+vertex-cylinder-bend	Vertex Shader Cylinder Bend	webgl	webgl	rings	three
+uv-cover-fit	Cover-Fit UV Maths	webgl	webgl	grid	three
+scroll-deform-wave	Scroll Deformation Wave	webgl	webgl	wave	three
+ndc-mouse-bulge	In-Shader Mouse Bulge	webgl	webgl	noise	three
+velocity-afterimage-pass	Velocity Afterimage Pass	webgl	webgl	trail	three
+realtime-cube-envmap	Realtime Cube EnvMap	webgl	webgl	orbit	three
+orbit-ring-points	Single-Draw Orbit Rings	webgl	webgl	rings	three
+antialiased-disc-fragment	Anti-Aliased Point Discs	webgl	webgl	rings	three
+cylinder-dot-score	Dot-Cloud Score Cylinder	webgl	webgl	rings	three
+depth-pulse-travelling-wave	Depth Fade And Travelling Pulse	webgl	webgl	wave	three
+gpu-bezier-burst	GPU Cubic-Bezier Burst	webgl	webgl	rings	three
+instanced-quad-particles	Instanced Quad Particles	webgl	webgl	grid	ogl
+superellipse-text-avoidance	Superellipse Text Avoidance	webgl	webgl	rings	ogl
+dual-canvas-z-split	Dual-Canvas Depth Split	webgl	webgl	stack	ogl
+multipass-offscreen-composite	Multipass Offscreen Composite	webgl	webgl	stack	three
+stepped-film-grain	Stepped Film Grain	webgl	webgl	noise	three
+radial-ripple-dot-cloud	Radial Ripple Dot Cloud	webgl	webgl	wave	three
+bayer-plasma-hero	Bayer-Quantised Plasma	webgl	webgl	noise	-
+spring-lattice-field	Spring Lattice Field	webgl	webgl	grid	-
+bayer8-ordered-dither	Bit-Math Bayer8 Dither	webgl	webgl	noise	-
+surface-sampled-particles	Area-Weighted Surface Sampling	webgl	webgl	orbit	three
+text-target-particle-glyphs	Text-As-Target Particle Glyphs	webgl	webgl	split	three
+fullscreen-triangle-pass	Fullscreen Triangle Pass	webgl	webgl	grid	-
+domain-warped-fbm	Domain-Warped FBM Fog	webgl	webgl	noise	-
+cursor-reactive-shader-glow	Cursor-Reactive Shader Glow	webgl	webgl	noise	-
+fractional-render-scale	Fractional Backing Store	webgl	webgl	grid	-
+gsap-cursor-follower	GSAP Cursor Follower	cursor	dom	trail	gsap
+tweened-cursor-uniform	Tweened Cursor Uniform	cursor	webgl	trail	gsap,three
+pooled-image-trail	Pooled Cursor Image Trail	cursor	dom	trail	gsap
+quickto-cursor-preview	quickTo Cursor Preview	cursor	dom	trail	gsap
+blend-difference-cursor	Blend-Difference Cursor	cursor	dom	rings	gsap
+magnetic-button	Magnetic Pointer Button	cursor	dom	orbit	gsap
+cursor-clip-path-mask	Cursor Clip-Path Mask	cursor	dom	rings	gsap
+hover-list-image-trail	Hover List Image Trail	cursor	dom	trail	gsap
+cursor-repulsion-burst	Cursor Repulsion And Burst	cursor	webgl	orbit	ogl
+dither-trail-image-reveal	Dithered Pointer Trail Reveal	cursor	webgl	trail	-
+pointer-palette-sampling	Pointer Palette Sampling	cursor	canvas2d	grid	-
+radial-mask-spotlight	Radial Mask Spotlight	cursor	dom	rings	-
+pointer-var-gradient	Pointer-Variable Gradient	cursor	css	rings	-
+hinged-container-intro	Hinged Container Intro	transition	dom	stack	gsap
+exit-warp-navigation	Exit Warp Before Navigate	transition	webgl	rings	gsap,three
+asymmetric-stagger	Asymmetric In/Out Staggers	transition	dom	stack	gsap
+delayed-unmount-loader	Delayed-Unmount Loader	transition	css	stack	-
+ab-layer-crossfade	A/B Layer Ping-Pong	transition	dom	stack	gsap
+panel-wipe-preloader	Staggered Panel Wipe	transition	dom	split	gsap
+safe-preloader	Preloader That Cannot Hang	transition	dom	stack	-
+page-reveal-overlay	Pathname-Keyed Page Reveal	transition	css	stack	-
+rekey-caption-replay	Re-Key Replay	transition	css	stack	-
+hover-prefetch-wipe	Prefetch-On-Hover Wipe	transition	dom	stack	-
+clip-path-variable-tween	CSS Variable Clip-Path Tween	transition	dom	stack	gsap
+slab-page-transition	Slab Page Transition	transition	dom	stack	gsap
+idle-gated-page-states	Idle-Gated Page States	transition	dom	stack	gsap
+canvas-handoff-transition	Live Canvas Handoff	transition	webgl	stack	-
+eased-number-counter	Eased Number Counter	text	dom	stack	gsap
+char-stagger-scale-up	Char Stagger Then Scale-Up	text	dom	split	gsap
+asymmetric-typewriter	Asymmetric Typewriter	text	dom	split	-
+step-end-caret	Step-End Blinking Caret	text	css	stack	-
+seamless-marquee	Pixels-Per-Second Marquee	text	dom	wave	gsap
+stroke-to-fill-hover	Stroke-To-Fill Hover Rows	text	css	split	-
+converging-scrub-words	Converging Headline Words	text	dom	split	gsap
+morphsvg-letter-scramble	MorphSVG Letter Scramble	text	dom	split	gsap
+scrub-char-color-reveal	Scrubbed Character Colour Reveal	text	dom	split	gsap
+nested-splittext-restore	Nested Split With True Restore	text	dom	split	gsap
+font-safe-text-split	Font-Safe Text Splitting	text	dom	split	gsap
+wrapping-drum-carousel	Wrapping Drum Carousel	layout	dom	orbit	gsap
+perspective-coverflow-scroller	Perspective Coverflow Scroller	layout	dom	orbit	-
+auto-advance-filmstrip	Auto-Advance Filmstrip	layout	css	stack	-
+proximity-snap-track	Proximity Snap Track	layout	css	stack	-
+percent-slide-carousel	Percent Slide Carousel	layout	css	stack	-
+matchmedia-layout-teardown	matchMedia Layout Teardown	layout	dom	stack	gsap
+height-first-media-stage	Height-First Media Stage	layout	css	stack	-
+rotary-drag-carousel	Rotary Drag Carousel	layout	dom	orbit	gsap
+drag-marquee	Wrap-Modifier Drag Marquee	layout	dom	trail	gsap
+layout-lerp-scalar	Two-Layout Lerp Scalar	layout	webgl	stack	three
+fov-derived-row-step	FOV-Derived Row Spacing	layout	dom	grid	-
+wrapped-ring-offset	Shortest Signed Ring Offset	primitive	dom	rings	-
+relaxed-seeded-scatter	Relaxed Seeded Scatter	primitive	dom	orbit	-
+cpu-mirror-picking	Raycaster-Free Hover Picking	primitive	dom	orbit	-
+analytic-disc-picking	Analytic Disc Picking	primitive	webgl	rings	three
+burst-audio-sync	Chord-Synced Particle Burst	primitive	dom	wave	-
+web-audio-scheduler	Web Audio Scheduling Kit	primitive	dom	wave	-
+spring-to-linear-easing	Spring To CSS linear()	primitive	css	wave	-
+self-parking-raf	Self-Parking RAF	primitive	dom	wave	-
+pause-dont-unmount	Pause, Don't Unmount	primitive	webgl	stack	three
+wheel-accumulator-stepper	Wheel Accumulator Stepper	primitive	dom	stack	-
+drag-deadzone-capture	Drag Dead Zone With Capture	primitive	dom	stack	-
+capture-phase-click-swallow	Capture-Phase Click Swallow	primitive	dom	stack	-
+conic-property-border	Conic @property Border	primitive	css	rings	-
+dotted-notepad-surface	Dotted Notepad Surface	primitive	css	grid	-
+drifting-smoke-layers	Drifting Smoke Layers	primitive	css	noise	-
+slow-float-idle	Slow Idle Float	primitive	css	wave	-
+compound-group-hover	Compound Group Hover Card	primitive	css	stack	-
+nav-dot-wave	Nav Dot Wave	primitive	css	wave	-
+looping-scroll-cue	Looping Scroll Cue	primitive	css	wave	-
+browser-chrome-frame	Browser Chrome Frame	primitive	css	stack	-
+lottie-ratio-poster	Lottie Ratio And Poster	primitive	dom	stack	lottie-web

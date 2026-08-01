@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "magnetic-button",
+  "title": "Magnetic Pointer Button",
+  "description": "A button that leans toward the cursor and springs back, with the label leading the box.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/magnetic-button.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport { useEffect, useRef, type ReactNode } from 'react';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   Magnetic Pointer Button\n   ========================================================================== */\n\nexport interface MagneticButtonProps {\n  children: ReactNode;\n  /**\n   * How far the element travels, as a fraction of pointer offset from centre.\n   * 0.35 reads as magnetic; past ~0.6 it reads as broken.\n   */\n  strength?: number;\n  /** Label travel relative to the button. >1 makes the text lead the box. */\n  labelStrength?: number;\n  /** Pixels beyond the border that still count as \"near\". */\n  padding?: number;\n  className?: string;\n  onClick?: () => void;\n  disabled?: boolean;\n}\n\n// #region critical\nconst RETURN_DURATION = 0.6;\nconst FOLLOW_DURATION = 0.35;\n\nexport function MagneticButton({\n  children,\n  strength = 0.35,\n  labelStrength = 1.6,\n  padding = 24,\n  className,\n  onClick,\n  disabled = false,\n}: MagneticButtonProps) {\n  const root = useRef<HTMLButtonElement>(null);\n  const label = useRef<HTMLSpanElement>(null);\n\n  useEffect(() => {\n    const el = root.current;\n    const text = label.current;\n    if (!el || !text || disabled) return;\n\n    // A coarse pointer has no hover state: the effect would only ever fire on\n    // touch-down, which reads as a glitch rather than an affordance.\n    const fine = window.matchMedia('(pointer: fine)');\n    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');\n    if (!fine.matches || reduced.matches) return;\n\n    // quickTo builds one reusable tween per property. The naive version calls\n    // gsap.to() on every pointermove, which allocates a tween per event (~120\n    // a second) and makes each one fight the last for the same property.\n    const xTo = gsap.quickTo(el, 'x', { duration: FOLLOW_DURATION, ease: 'power3.out' });\n    const yTo = gsap.quickTo(el, 'y', { duration: FOLLOW_DURATION, ease: 'power3.out' });\n    const labelXTo = gsap.quickTo(text, 'x', { duration: FOLLOW_DURATION, ease: 'power3.out' });\n    const labelYTo = gsap.quickTo(text, 'y', { duration: FOLLOW_DURATION, ease: 'power3.out' });\n\n    const onMove = (e: PointerEvent) => {\n      // Read the rect per move, not once on mount: the element is being\n      // translated by this very effect, and any scroll or reflow invalidates\n      // a cached rect. Stale centres make the button drift away permanently.\n      const rect = el.getBoundingClientRect();\n      const cx = rect.left + rect.width / 2;\n      const cy = rect.top + rect.height / 2;\n\n      const withinX = Math.abs(e.clientX - cx) < rect.width / 2 + padding;\n      const withinY = Math.abs(e.clientY - cy) < rect.height / 2 + padding;\n\n      if (withinX && withinY) {\n        const dx = (e.clientX - cx) * strength;\n        const dy = (e.clientY - cy) * strength;\n        xTo(dx);\n        yTo(dy);\n        labelXTo(dx * (labelStrength - 1));\n        labelYTo(dy * (labelStrength - 1));\n        return;\n      }\n\n      // Release. Overshoot on the way home is what sells the elastic.\n      gsap.to([el, text], {\n        x: 0,\n        y: 0,\n        duration: RETURN_DURATION,\n        ease: 'elastic.out(1, 0.4)',\n        overwrite: 'auto',\n      });\n    };\n\n    // Listen on the window, not the element. On the element, `pointerleave`\n    // fires the moment the button moves out from under the cursor — it\n    // chases itself away and stutters at the edge of the hit area.\n    window.addEventListener('pointermove', onMove, { passive: true });\n\n    return () => {\n      window.removeEventListener('pointermove', onMove);\n      // Kill before clearing: an in-flight tween would otherwise write a\n      // transform back onto a node React has already handed to something else.\n      gsap.killTweensOf([el, text]);\n      gsap.set([el, text], { clearProps: 'transform' });\n    };\n  }, [strength, labelStrength, padding, disabled]);\n  // #endregion critical\n\n  return (\n    <button\n      ref={root}\n      type=\"button\"\n      onClick={onClick}\n      disabled={disabled}\n      className={cn(\n        'relative inline-flex items-center justify-center rounded-full',\n        'border border-line-strong px-8 py-3',\n        'text-sm tracking-tight',\n        'transition-colors duration-300 hover:bg-surface',\n        'disabled:pointer-events-none disabled:opacity-50',\n        'will-change-transform',\n        className,\n      )}\n    >\n      <span ref={label} className=\"pointer-events-none inline-block will-change-transform\">\n        {children}\n      </span>\n    </button>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/magnetic-button.tsx"
+    }
+  ],
+  "meta": {
+    "category": "cursor",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "pointer",
+      "button",
+      "quickto",
+      "micro-interaction"
+    ]
+  },
+  "categories": [
+    "cursor"
+  ],
+  "type": "registry:ui"
+}

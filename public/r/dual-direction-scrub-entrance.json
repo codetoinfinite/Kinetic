@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dual-direction-scrub-entrance",
+  "title": "Dual-Direction Scrub Entrance",
+  "description": "Copy rises while a panel slides in from the side, both on one scrub with 600ms of lag.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-gsap.json",
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/dual-direction-scrub-entrance.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\nimport { useRef, type ReactNode, type RefObject } from 'react';\nimport { cn } from '@/lib/utils';\nimport { useGsap } from '@/hooks/use-gsap';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\n\n/* ==========================================================================\n   Dual-Direction Scrub Entrance\n   --------------------------------------------------------------------------\n   Two elements entering on the *same* scrub from different directions: the\n   copy rises, the card slides in from the side. One trigger, one timeline,\n   both tweens at position 0 — so their progress is identical at every scroll\n   position and the pair reads as one composed arrival rather than two\n   animations that happen to overlap.\n\n   The other half is `scrub: 0.6`. A boolean scrub is welded to the wheel:\n   stop scrolling and the animation stops in the same millisecond, which\n   feels like dragging a slider. 0.6 seconds of catch-up lets the elements\n   keep arriving briefly after the wheel stops, which is what \"weight\" is.\n   ========================================================================== */\n\nif (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger);\n\nexport interface DualDirectionScrubEntranceProps {\n  /** Rises from below. The reading order anchor — usually the copy. */\n  primary: ReactNode;\n  /** Slides in horizontally. Usually the card, figure or panel. */\n  secondary: ReactNode;\n  /** Which edge the secondary enters from. */\n  from?: 'left' | 'right';\n  /** Pixels the primary rises through. */\n  rise?: number;\n  /** Secondary travel as a percentage of its own width. */\n  slide?: number;\n  /** Seconds of catch-up behind the scroll position. */\n  scrub?: number;\n  start?: string;\n  end?: string;\n  /** The scroll container that owns the scroll position. Omit for the document. */\n  scrollerRef?: RefObject<HTMLElement | null>;\n  className?: string;\n}\n\n// #region critical\nexport function DualDirectionScrubEntrance({\n  primary,\n  secondary,\n  from = 'right',\n  rise = 60,\n  slide = 55,\n  scrub = 0.6,\n  start = 'top 82%',\n  end = 'top 38%',\n  scrollerRef,\n  className,\n}: DualDirectionScrubEntranceProps) {\n  const root = useRef<HTMLDivElement>(null);\n  const primaryRef = useRef<HTMLDivElement>(null);\n  const secondaryRef = useRef<HTMLDivElement>(null);\n  const reduced = useReducedMotion();\n\n  useGsap(\n    gsap,\n    () => {\n      const container = root.current;\n      const a = primaryRef.current;\n      const b = secondaryRef.current;\n      if (!container || !a || !b || reduced) return;\n\n      const tl = gsap.timeline({\n        scrollTrigger: {\n          trigger: container,\n          scroller: scrollerRef?.current ?? undefined,\n          start,\n          end,\n          // The number, not `true`. `true` welds the timeline to the wheel and\n          // the section stops moving in the same millisecond the wheel does.\n          scrub,\n          invalidateOnRefresh: true,\n        },\n      });\n\n      // `fromTo`, deliberately, and not `from`. A `from` tween on a scrubbed\n      // trigger renders its start state immediately at build time and then\n      // treats the element's *current* values as the destination — so a second\n      // tween, a resize, or React re-applying a style mid-scroll silently\n      // rewrites where the animation is heading. Stating both ends makes the\n      // timeline idempotent.\n      tl.fromTo(\n        a,\n        { autoAlpha: 0, y: rise },\n        { autoAlpha: 1, y: 0, ease: 'none', duration: 1 },\n        0,\n      );\n\n      tl.fromTo(\n        b,\n        { autoAlpha: 0, xPercent: from === 'right' ? slide : -slide },\n        { autoAlpha: 1, xPercent: 0, ease: 'none', duration: 1 },\n        // Position 0: both tweens share one progress value. Offsetting them\n        // would make the pair read as a queue instead of a single arrival.\n        0,\n      );\n    },\n    root,\n    [from, rise, slide, scrub, start, end, reduced],\n  );\n  // #endregion critical\n\n  return (\n    <div\n      ref={root}\n      className={cn(\n        'grid items-center gap-6 md:grid-cols-2',\n        from === 'left' && 'md:[&>*:first-child]:order-2',\n        className,\n      )}\n    >\n      <div ref={primaryRef} className=\"will-change-transform\">\n        {primary}\n      </div>\n      {/* The clip is what stops the sliding panel from widening the page: at\n          xPercent 55 it starts more than half its own width outside the grid\n          cell, and without an overflow guard that is a horizontal scrollbar. */}\n      <div className=\"overflow-hidden\">\n        <div ref={secondaryRef} className=\"will-change-transform\">\n          {secondary}\n        </div>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/dual-direction-scrub-entrance.tsx"
+    }
+  ],
+  "meta": {
+    "category": "scroll",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "scrolltrigger",
+      "scrub",
+      "entrance",
+      "timeline"
+    ]
+  },
+  "categories": [
+    "scroll"
+  ],
+  "type": "registry:ui"
+}

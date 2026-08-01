@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pinned-horizontal-track",
+  "title": "Pinned Horizontal Track",
+  "description": "A section pins while a strip of panels slides sideways, one scroll pixel per track pixel.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/pinned-horizontal-track.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\nimport { useEffect, useRef, type ReactNode, type RefObject } from 'react';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   Pinned Horizontal Track\n   --------------------------------------------------------------------------\n   Vertical scroll drives horizontal travel. One element is pinned, a strip\n   inside it translates on x, and the pin lasts exactly as many scroll pixels\n   as the strip has to travel — so one wheel notch moves the track by the\n   same distance it would have moved the page.\n\n   The whole construction rests on one measurement, `scrollWidth -\n   clientWidth`, and the only way to get it wrong is to take it once. Fonts\n   swap after first paint, images decode late, the container resizes: every\n   one of those changes the number. It is therefore read through a function\n   that ScrollTrigger re-invokes on refresh, for both the tween target and\n   the pin duration, so the two can never disagree.\n   ========================================================================== */\n\n// Registering twice is a no-op inside GSAP, but module evaluation also\n// happens during prerender, where ScrollTrigger has no document to measure.\nif (typeof window !== 'undefined') {\n  gsap.registerPlugin(ScrollTrigger);\n}\n\n/** Handed to the parent so sibling systems can drive off the same pin. */\nexport interface PinnedTrack {\n  /** The x tween. Pass as `containerAnimation` to reveal triggers. */\n  animation: gsap.core.Tween;\n  /** The pin itself. `trigger.end - trigger.start` is the scroll span. */\n  trigger: ScrollTrigger;\n  /** Live horizontal travel in px. Re-measured on call, never cached. */\n  getDistance: () => number;\n}\n\nexport interface PinnedHorizontalTrackProps {\n  /** Panels. Give them a width and `shrink-0`; the track is a flex row. */\n  children: ReactNode;\n  /**\n   * The scroll container the trigger reads. Omit to use the document.\n   * Required whenever the component lives inside its own scroll box.\n   */\n  scroller?: RefObject<HTMLElement | null>;\n  /** Seconds of catch-up. 0 locks to the scrollbar, 1 glides behind it. */\n  scrub?: number;\n  /** Receives the tween and trigger on build, `null` on teardown. */\n  onTrack?: (track: PinnedTrack | null) => void;\n  className?: string;\n  trackClassName?: string;\n}\n\n// #region critical\nexport function PinnedHorizontalTrack({\n  children,\n  scroller,\n  scrub = 1,\n  onTrack,\n  className,\n  trackClassName,\n}: PinnedHorizontalTrackProps) {\n  const root = useRef<HTMLDivElement>(null);\n  const track = useRef<HTMLDivElement>(null);\n  const onTrackRef = useRef(onTrack);\n  onTrackRef.current = onTrack;\n  const reduced = useReducedMotion();\n\n  useEffect(() => {\n    const rootEl = root.current;\n    const trackEl = track.current;\n    if (!rootEl || !trackEl || reduced) return;\n\n    // `undefined` means \"the document\" to ScrollTrigger. Passing `null` would\n    // be read as an explicit scroller and throw on the first refresh.\n    const scrollerEl = scroller?.current ?? undefined;\n\n    // The single source of truth. Both the tween's end value and the pin's\n    // duration call it, so a refresh that changes one changes the other.\n    const distanceOf = () => Math.max(0, trackEl.scrollWidth - rootEl.clientWidth);\n\n    let cancelled = false;\n\n    const ctx = gsap.context(() => {\n      const animation = gsap.to(trackEl, {\n        // Function-based value: re-evaluated by `invalidateOnRefresh`.\n        x: () => -distanceOf(),\n        ease: 'none',\n        scrollTrigger: {\n          trigger: rootEl,\n          scroller: scrollerEl,\n          pin: true,\n          anticipatePin: 1,\n          scrub,\n          start: 'top top',\n          // 1 px of scroll buys 1 px of track. Expressing the end as a\n          // percentage of viewport height instead makes the mapping depend\n          // on window shape, and the track finishes early on a short screen.\n          end: () => `+=${Math.max(1, distanceOf())}`,\n          invalidateOnRefresh: true,\n        },\n      });\n\n      const trigger = animation.scrollTrigger;\n      if (trigger) {\n        onTrackRef.current?.({ animation, trigger, getDistance: distanceOf });\n      }\n    }, rootEl);\n\n    // The most-forgotten line in scroll-driven layout. A font swap changes\n    // `scrollWidth` after the pin has already been measured, and the last\n    // panel becomes unreachable because the pin ends before the track does.\n    void document.fonts?.ready.then(() => {\n      if (!cancelled) ScrollTrigger.refresh();\n    });\n\n    return () => {\n      cancelled = true;\n      onTrackRef.current?.(null);\n      // revert(), not kill(): it also removes the pin-spacer GSAP injected\n      // into the DOM and restores the inline transform on the strip.\n      ctx.revert();\n    };\n  }, [scroller, scrub, reduced]);\n  // #endregion critical\n\n  return (\n    <div\n      ref={root}\n      className={cn(\n        'relative h-full w-full overflow-hidden',\n        // Reduced motion keeps every panel reachable — by thumb, trackpad\n        // and keyboard — instead of stranding them behind a dead pin.\n        reduced && 'overflow-x-auto',\n        className,\n      )}\n    >\n      <div\n        ref={track}\n        className={cn('flex h-full items-stretch will-change-transform', trackClassName)}\n      >\n        {children}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/pinned-horizontal-track.tsx"
+    }
+  ],
+  "meta": {
+    "category": "scroll",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "scrolltrigger",
+      "pin",
+      "horizontal",
+      "scrub"
+    ]
+  },
+  "categories": [
+    "scroll"
+  ],
+  "type": "registry:ui"
+}

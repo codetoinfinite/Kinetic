@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "step-end-caret",
+  "title": "Step-End Blinking Caret",
+  "description": "A text caret that snaps on and off instead of fading, using step-end timing and an uneven blink rhythm.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/step-end-caret.tsx",
+      "content": "'use client';\n\nimport type { CSSProperties } from 'react';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   Step-End Blinking Caret\n   --------------------------------------------------------------------------\n   One rule carries this component: `animation-timing-function: step-end`. A\n   real terminal cursor is a hardware blink — it is on, then it is off, with\n   nothing in between. Interpolate the opacity and you get a pulsing glow,\n   which reads as decoration rather than as an insertion point.\n\n   The keyframe distribution is deliberately uneven — on 0-20%, off 20-50%, on\n   50-70%, off 70-100%. A perfect square wave reads as a metronome; the long\n   on / short off / long on pattern reads as something alive.\n\n   Cost is CSS: no JavaScript runs after mount, no rAF, nothing to clean up.\n   The stylesheet is emitted once through React 19's `<style precedence>`\n   hoisting, so a hundred carets on a page produce one rule.\n   ========================================================================== */\n\n// #region critical\nconst CARET_CSS = `\n@keyframes kinetic-caret-blink {\n  0%, 70%, 100% { opacity: 1; }\n  20%, 50%      { opacity: 0; }\n}\n.kinetic-caret {\n  display: inline-block;\n  background-color: currentColor;\n  vertical-align: -0.14em;\n  animation: var(--kx-caret-period, 1.05s) step-end infinite kinetic-caret-blink;\n}\n/* Paused means solid, not frozen. 'animation-play-state: paused' stops on\n   whatever frame it happened to be on, which is a 50% chance of an invisible\n   caret. Dropping the animation entirely re-exposes the base opacity. */\n.kinetic-caret[data-paused='true'] {\n  animation: none;\n  opacity: 1;\n}\n@media (prefers-reduced-motion: reduce) {\n  .kinetic-caret {\n    animation: none;\n    opacity: 1;\n  }\n}\n`;\n\nexport interface StepEndCaretProps {\n  /** Bar width in px. */\n  width?: number;\n  /** Any CSS length. `em` keeps it locked to the type size around it. */\n  height?: string;\n  /** Seconds for one on-off-on-off cycle. */\n  period?: number;\n  /** Hold the caret solid — what a real terminal does while keys are down. */\n  paused?: boolean;\n  className?: string;\n}\n\nexport function StepEndCaret({\n  width = 2,\n  height = '1em',\n  period = 1.05,\n  paused = false,\n  className,\n}: StepEndCaretProps) {\n  return (\n    <>\n      <style href=\"kinetic-step-end-caret\" precedence=\"medium\">\n        {CARET_CSS}\n      </style>\n      <span\n        aria-hidden\n        data-paused={paused ? 'true' : 'false'}\n        className={cn('kinetic-caret', className)}\n        style={\n          {\n            width,\n            height,\n            '--kx-caret-period': `${period}s`,\n          } as CSSProperties\n        }\n      />\n    </>\n  );\n}\n// #endregion critical\n",
+      "type": "registry:ui",
+      "target": "components/motion/step-end-caret.tsx"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "cost": "css",
+    "tags": [
+      "css",
+      "caret",
+      "cursor",
+      "keyframes",
+      "terminal"
+    ]
+  },
+  "categories": [
+    "text"
+  ],
+  "type": "registry:ui"
+}

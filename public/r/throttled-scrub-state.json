@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "throttled-scrub-state",
+  "title": "Throttled Scrub To State",
+  "description": "A scrubbed trigger fires 120x a second; a time, distance and frame gate turns that into a handful of React renders.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-gsap.json",
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/throttled-scrub-state.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\nimport { useRef, useState, type ReactNode, type RefObject } from 'react';\nimport { cn } from '@/lib/utils';\nimport { useGsap } from '@/hooks/use-gsap';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\n\n/* ==========================================================================\n   Throttled Scrub To State\n   --------------------------------------------------------------------------\n   A scrubbed ScrollTrigger fires `onUpdate` on every frame the scroll\n   position moves — 60 to 120 times a second, and more on a trackpad. Calling\n   `setState` from there hands React 120 renders a second of whatever tree is\n   below you. That is fine for a number in a box and catastrophic for\n   anything that reconciles a list, so the usual outcome is that scroll-linked\n   React state gets abandoned and everything moves to imperative writes.\n\n   The alternative is a gate. This component keeps the continuous signal\n   imperative and commits a *discrete* React state only when three conditions\n   are met:\n\n     1. TIME     at least `interval` ms since the last commit\n     2. DISTANCE progress moved at least `minDelta` since the last commit\n     3. FRAME    at most one commit per animation frame, coalesced\n\n   with one override: the boundary frames (progress <= 0 and >= 1) always\n   commit, whatever the clock says. Without that override the gate eats the\n   last update of a fast flick and the tree is left at 0.93 forever — the\n   single most common bug in hand-rolled scroll throttles.\n\n   The two counters this exposes are the point. `ticks` is how many times\n   ScrollTrigger called back; `commits` is how many times React rendered.\n   Watch the ratio while you scroll.\n   ========================================================================== */\n\nif (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger);\n\nexport interface ScrubState {\n  /** Latest committed progress, 0-1. */\n  progress: number;\n  /** How many times React has re-rendered from this component. */\n  commits: number;\n  /** How many times ScrollTrigger called back, as of that commit. */\n  ticks: number;\n}\n\nexport interface ThrottledScrubStateProps {\n  /** Render prop. Called only on committed states, not on every tick. */\n  children: (state: ScrubState) => ReactNode;\n  /** Minimum milliseconds between commits. */\n  interval?: number;\n  /** Minimum change in progress, 0-1, before a commit is worth making. */\n  minDelta?: number;\n  /** Seconds of catch-up behind the scroll position. */\n  scrub?: number | boolean;\n  scrollerRef?: RefObject<HTMLElement | null>;\n  className?: string;\n}\n\n// #region critical\nexport function ThrottledScrubState({\n  children,\n  interval = 100,\n  minDelta = 0.02,\n  scrub = 0.4,\n  scrollerRef,\n  className,\n}: ThrottledScrubStateProps) {\n  const root = useRef<HTMLDivElement>(null);\n  const reduced = useReducedMotion();\n\n  // The only React state in the component. Everything else is a ref, because\n  // a ref write does not render.\n  const [state, setState] = useState<ScrubState>({ progress: 0, commits: 0, ticks: 0 });\n\n  const ticks = useRef(0);\n  const commits = useRef(0);\n  const lastAt = useRef(0);\n  const lastProgress = useRef(0);\n  const pending = useRef<number | null>(null);\n  const frame = useRef(0);\n\n  useGsap(\n    gsap,\n    () => {\n      const el = root.current;\n      if (!el) return;\n\n      // Gate 3: coalesce. Several ticks can pass all the other gates inside\n      // one frame (ScrollTrigger fires per scroll event, not per paint), and\n      // three setStates in a frame is three renders for one visible change.\n      const flush = () => {\n        frame.current = 0;\n        const value = pending.current;\n        if (value === null) return;\n        pending.current = null;\n        commits.current += 1;\n        setState({ progress: value, commits: commits.current, ticks: ticks.current });\n      };\n\n      const trigger = ScrollTrigger.create({\n        trigger: el,\n        scroller: scrollerRef?.current ?? undefined,\n        start: 'top bottom',\n        end: 'bottom top',\n        // Reduced motion welds the readout to the wheel: the value still\n        // tracks the scroll the reader is performing, but nothing continues\n        // to move after they stop.\n        scrub: reduced ? true : scrub,\n        invalidateOnRefresh: true,\n        onUpdate: (self) => {\n          const p = self.progress;\n          ticks.current += 1;\n\n          // The override. The ends of the range are the two values that must\n          // never be dropped, because there is no later tick to correct them.\n          const boundary = p <= 0 || p >= 1;\n\n          if (boundary) {\n            // ...but do not re-commit the same boundary on every one of the\n            // dozens of ticks that arrive while sitting at the end.\n            if (p === lastProgress.current) return;\n          } else {\n            // Gate 1: time. `performance.now()` and not `Date.now()` — a\n            // monotonic clock, so an NTP correction cannot make the elapsed\n            // time negative and freeze the gate shut.\n            if (performance.now() - lastAt.current < interval) return;\n            // Gate 2: distance. A slow drag passes the time gate constantly\n            // while moving a fraction of a percent, which is a render for a\n            // change nobody can see.\n            if (Math.abs(p - lastProgress.current) < minDelta) return;\n          }\n\n          lastAt.current = performance.now();\n          lastProgress.current = p;\n          pending.current = p;\n          if (frame.current === 0) frame.current = requestAnimationFrame(flush);\n        },\n      });\n\n      return () => {\n        // Order matters: kill the source first, then drop the frame it may\n        // have just scheduled. A flush that survives teardown calls setState\n        // on an unmounted tree.\n        trigger.kill();\n        if (frame.current !== 0) {\n          cancelAnimationFrame(frame.current);\n          frame.current = 0;\n        }\n        pending.current = null;\n      };\n    },\n    root,\n    [interval, minDelta, scrub, scrollerRef, reduced],\n  );\n  // #endregion critical\n\n  return (\n    <div ref={root} className={cn('relative', className)}>\n      {children(state)}\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/throttled-scrub-state.tsx"
+    }
+  ],
+  "meta": {
+    "category": "scroll",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "scrolltrigger",
+      "scrub",
+      "react-state",
+      "throttle",
+      "performance"
+    ]
+  },
+  "categories": [
+    "scroll"
+  ],
+  "type": "registry:ui"
+}

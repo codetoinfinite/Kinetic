@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hinged-container-intro",
+  "title": "Hinged Container Intro",
+  "description": "The page body swings up from below the fold, hinged on its own bottom edge, with captions following it in.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-gsap.json",
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/hinged-container-intro.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport { useEffect, useRef, type ReactNode } from 'react';\nimport { cn } from '@/lib/utils';\nimport { useGsap } from '@/hooks/use-gsap';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\n\n/* ==========================================================================\n   Hinged Container Intro\n   --------------------------------------------------------------------------\n   The page body arrives from below the fold already tipped back in X and\n   hinged from its own bottom edge, so it reads as a lid tilting up toward the\n   viewer rather than a card sliding in. Secondary copy follows on a stagger\n   that starts before the panel has landed, and a single cue fires partway\n   through the flight for whatever expensive thing (a WebGL scene, a video)\n   should start while the panel is still moving.\n\n   The three beats are deliberately unequal in length: 1.4 s panel, 0.9 s\n   detail, and a cue at 0.8 s. Equal beats read as one long move; unequal ones\n   read as choreography.\n   ========================================================================== */\n\nexport interface HingedContainerIntroProps {\n  children: ReactNode;\n  /**\n   * Change this to replay the intro. In an App Router layout pass\n   * `usePathname()`; in a modal pass the record id. Left undefined the intro\n   * plays once on mount.\n   */\n  routeKey?: string;\n  /** Panel flight time in seconds. */\n  duration?: number;\n  /** Starting X rotation in degrees. Negative tips the top edge away. */\n  tilt?: number;\n  /** Starting offset as a percentage of the panel's own height. */\n  travel?: number;\n  /** Perspective on the wrapper, in px. Smaller is a wider lens. */\n  perspective?: number;\n  /** Elements matching this selector inside the panel stagger in after it. */\n  detailSelector?: string;\n  /** Fired `sceneCue` seconds into the timeline — start heavy work here. */\n  onSceneCue?: () => void;\n  /** When the cue fires, in seconds from timeline start. */\n  sceneCue?: number;\n  className?: string;\n}\n\nconst DETAIL_DURATION = 0.9;\nconst DETAIL_STAGGER = 0.1;\nconst DETAIL_OVERLAP = 0.6;\n\n/* The start state lives in CSS, not in the effect. A `fromTo` alone leaves a\n   window between first paint and the passive effect in which the panel is\n   painted in its final position — one frame of the finished page, then a jump\n   back below the fold. Reduced motion re-reveals it here so the content is\n   never gated on JS running at all. */\nconst CSS = `\n[data-hinged-panel] { opacity: 0; }\n@media (prefers-reduced-motion: reduce) {\n  [data-hinged-panel] { opacity: 1; }\n}\n`;\n\n// #region critical\nexport function HingedContainerIntro({\n  children,\n  routeKey,\n  duration = 1.4,\n  tilt = -45,\n  travel = 120,\n  perspective = 1200,\n  detailSelector = '[data-hinge-detail]',\n  onSceneCue,\n  sceneCue = 0.8,\n  className,\n}: HingedContainerIntroProps) {\n  const root = useRef<HTMLDivElement>(null);\n  const panel = useRef<HTMLDivElement>(null);\n  const reduced = useReducedMotion();\n\n  // Held in a ref so a caller passing an inline arrow does not have to\n  // memoise it to avoid replaying the whole intro on every parent render.\n  const cue = useRef(onSceneCue);\n  cue.current = onSceneCue;\n\n  useGsap(\n    gsap,\n    () => {\n      const el = panel.current;\n      if (!el || reduced) return;\n\n      const details = Array.from(el.querySelectorAll<HTMLElement>(detailSelector));\n      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });\n\n      // transformOrigin bottom + negative rotateX is the whole trick: the\n      // panel pivots on the edge it is about to sit on, so the top edge\n      // travels much further than the bottom and the move reads as a hinge\n      // instead of a translation with a tilt bolted on.\n      tl.fromTo(\n        el,\n        {\n          yPercent: travel,\n          rotateX: tilt,\n          opacity: 0,\n          transformOrigin: 'center bottom',\n          transformPerspective: perspective,\n        },\n        { yPercent: 0, rotateX: 0, opacity: 1, duration },\n      );\n\n      // Guarded: GSAP logs \"target not found\" for an empty array, and a\n      // component that warns on every mount trains people to ignore the\n      // console.\n      if (details.length > 0) {\n        tl.fromTo(\n          details,\n          { opacity: 0, y: 30 },\n          { opacity: 1, y: 0, duration: DETAIL_DURATION, stagger: DETAIL_STAGGER },\n          `-=${DETAIL_OVERLAP}`,\n        );\n      }\n\n      // A number position is absolute on the timeline, so the cue stays at\n      // 0.8 s no matter how the two tweens above are retimed.\n      tl.call(\n        () => {\n          cue.current?.();\n        },\n        undefined,\n        sceneCue,\n      );\n    },\n    root,\n    [routeKey, reduced],\n  );\n  // #endregion critical\n\n  // Reduced motion still needs the cue — the scene, video or fetch behind it\n  // is content, not decoration.\n  useEffect(() => {\n    if (!reduced) return;\n    cue.current?.();\n  }, [reduced, routeKey]);\n\n  return (\n    <div\n      ref={root}\n      className={cn('relative h-full w-full', className)}\n      style={{ perspective: `${perspective}px` }}\n    >\n      <style>{CSS}</style>\n      <div\n        ref={panel}\n        data-hinged-panel=\"\"\n        className=\"h-full w-full will-change-transform\"\n      >\n        {children}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/hinged-container-intro.tsx"
+    }
+  ],
+  "meta": {
+    "category": "transition",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "intro",
+      "rotatex",
+      "stagger",
+      "page-enter"
+    ]
+  },
+  "categories": [
+    "transition"
+  ],
+  "type": "registry:ui"
+}

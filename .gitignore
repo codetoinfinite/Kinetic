@@ -1,0 +1,36 @@
+# dependencies
+node_modules/
+
+# next
+.next/
+out/
+next-env.d.ts
+
+# typescript
+*.tsbuildinfo
+
+# playwright
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# local screenshot scratch (scripts/shots.ts)
+shots*/
+
+# env — never commit these. `SITE_URL` belongs in the host's build settings,
+# not in the repo.
+.env
+.env.*
+!.env.example
+
+# local tooling — machine-specific, never part of the project
+.claude/
+.cursor/
+.vscode/
+.idea/
+*.local.md
+
+# os / editor
+.DS_Store
+*.log

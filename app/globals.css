@@ -1,0 +1,773 @@
+@import 'tailwindcss';
+
+@source '../app';
+@source '../components';
+@source '../registry';
+@source '../__generated__';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ==========================================================================
+   Kinetic — "Editorial Mono"
+   --------------------------------------------------------------------------
+   Near-black canvas, hairline rules, one accent per category, monospace for
+   anything that is metadata rather than prose. Dark is the default because
+   the product is motion: a WebGL or particle preview reads correctly against
+   black and washes out against white.
+
+   Raw values live on :root/.dark as `--k-*`. The `@theme inline` block at the
+   bottom republishes them under Tailwind's namespaces, which is what makes
+   `bg-bg`, `text-muted`, `border-line` generate AND respond to the `.dark`
+   class. `inline` is required: without it Tailwind resolves the token to its
+   :root value at build time and the .dark override never lands.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  --k-bg: oklch(0.145 0 0); /* #0A0A0A */
+  --k-bg-subtle: oklch(0.178 0 0);
+  --k-surface: oklch(0.196 0 0);
+  --k-surface-hover: oklch(0.235 0 0);
+
+  --k-fg: oklch(0.949 0 0);
+  --k-fg-muted: oklch(0.63 0 0);
+  --k-fg-faint: oklch(0.45 0 0);
+
+  --k-line: oklch(1 0 0 / 8%);
+  --k-line-strong: oklch(1 0 0 / 16%);
+
+  --k-accent: oklch(0.75 0.16 250);
+  --k-accent-fg: oklch(0.145 0 0);
+
+  --k-danger: oklch(0.68 0.2 25);
+  --k-shadow: oklch(0 0 0 / 60%);
+
+  /* One accent per category. Set as --k-accent on any subtree via
+     `data-category`, so a card, a badge and a motif all agree without props. */
+  --k-cat-scroll: oklch(0.72 0.15 250);
+  --k-cat-webgl: oklch(0.75 0.16 165);
+  --k-cat-cursor: oklch(0.76 0.17 45);
+  --k-cat-transition: oklch(0.72 0.18 305);
+  --k-cat-text: oklch(0.82 0.15 95);
+  --k-cat-layout: oklch(0.74 0.13 205);
+  --k-cat-primitive: oklch(0.7 0.03 260);
+}
+
+.light {
+  color-scheme: light;
+
+  --k-bg: oklch(0.985 0 0);
+  --k-bg-subtle: oklch(0.968 0 0);
+  --k-surface: oklch(1 0 0);
+  --k-surface-hover: oklch(0.955 0 0);
+
+  --k-fg: oklch(0.16 0 0);
+  --k-fg-muted: oklch(0.48 0 0);
+  --k-fg-faint: oklch(0.63 0 0);
+
+  --k-line: oklch(0 0 0 / 10%);
+  --k-line-strong: oklch(0 0 0 / 18%);
+
+  --k-accent: oklch(0.55 0.18 250);
+  --k-accent-fg: oklch(0.99 0 0);
+
+  --k-danger: oklch(0.54 0.21 25);
+  --k-shadow: oklch(0 0 0 / 12%);
+
+  --k-cat-scroll: oklch(0.53 0.17 250);
+  --k-cat-webgl: oklch(0.52 0.14 165);
+  --k-cat-cursor: oklch(0.58 0.16 45);
+  --k-cat-transition: oklch(0.53 0.2 305);
+  --k-cat-text: oklch(0.6 0.14 95);
+  --k-cat-layout: oklch(0.53 0.13 205);
+  --k-cat-primitive: oklch(0.5 0.02 260);
+}
+
+/* A subtree tagged with its category adopts that category's accent. Every
+   accent-coloured thing inside then needs no prop and cannot disagree. */
+[data-category='scroll'] { --k-accent: var(--k-cat-scroll); }
+[data-category='webgl'] { --k-accent: var(--k-cat-webgl); }
+[data-category='cursor'] { --k-accent: var(--k-cat-cursor); }
+[data-category='transition'] { --k-accent: var(--k-cat-transition); }
+[data-category='text'] { --k-accent: var(--k-cat-text); }
+[data-category='layout'] { --k-accent: var(--k-cat-layout); }
+[data-category='primitive'] { --k-accent: var(--k-cat-primitive); }
+
+@theme inline {
+  --color-bg: var(--k-bg);
+  --color-bg-subtle: var(--k-bg-subtle);
+  --color-surface: var(--k-surface);
+  --color-surface-hover: var(--k-surface-hover);
+
+  --color-fg: var(--k-fg);
+  --color-muted: var(--k-fg-muted);
+  --color-faint: var(--k-fg-faint);
+
+  --color-line: var(--k-line);
+  --color-line-strong: var(--k-line-strong);
+
+  --color-accent: var(--k-accent);
+  --color-accent-fg: var(--k-accent-fg);
+  --color-danger: var(--k-danger);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular,
+    'SF Mono', Menlo, Consolas, monospace;
+
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* Editorial Mono uses a narrow, deliberate motion vocabulary. Anything that
+     is site chrome uses these; component previews bring their own. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Entrances decelerate hard and never overshoot. A spring that bounces reads
+     as playful, and nothing on this site is trying to be playful. */
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Four durations, and the tier is chosen by how much of the screen moves.
+     Anything outside this scale is a mistake rather than a decision.
+
+       instant  colour, opacity, border — the thing under the cursor
+       control  a control changing state: tab indicator, toggle, copy button
+       element  one element entering, leaving or resizing
+       surface  a whole panel or the hero
+
+     Ceiling is 480ms. Material 3's medium tier tops out at 400ms, Carbon's
+     moderate-02 at 240ms, and practitioner guidance puts UI interactions
+     under 300ms; past roughly 500ms a transition stops reading as the
+     interface responding and starts reading as the interface waiting.
+
+     Exit is deliberately faster than enter — you have already decided to
+     dismiss the thing, so waiting for it to leave is pure latency. */
+  --duration-instant: 120ms;
+  --duration-control: 200ms;
+  --duration-element: 320ms;
+  --duration-surface: 480ms;
+  --duration-exit: 160ms;
+
+  /* The same five values a second time, under the namespace Tailwind actually
+     reads. `duration-*` utilities resolve against `--transition-duration-*`,
+     not against `--duration-*`, so without these aliases a class like
+     `duration-control` matches nothing, emits nothing, and the element quietly
+     inherits Tailwind's 150ms default — the scale above would be documentation
+     rather than behaviour, and nothing would fail to tell you.
+
+     The `--duration-*` names stay because the raw CSS further down this file
+     (`.lift`, `.wipe`, `.rise`) writes `var(--duration-control)` directly, and
+     because `duration-(--duration-control)` is the escape hatch when a value
+     has to be read as a variable rather than inlined. Aliasing rather than
+     renaming keeps one source of truth for the numbers. */
+  --transition-duration-instant: var(--duration-instant);
+  --transition-duration-control: var(--duration-control);
+  --transition-duration-element: var(--duration-element);
+  --transition-duration-surface: var(--duration-surface);
+  --transition-duration-exit: var(--duration-exit);
+
+  /* Display scale. The theme previously went straight from a 64px headline to
+     15px body text, so every section title, every stat and every intro
+     paragraph was fighting for the same one size — which is exactly what makes
+     a page read as a stack of divs rather than as a document.
+
+     Fluid rather than stepped: `clamp` means the hero is never larger than its
+     column at 1440 and never wraps to five lines at 380, without a breakpoint
+     for each. Tracking tightens as size grows because letter-spacing that
+     looks correct at 15px looks slack at 80px. */
+  --text-display-1: clamp(2.5rem, 5.2vw, 4.75rem);
+  --text-display-1--line-height: 0.96;
+  --text-display-1--letter-spacing: -0.035em;
+  --text-display-1--font-weight: 500;
+
+  --text-display-2: clamp(1.75rem, 3vw, 2.5rem);
+  --text-display-2--line-height: 1.08;
+  --text-display-2--letter-spacing: -0.025em;
+  --text-display-2--font-weight: 500;
+
+  --text-display-3: clamp(1.25rem, 1.8vw, 1.5rem);
+  --text-display-3--line-height: 1.2;
+  --text-display-3--letter-spacing: -0.018em;
+  --text-display-3--font-weight: 500;
+
+  /* The rung that was missing: large enough to be read before the body copy,
+     small enough not to compete with a heading. */
+  --text-lead: clamp(1rem, 1.15vw, 1.1875rem);
+  --text-lead--line-height: 1.6;
+  --text-lead--letter-spacing: -0.01em;
+
+  --breakpoint-3xl: 120rem;
+}
+
+/* ==========================================================================
+   Depth.
+   --------------------------------------------------------------------------
+   The theme was built entirely out of 1px hairlines on one flat background,
+   which is why every panel read as the same panel. These add the second axis.
+
+   The inner top highlight is the load-bearing one: a single hairline of light
+   along a surface's top edge is what makes it sit *above* the page rather
+   than being a rectangle drawn *on* it. It is nearly invisible in isolation
+   and does most of the work in aggregate.
+   ========================================================================== */
+
+:root {
+  --k-highlight: inset 0 1px 0 oklch(1 0 0 / 6%);
+  --k-elev-1: 0 1px 2px oklch(0 0 0 / 40%);
+  --k-elev-2: 0 4px 16px -4px oklch(0 0 0 / 50%);
+  --k-elev-3: 0 16px 48px -12px oklch(0 0 0 / 65%);
+}
+
+.light {
+  /* Inverted: on a light canvas the highlight would be invisible, so the
+     equivalent cue is a soft shadow and a slightly darker bottom edge. */
+  --k-highlight: inset 0 1px 0 oklch(1 0 0 / 90%);
+  --k-elev-1: 0 1px 2px oklch(0 0 0 / 6%);
+  --k-elev-2: 0 4px 16px -4px oklch(0 0 0 / 10%);
+  --k-elev-3: 0 16px 48px -12px oklch(0 0 0 / 14%);
+}
+
+@layer base {
+  * {
+    border-color: var(--k-line);
+  }
+
+  html {
+    /* Next 16 removed the automatic `scroll-behavior: smooth`; this attribute
+       is how you opt back in without breaking router-driven scroll restore. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--k-bg);
+    color: var(--k-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--k-accent);
+    color: var(--k-accent-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--k-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* The site's own chrome never animates for users who asked it not to.
+     Individual components handle this themselves via useReducedMotion, because
+     for them "no motion" means a different render, not a 0s duration. */
+  @media (prefers-reduced-motion: reduce) {
+    html:not([data-force-motion]) *,
+    html:not([data-force-motion]) *::before,
+    html:not([data-force-motion]) *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Metadata voice: uppercase mono, wide tracking, faint. Used for category
+     labels, file names, dependency lists, the things that are not prose. */
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--k-fg-muted);
+  }
+
+  .rule {
+    height: 1px;
+    width: 100%;
+    background-color: var(--k-line);
+  }
+
+  /* Replaces fumadocs' typography. Scoped, ~60 lines, no plugin. */
+  .prose {
+    color: var(--k-fg-muted);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    max-width: 68ch;
+  }
+  .prose > * + * {
+    margin-top: 1.15em;
+  }
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    color: var(--k-fg);
+    font-weight: 500;
+    letter-spacing: -0.011em;
+    line-height: 1.3;
+    scroll-margin-top: 6rem;
+  }
+  .prose h2 {
+    font-size: 1.25rem;
+    margin-top: 2.5em;
+  }
+  .prose h3 {
+    font-size: 1.0625rem;
+    margin-top: 2em;
+  }
+  .prose h4 {
+    font-size: 0.9375rem;
+    margin-top: 1.75em;
+  }
+  .prose strong {
+    color: var(--k-fg);
+    font-weight: 500;
+  }
+  .prose a {
+    color: var(--k-fg);
+    text-decoration: underline;
+    text-decoration-color: var(--k-line-strong);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 150ms var(--ease-out-quart);
+  }
+  .prose a:hover {
+    text-decoration-color: var(--k-accent);
+  }
+  .prose ul,
+  .prose ol {
+    padding-left: 1.25em;
+  }
+  .prose ul {
+    list-style: disc;
+  }
+  .prose ol {
+    list-style: decimal;
+  }
+  .prose li::marker {
+    color: var(--k-fg-faint);
+  }
+  .prose li + li {
+    margin-top: 0.4em;
+  }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--k-fg);
+    background-color: var(--k-bg-subtle);
+    border: 1px solid var(--k-line);
+    border-radius: 3px;
+    padding: 0.12em 0.36em;
+  }
+  .prose pre {
+    background-color: var(--k-bg-subtle);
+    border: 1px solid var(--k-line);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+  .prose pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+  }
+  .prose blockquote {
+    border-left: 2px solid var(--k-line-strong);
+    padding-left: 1em;
+    color: var(--k-fg-faint);
+  }
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  .prose th,
+  .prose td {
+    border-bottom: 1px solid var(--k-line);
+    padding: 0.55em 0.8em;
+    text-align: left;
+  }
+  .prose th {
+    color: var(--k-fg);
+    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+@layer utilities {
+  /* Shiki emits both themes into one <pre>; these two rules pick one.
+     Cheaper and flash-free versus re-highlighting on the client. */
+  .shiki span {
+    color: var(--shiki-dark);
+  }
+  .shiki {
+    background-color: transparent !important;
+  }
+  .light .shiki span {
+    color: var(--shiki-light);
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Used by the preview host: an element that is laid out and painted but
+     cannot be interacted with while its slot is revoked. */
+  .inert-layer {
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+/* ==========================================================================
+   Motion.
+   --------------------------------------------------------------------------
+   Entrances are driven by the scroll position rather than by an
+   IntersectionObserver: `animation-timeline: view()` ties an element's
+   progress to its own travel through the viewport, so a reveal scrubs both
+   ways, costs no JavaScript, and cannot desynchronise from the scroll the way
+   a JS-driven class toggle does.
+
+   Support, checked rather than assumed: Chrome/Edge 115+, Safari 26+. Firefox
+   still has it behind `layout.css.scroll-driven-animations.enabled` in stable
+   as of mid-2026, so everything here is gated on @supports.
+
+   The gate direction is the part that matters. The animated end state is the
+   *default* state, and the @supports block only adds the from-state. So a
+   browser without scroll timelines, a user with reduced motion, and a crawler
+   with no layout at all all get fully visible content. There is no path where
+   a failed animation leaves the page blank — which is the standard way scroll
+   reveals break in production.
+   ========================================================================== */
+
+@keyframes k-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .rise {
+      animation: k-rise var(--duration-surface) var(--ease-entrance) both;
+      animation-timeline: view();
+      /* Finished a fifth of the way up rather than at the centre: an element
+         that is still fading at reading height feels like it is lagging. */
+      animation-range: entry 0% cover 20%;
+    }
+
+    /* Siblings on one row enter the viewport at the same moment, so their
+       stagger has to come from the range rather than from arrival. Literal
+       values, not calc(): percentages inside animation-range are resolved
+       against the timeline, and calc() there is not reliably supported. */
+    .rise-row > *:nth-child(2) {
+      animation-range: entry 3% cover 23%;
+    }
+    .rise-row > *:nth-child(3) {
+      animation-range: entry 6% cover 26%;
+    }
+    .rise-row > *:nth-child(4) {
+      animation-range: entry 9% cover 29%;
+    }
+  }
+}
+
+@layer components {
+  /* A surface that sits above the page: hairline, top highlight, elevation.
+     Replaces the bare `border border-line` that every panel used to share. */
+  .panel {
+    background-color: var(--k-surface);
+    border: 1px solid var(--k-line);
+    box-shadow: var(--k-highlight), var(--k-elev-1);
+  }
+
+  /* Hover affordance for anything clickable and card-shaped. 2px, because the
+     point is to acknowledge the cursor, not to jump at it. */
+  .lift {
+    transition:
+      transform var(--duration-control) var(--ease-out-quart),
+      box-shadow var(--duration-control) var(--ease-out-quart),
+      border-color var(--duration-instant) linear;
+    will-change: transform;
+  }
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--k-highlight), var(--k-elev-2);
+    border-color: var(--k-line-strong);
+  }
+  /* Pressing is the one place the scale goes down: it reads as the surface
+     taking the weight of the click. */
+  .lift:active {
+    transform: translateY(-2px) scale(0.995);
+    transition-duration: var(--duration-instant);
+  }
+
+  /* An underline that wipes in from the left rather than appearing all at once.
+     Drawn as a pseudo-element, not `text-decoration`, because scaleX is a
+     compositor-only property and animating the decoration is not.
+
+     `transform-origin` flips on the way out so the line retracts back to where
+     it came from instead of collapsing to its centre. */
+  .wipe {
+    position: relative;
+  }
+  .wipe::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--duration-control) var(--ease-out-quart);
+  }
+  .wipe:hover::after,
+  .wipe:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* The one gradient in the theme. A flat near-black canvas is what made every
+     panel read as the same panel no matter how the borders were arranged; a
+     single very low-contrast wash behind the top of the page gives the hero a
+     light source, and everything below it reads as further away.
+
+     Kept at 4% and confined to a pseudo-element so it never tints text and
+     never participates in the stacking context of anything interactive. */
+  .wash {
+    position: relative;
+    isolation: isolate;
+  }
+  .wash::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        90rem 40rem at 18% -10%,
+        color-mix(in oklab, var(--k-accent) 4%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(60rem 30rem at 88% 0%, var(--k-bg-subtle), transparent 70%);
+  }
+}
+
+/* ==========================================================================
+   Scrub.
+   --------------------------------------------------------------------------
+   Two different mechanisms, because they answer two different questions.
+
+   `.rise` above is a *reveal*: an element crossing the viewport, which the
+   browser can time on its own with `animation-timeline: view()` and no script.
+
+   This section is a *transport*: the reader's scroll position is the playhead
+   for a scene that stays pinned while they travel through it. The playhead
+   itself has to come from script — the hero's WebGL stage needs the number
+   anyway, per frame, to place a camera — so rather than have CSS and WebGL
+   each derive their own progress from the same scroll and drift apart by a
+   frame, script publishes one number as `--k-scrub` and both read it.
+
+   Registering it is what makes that safe. An unregistered custom property is
+   a token, so a stylesheet that divides by it is invalid at computed-value
+   time whenever the value has not been written yet — during SSR, before
+   hydration, with JS off. Registered with `<number>` and an initial value of
+   0, every one of those cases resolves to "start of travel", which is exactly
+   the state the page should paint in.
+   ========================================================================== */
+
+@property --k-scrub {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+@layer components {
+  /* Copy layered over a pinned stage. It clears out over the first fifth of
+     the travel, so the stage is unobstructed for the rest of it, and comes
+     back on the way up. `clamp` rather than a raw division because opacity
+     accepts out-of-range numbers and would otherwise stay at 0 for the whole
+     tail of the scrub. */
+  .scrub-lead {
+    opacity: clamp(0, calc(1 - var(--k-scrub) / 0.2), 1);
+    transform: translate3d(0, calc(var(--k-scrub) * -4rem), 0);
+  }
+
+  /* Inverse: appears once travel is underway. */
+  .scrub-trail {
+    opacity: clamp(0, calc(var(--k-scrub) / 0.2 - 0.6), 1);
+  }
+
+  /* Position along a track, 0 at the top and 1 at the bottom. */
+  .scrub-marker {
+    top: calc(var(--k-scrub) * 100%);
+  }
+}
+
+@layer components {
+  /* A scrub-revealed strip still holds real links, and tabbing to one that is
+     at opacity 0 leaves a sighted keyboard user with a focus ring on nothing.
+     Focus forces the strip open. */
+  .scrub-trail:focus-within {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Editorial spreads.
+   --------------------------------------------------------------------------
+   The page below the stage used to be three grids of cells: seven previews in
+   a seamed mosaic, three steps in a seamed row, seven links in a list. Every
+   band had the same construction, the same rhythm and the same 3.5rem of air,
+   which is why it read as congested — not because there was too much on it,
+   but because nothing on it was a different shape from anything else.
+
+   What replaces it is one row per item, running the full width, with the
+   composition alternating side to side and the vertical measure set by the
+   item rather than by a grid. The rules below are the moving parts of that:
+   three scroll-driven graphics and two hover states, all of them either
+   compositor-only transforms or colour.
+
+     .plate    a frame opening out as it arrives, scrubbed by its own travel
+     .slide    an ordinal entering laterally, tied to its own row's travel
+     .draw     a hairline drawing itself in as its section arrives
+     .spread   accent hairline wiping along the bottom of a hovered row
+     .brace    accent bar wiping down the left edge of a hovered row
+
+   Same gate as `.rise`: the finished state is the *default*, and the
+   @supports/@media block only ever adds the from-state, so no scroll timeline,
+   reduced motion, or no layout at all still paints the composed page.
+   ========================================================================== */
+
+/* The frame opens from its own top edge and settles out of a slight overscale,
+   so the arrival is the frame's, not the preview's.
+
+   This replaces a continuous parallax, which cropped a fixed slice off the
+   preview for its whole passage. The previews are live components and several
+   of them anchor their own copy to their bottom edge, so a permanent crop cut
+   sentences in half. A reveal only clips on the way in, and every frame that
+   has arrived shows its component whole. */
+@keyframes k-plate {
+  from {
+    clip-path: inset(0 0 26% 0);
+    transform: scale(1.035);
+  }
+}
+
+@keyframes k-slide {
+  from {
+    transform: translate3d(-1.75rem, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes k-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@layer components {
+  /* The frame must clip with `overflow: clip`, not `overflow: hidden`. Hidden
+     makes an element a scroll container, and `view()` binds to the nearest
+     one — so a hidden frame would carry a timeline that never advances, and
+     the reveal would hold at its from-state forever. */
+  .plate {
+    will-change: transform, clip-path;
+  }
+
+  .draw {
+    transform-origin: left center;
+  }
+
+  /* Row-level hover. A rule that lights up in the row's own category accent
+     is the whole affordance — the alternative is a border, and a border is a
+     card. `focus-within` so tabbing through the page shows the same thing. */
+  .spread {
+    position: relative;
+  }
+  .spread::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -1px 0;
+    height: 1px;
+    background-color: var(--k-accent);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform var(--duration-element) var(--ease-out-quart);
+    pointer-events: none;
+  }
+  .spread:hover::after,
+  .spread:focus-within::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  /* The list equivalent: a 2px accent brace down the leading edge. */
+  .brace {
+    position: relative;
+  }
+  .brace::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background-color: var(--k-accent);
+    transform: scaleY(0);
+    transform-origin: center bottom;
+    transition: transform var(--duration-control) var(--ease-out-quart);
+    pointer-events: none;
+  }
+  .brace:hover::before,
+  .brace:focus-visible::before {
+    transform: scaleY(1);
+    transform-origin: center top;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* Scrubbed from the moment the frame's top edge enters to a third of the
+       way through its passage, so it is open well before it is the thing you
+       are looking at, and it closes again on the way back up. No duration: a
+       scroll-driven animation takes its progress from the timeline. */
+    .plate {
+      animation: k-plate linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 32%;
+    }
+
+    .slide {
+      animation: k-slide var(--duration-surface) var(--ease-entrance) both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 25%;
+    }
+
+    .draw {
+      animation: k-draw var(--duration-surface) var(--ease-out-quart) both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 30%;
+    }
+  }
+}

@@ -1,0 +1,4617 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "kinetic",
+  "homepage": "http://localhost:8927",
+  "items": [
+    {
+      "name": "ab-layer-crossfade",
+      "type": "registry:ui",
+      "title": "A/B Layer Ping-Pong",
+      "description": "Two stacked layers alternate so any change crossfades, however fast you move between rows.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ab-layer-crossfade.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/ab-layer-crossfade.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "crossfade",
+          "hover-preview",
+          "double-buffer",
+          "opacity"
+        ]
+      }
+    },
+    {
+      "name": "analytic-disc-picking",
+      "type": "registry:ui",
+      "title": "Analytic Disc Picking",
+      "description": "Hit-test camera-facing discs by intersecting the pointer ray with their plane. Exact, allocation-free, and correct for shader billboards.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/analytic-disc-picking.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/analytic-disc-picking.tsx"
+        },
+        {
+          "path": "registry/shaders/analytic-disc-picking.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/analytic-disc-picking.ts"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "webgl",
+        "tags": [
+          "picking",
+          "hit-test",
+          "raycaster",
+          "billboard",
+          "three"
+        ]
+      }
+    },
+    {
+      "name": "antialiased-disc-fragment",
+      "type": "registry:ui",
+      "title": "Anti-Aliased Point Discs",
+      "description": "A phyllotaxis field of dots that stay the same weight at every pixel ratio, with no MSAA and no texture.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/antialiased-disc-fragment.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/antialiased-disc-fragment.tsx"
+        },
+        {
+          "path": "registry/shaders/antialiased-disc-fragment.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/antialiased-disc-fragment.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "points",
+          "fragment-shader",
+          "antialiasing",
+          "device-pixel-ratio"
+        ]
+      }
+    },
+    {
+      "name": "asymmetric-stagger",
+      "type": "registry:ui",
+      "title": "Asymmetric In/Out Staggers",
+      "description": "A list that arrives item by item after a hold and leaves twice as fast, from the last row backwards.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/asymmetric-stagger.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/asymmetric-stagger.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "stagger",
+          "list",
+          "enter-exit",
+          "choreography"
+        ]
+      }
+    },
+    {
+      "name": "asymmetric-typewriter",
+      "type": "registry:ui",
+      "title": "Asymmetric Typewriter",
+      "description": "Rotating phrases that delete at twice the speed they type, with a beat of nothing at the empty string.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/step-end-caret.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/asymmetric-typewriter.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/asymmetric-typewriter.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "typewriter",
+          "timing",
+          "caret",
+          "rotating-text",
+          "css"
+        ]
+      }
+    },
+    {
+      "name": "auto-advance-filmstrip",
+      "type": "registry:ui",
+      "title": "Auto-Advance Filmstrip",
+      "description": "A centred strip that steps one panel every few seconds, neighbours dimmed and shrunk, on one CSS transition.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/auto-advance-filmstrip.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/auto-advance-filmstrip.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "css",
+        "tags": [
+          "carousel",
+          "css-transition",
+          "container-query",
+          "autoplay",
+          "filmstrip"
+        ]
+      }
+    },
+    {
+      "name": "banded-scrollspy-rail",
+      "type": "registry:ui",
+      "title": "Banded Scrollspy Rail",
+      "description": "A tick rail whose active mark widens as a section crosses a 7% band through the middle of the screen.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/banded-scrollspy-rail.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/banded-scrollspy-rail.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "css",
+        "tags": [
+          "intersection-observer",
+          "scrollspy",
+          "navigation",
+          "rootmargin",
+          "no-dependencies"
+        ]
+      }
+    },
+    {
+      "name": "batched-blur-reveal",
+      "type": "registry:ui",
+      "title": "Batched Blur Reveal",
+      "description": "Cards that enter together focus in as one staggered group instead of arriving as a slab.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/batched-blur-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/batched-blur-reveal.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "reveal",
+          "batch",
+          "stagger",
+          "blur"
+        ]
+      }
+    },
+    {
+      "name": "bayer-plasma-hero",
+      "type": "registry:ui",
+      "title": "Bayer-Quantised Plasma",
+      "description": "An iterated domain-warped plasma crushed to eleven grey levels, so the hero reads as a dot-matrix proof.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/bayer-plasma-hero.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/bayer-plasma-hero.tsx"
+        },
+        {
+          "path": "registry/shaders/bayer-plasma-hero.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/bayer-plasma-hero.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "webgl2",
+          "shader",
+          "plasma",
+          "dither",
+          "bayer",
+          "hero"
+        ]
+      }
+    },
+    {
+      "name": "bayer8-ordered-dither",
+      "type": "registry:ui",
+      "title": "Bit-Math Bayer8 Dither",
+      "description": "A smooth gradient crushed to five levels through an 8x8 ordered matrix derived from six integer ops.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/bayer8-ordered-dither.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/bayer8-ordered-dither.tsx"
+        },
+        {
+          "path": "registry/shaders/bayer8-ordered-dither.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/bayer8-ordered-dither.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "webgl2",
+          "shader",
+          "dither",
+          "bayer",
+          "quantisation",
+          "bit-math"
+        ]
+      }
+    },
+    {
+      "name": "blend-difference-cursor",
+      "type": "registry:ui",
+      "title": "Blend-Difference Cursor",
+      "description": "A white dot in difference blend mode inverts whatever it crosses, growing 16 to 44 to 150px on hover.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/blend-difference-cursor.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/blend-difference-cursor.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "quickto",
+          "mix-blend-mode",
+          "cursor",
+          "pointer",
+          "hover"
+        ]
+      }
+    },
+    {
+      "name": "browser-chrome-frame",
+      "type": "registry:ui",
+      "title": "Browser Chrome Frame",
+      "description": "A macOS window frame with hover-revealed traffic lights and an address pill whose check draws itself on copy.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/browser-chrome-frame.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/browser-chrome-frame.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "chrome",
+          "clipboard",
+          "svg",
+          "confirmation",
+          "wrapper"
+        ]
+      }
+    },
+    {
+      "name": "burst-audio-sync",
+      "type": "registry:ui",
+      "title": "Chord-Synced Particle Burst",
+      "description": "Fires an arpeggio and its visual flares off one schedule, so each flash lands on its own note.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/burst-audio-sync.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/burst-audio-sync.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "web-audio",
+          "scheduling",
+          "audio-visual",
+          "raf",
+          "clock-sync"
+        ]
+      }
+    },
+    {
+      "name": "canvas-handoff-transition",
+      "type": "registry:ui",
+      "title": "Canvas Handoff Transition",
+      "description": "The live WebGL canvas is handed to the next page and flies to its new slot, instead of being destroyed and rebuilt.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "three@^0.185.1",
+        "gsap@^3.15.0"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/canvas-handoff-transition.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/canvas-handoff-transition.tsx"
+        },
+        {
+          "path": "registry/shaders/canvas-handoff-transition.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/canvas-handoff-transition.ts"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "webgl",
+        "tags": [
+          "webgl",
+          "three",
+          "route",
+          "flip",
+          "gsap",
+          "context",
+          "strict-mode"
+        ]
+      }
+    },
+    {
+      "name": "capture-phase-click-swallow",
+      "type": "registry:ui",
+      "title": "Capture-Phase Click Swallow",
+      "description": "Cancels the single click a finished drag would fire, in the capture phase, without eating the next real click or keyboard activation.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/capture-phase-click-swallow.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/capture-phase-click-swallow.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "click",
+          "capture-phase",
+          "drag",
+          "stoppropagation",
+          "keyboard",
+          "input"
+        ]
+      }
+    },
+    {
+      "name": "char-stagger-scale-up",
+      "type": "registry:ui",
+      "title": "Char Stagger Then Scale-Up",
+      "description": "Characters resolve left to right, then the whole word scales up with an overshoot as the last one lands.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/char-stagger-scale-up.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/char-stagger-scale-up.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "split",
+          "stagger",
+          "timeline",
+          "headline"
+        ]
+      }
+    },
+    {
+      "name": "clip-path-variable-tween",
+      "type": "registry:ui",
+      "title": "CSS Variable Clip-Path Tween",
+      "description": "One tweened custom property drives every clip-path on the panel, and reversing the timeline is the exit.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/clip-path-variable-tween.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/clip-path-variable-tween.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "clip-path",
+          "css-variable",
+          "reveal",
+          "stagger"
+        ]
+      }
+    },
+    {
+      "name": "compound-group-hover",
+      "type": "registry:ui",
+      "title": "Compound Group Hover Card",
+      "description": "One hover drives four changes on three elements, each with its own duration and curve. Keyboard gets all four.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/compound-group-hover.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/compound-group-hover.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "css",
+          "hover",
+          "has-selector",
+          "transition",
+          "card"
+        ]
+      }
+    },
+    {
+      "name": "conic-property-border",
+      "type": "registry:ui",
+      "title": "Conic @property Border",
+      "description": "A gradient ring that rotates around a rounded box. Two highlights chase each other; no JavaScript runs.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/conic-property-border.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/conic-property-border.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "css",
+          "at-property",
+          "conic-gradient",
+          "border",
+          "zero-js"
+        ]
+      }
+    },
+    {
+      "name": "container-animation-reveals",
+      "type": "registry:ui",
+      "title": "One Reveal Engine, Two Axes",
+      "description": "The same staggered line reveal fires for vertical sections and for panels on a horizontal track.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/container-animation-reveals.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/container-animation-reveals.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "containeranimation",
+          "reveal",
+          "stagger"
+        ]
+      }
+    },
+    {
+      "name": "converging-flow-steps",
+      "type": "registry:ui",
+      "title": "Converging Flow Steps",
+      "description": "A process diagram that closes from both ends while the connectors pop in a third of the way through.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/converging-flow-steps.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/converging-flow-steps.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "scrub",
+          "diagram",
+          "stagger",
+          "process"
+        ]
+      }
+    },
+    {
+      "name": "converging-scrub-words",
+      "type": "registry:ui",
+      "title": "Converging Headline Words",
+      "description": "Headline words slide in from opposite margins and lock into a sentence, pinned to scroll position.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/converging-scrub-words.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/converging-scrub-words.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "scrub",
+          "headline",
+          "split"
+        ]
+      }
+    },
+    {
+      "name": "cpu-mirror-picking",
+      "type": "registry:ui",
+      "title": "Raycaster-Free Hover Picking",
+      "description": "Run the GPU's transform again on the CPU and hit-test the result. No raycaster, no rect reads.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/cpu-mirror-picking.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/cpu-mirror-picking.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "picking",
+          "hit-test",
+          "projection",
+          "css-3d",
+          "compositor"
+        ]
+      }
+    },
+    {
+      "name": "css-var-stagger-reveal",
+      "type": "registry:ui",
+      "title": "CSS Variable Stagger Reveal",
+      "description": "Groups reveal as they enter their scroll container; the stagger delay is a CSS calc over an index the JS writes once.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/css-var-stagger-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/css-var-stagger-reveal.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "css",
+        "tags": [
+          "intersection-observer",
+          "css-variables",
+          "stagger",
+          "reveal",
+          "zero-js-animation"
+        ]
+      }
+    },
+    {
+      "name": "cursor-clip-path-mask",
+      "type": "registry:ui",
+      "title": "Cursor Clip-Path Mask",
+      "description": "A disc of a second layer follows the pointer; hovering the trigger grows it until it covers the panel.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/cursor-clip-path-mask.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/cursor-clip-path-mask.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "clip-path",
+          "mask",
+          "pointer",
+          "reveal",
+          "proxy-tween"
+        ]
+      }
+    },
+    {
+      "name": "cursor-reactive-shader-glow",
+      "type": "registry:ui",
+      "title": "Cursor-Reactive Shader Glow",
+      "description": "A warped-noise atmosphere with a light that trails the cursor, held under a hard luminance ceiling so copy stays readable.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/cursor-reactive-shader-glow.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/cursor-reactive-shader-glow.tsx"
+        },
+        {
+          "path": "registry/shaders/cursor-reactive-shader-glow.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/cursor-reactive-shader-glow.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "shader",
+          "pointer",
+          "noise",
+          "domain-warp",
+          "background",
+          "damping"
+        ]
+      }
+    },
+    {
+      "name": "cursor-repulsion-burst",
+      "type": "registry:ui",
+      "title": "Cursor Repulsion Burst",
+      "description": "An orbiting particle field the pointer pushes out of the way, and a press detonates into a shock wave with a heat band.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "ogl@^1.0.11"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/cursor-repulsion-burst.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/cursor-repulsion-burst.tsx"
+        },
+        {
+          "path": "registry/shaders/cursor-repulsion-burst.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/cursor-repulsion-burst.ts"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "webgl",
+        "tags": [
+          "ogl",
+          "webgl",
+          "instancing",
+          "pointer",
+          "particles",
+          "orbit",
+          "damping"
+        ]
+      }
+    },
+    {
+      "name": "cylinder-dot-score",
+      "type": "registry:ui",
+      "title": "Dot-Cloud Score Cylinder",
+      "description": "Two counter-rotating cylinders of dots — rings, bar lines, notes — drawn from one buffer with no depth buffer.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/cylinder-dot-score.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/cylinder-dot-score.tsx"
+        },
+        {
+          "path": "registry/shaders/cylinder-dot-score.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/cylinder-dot-score.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "points",
+          "draw-order",
+          "instancing",
+          "no-depth-buffer"
+        ]
+      }
+    },
+    {
+      "name": "cylinder-gallery",
+      "type": "registry:ui",
+      "title": "Cylinder Gallery Drum",
+      "description": "Nineteen planes wrapped around a drum in the vertex shader, spun by wheel or scroll, focus falling off from centre.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1",
+        "gsap@^3.15.0",
+        "lenis@^1.3.11"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-drag.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-lenis.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/cylinder-gallery.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/cylinder-gallery.tsx"
+        },
+        {
+          "path": "registry/shaders/cylinder-gallery.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/cylinder-gallery.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "gsap",
+          "lenis",
+          "vertex-shader",
+          "gallery",
+          "infinite"
+        ]
+      }
+    },
+    {
+      "name": "dataset-parallax",
+      "type": "registry:ui",
+      "title": "Dataset-Driven Parallax",
+      "description": "Layers drift at a rate written on the element itself, over the widest possible scroll window.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/dataset-parallax.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/dataset-parallax.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "parallax",
+          "scrub",
+          "data-attribute"
+        ]
+      }
+    },
+    {
+      "name": "delayed-unmount-loader",
+      "type": "registry:ui",
+      "title": "Delayed-Unmount Loader",
+      "description": "A loading overlay that stays mounted 600ms past the signal so its fade can actually play before it leaves.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/delayed-unmount-loader.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/delayed-unmount-loader.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "css",
+        "tags": [
+          "loader",
+          "css-transition",
+          "unmount-delay",
+          "overlay",
+          "no-deps"
+        ]
+      }
+    },
+    {
+      "name": "depth-pulse-travelling-wave",
+      "type": "registry:ui",
+      "title": "Depth Fade And Travelling Pulse",
+      "description": "A dot lattice on an arc: z drives alpha and point size together, and a per-column phase sweeps the pulse across the field.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/depth-pulse-travelling-wave.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/depth-pulse-travelling-wave.tsx"
+        },
+        {
+          "path": "registry/shaders/depth-pulse-travelling-wave.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/depth-pulse-travelling-wave.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "points",
+          "depth-cue",
+          "wave",
+          "no-depth-buffer"
+        ]
+      }
+    },
+    {
+      "name": "dither-trail-image-reveal",
+      "type": "registry:ui",
+      "title": "Dither Trail Image Reveal",
+      "description": "A dimmed image restored through a trail of Bayer-thresholded blocks that smear in the direction the pointer moved.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/dither-trail-image-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/dither-trail-image-reveal.tsx"
+        },
+        {
+          "path": "registry/shaders/dither-trail-image-reveal.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/dither-trail-image-reveal.ts"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "webgl",
+          "dither",
+          "bayer",
+          "pointer",
+          "trail",
+          "image",
+          "damping"
+        ]
+      }
+    },
+    {
+      "name": "domain-warped-fbm",
+      "type": "registry:ui",
+      "title": "Domain-Warped FBM Fog",
+      "description": "Slow, low-contrast fog that flows rather than fades, with a faint light that trails the cursor.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/domain-warped-fbm.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/domain-warped-fbm.tsx"
+        },
+        {
+          "path": "registry/shaders/domain-warped-fbm.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/domain-warped-fbm.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "webgl2",
+          "shader",
+          "noise",
+          "fbm",
+          "domain-warp",
+          "background"
+        ]
+      }
+    },
+    {
+      "name": "dotted-notepad-surface",
+      "type": "registry:ui",
+      "title": "Dotted Notepad Surface",
+      "description": "A tiled dot grid that dissolves at the panel edges, with a hard-stopped folded corner.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/dotted-notepad-surface.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/dotted-notepad-surface.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "css",
+          "background",
+          "radial-gradient",
+          "mask",
+          "texture"
+        ]
+      }
+    },
+    {
+      "name": "drag-deadzone-capture",
+      "type": "registry:ui",
+      "title": "Drag with a Dead Zone and Pointer Capture",
+      "description": "Captures the pointer on press but only commits to a drag past a distance threshold, so a shaky click stays a click.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/drag-deadzone-capture.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/drag-deadzone-capture.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "pointer",
+          "drag",
+          "dead-zone",
+          "setpointercapture",
+          "pointercancel",
+          "input"
+        ]
+      }
+    },
+    {
+      "name": "drag-marquee",
+      "type": "registry:ui",
+      "title": "Drag Marquee",
+      "description": "An endless row that drifts, takes a drag and a throw, and scatters its cards while your hand is down.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/drag-marquee.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/drag-marquee.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "dom",
+        "tags": [
+          "marquee",
+          "drag",
+          "infinite",
+          "wrap",
+          "pointer-events",
+          "gsap"
+        ]
+      }
+    },
+    {
+      "name": "drag-throw-scroll",
+      "type": "registry:ui",
+      "title": "Drag-Throw Scroll",
+      "description": "Grab the page and pull it; let go mid-move and it coasts on, decaying, as far as the flick earned.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "lenis@^1.3.11"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-lenis.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/drag-throw-scroll.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/drag-throw-scroll.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "lenis",
+          "pointer-events",
+          "inertia",
+          "drag",
+          "velocity"
+        ]
+      }
+    },
+    {
+      "name": "drag-to-pin-progress",
+      "type": "registry:ui",
+      "title": "Drag Mapped To Pin Progress",
+      "description": "Drag a pinned horizontal strip and it moves exactly one pixel per pixel, then throws and settles.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-drag.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/drag-to-pin-progress.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/drag-to-pin-progress.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "drag",
+          "pin",
+          "inertia"
+        ]
+      }
+    },
+    {
+      "name": "drifting-smoke-layers",
+      "type": "registry:ui",
+      "title": "Drifting Smoke Layers",
+      "description": "Slow volumetric fog built from blurred radial gradients on three coprime cycles. No texture, no canvas.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/drifting-smoke-layers.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/drifting-smoke-layers.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "css",
+          "gradient",
+          "blur",
+          "atmosphere",
+          "zero-js"
+        ]
+      }
+    },
+    {
+      "name": "dual-canvas-z-split",
+      "type": "registry:ui",
+      "title": "Dual-Canvas Depth Split",
+      "description": "One particle field rendered twice with the depth sign flipped, so the text sits inside the field rather than on top of it.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "ogl@^1.0.11"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/dual-canvas-z-split.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/dual-canvas-z-split.tsx"
+        },
+        {
+          "path": "registry/shaders/dual-canvas-z-split.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/dual-canvas-z-split.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "ogl",
+          "instancing",
+          "particles",
+          "depth",
+          "layering"
+        ]
+      }
+    },
+    {
+      "name": "dual-direction-scrub-entrance",
+      "type": "registry:ui",
+      "title": "Dual-Direction Scrub Entrance",
+      "description": "Copy rises while a panel slides in from the side, both on one scrub with 600ms of lag.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/dual-direction-scrub-entrance.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/dual-direction-scrub-entrance.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "scrub",
+          "entrance",
+          "timeline"
+        ]
+      }
+    },
+    {
+      "name": "eased-number-counter",
+      "type": "registry:ui",
+      "title": "Eased Number Counter",
+      "description": "A statistic that counts up on an eased curve and settles on its exact final figure without shifting the layout.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/eased-number-counter.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/eased-number-counter.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "counter",
+          "number",
+          "intl",
+          "stat"
+        ]
+      }
+    },
+    {
+      "name": "exit-warp-navigation",
+      "type": "registry:ui",
+      "title": "Exit Warp Before Navigate",
+      "description": "A ring of cards tears itself apart and rushes past the camera, and only then does the route change.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "three@^0.185.1",
+        "gsap@^3.15.0"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/webgl.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/exit-warp-navigation.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/exit-warp-navigation.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "gsap",
+          "page-exit",
+          "ring",
+          "router"
+        ]
+      }
+    },
+    {
+      "name": "font-safe-text-split",
+      "type": "registry:ui",
+      "title": "Font-Safe Text Splitting",
+      "description": "Line splitting gated on document.fonts.ready, re-split on late fonts and on width change, debounced.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/font-safe-text-split.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/font-safe-text-split.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "splittext",
+          "fonts",
+          "resize",
+          "scrolltrigger"
+        ]
+      }
+    },
+    {
+      "name": "fov-derived-row-step",
+      "type": "registry:ui",
+      "title": "FOV-Derived Row Spacing",
+      "description": "A row whose item spacing is solved from a field of view and a camera distance, so it spans the frame exactly at any size.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/fov-derived-row-step.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/fov-derived-row-step.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "dom",
+        "tags": [
+          "perspective",
+          "projection",
+          "spacing",
+          "camera",
+          "no-dependencies"
+        ]
+      }
+    },
+    {
+      "name": "fractional-render-scale",
+      "type": "registry:ui",
+      "title": "Fractional Render Scale",
+      "description": "A field rendered into a backing store 0.6x its box — 36% of the fragments — with a grid measured in texels so the upscale never shows.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/fractional-render-scale.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/fractional-render-scale.tsx"
+        },
+        {
+          "path": "registry/shaders/fractional-render-scale.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/fractional-render-scale.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "performance",
+          "render-scale",
+          "grid",
+          "pointer",
+          "fragment-shader"
+        ]
+      }
+    },
+    {
+      "name": "fullscreen-triangle-pass",
+      "type": "registry:ui",
+      "title": "Fullscreen Triangle Pass",
+      "description": "One 3-vertex triangle covers the viewport and runs your fragment shader. No three, no ogl, no seam.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/fullscreen-triangle-pass.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/fullscreen-triangle-pass.tsx"
+        },
+        {
+          "path": "registry/shaders/fullscreen-triangle-pass.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/fullscreen-triangle-pass.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "webgl2",
+          "shader",
+          "fullscreen",
+          "raw-gl",
+          "primitive"
+        ]
+      }
+    },
+    {
+      "name": "gpu-bezier-burst",
+      "type": "registry:ui",
+      "title": "GPU Cubic-Bezier Burst",
+      "description": "Rings of dots that burst on click, every particle solving its own cubic-bezier easing in the vertex shader.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/gpu-bezier-burst.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/gpu-bezier-burst.tsx"
+        },
+        {
+          "path": "registry/shaders/gpu-bezier-burst.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/gpu-bezier-burst.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "points",
+          "easing",
+          "newton",
+          "reduced-motion"
+        ]
+      }
+    },
+    {
+      "name": "gsap-cursor-follower",
+      "type": "registry:ui",
+      "title": "GSAP Cursor Follower",
+      "description": "A puck that replaces the arrow inside a panel, trailing 0.4s behind and swelling to a label over targets.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/gsap-cursor-follower.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/gsap-cursor-follower.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "pointer",
+          "custom-cursor",
+          "follower",
+          "overwrite"
+        ]
+      }
+    },
+    {
+      "name": "height-first-media-stage",
+      "type": "registry:ui",
+      "title": "Height-First Media Stage",
+      "description": "A media stage sized from its height, with the width derived from the ratio, cross-fading layers and a caption that replays per index.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/height-first-media-stage.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/height-first-media-stage.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "css",
+        "tags": [
+          "layout",
+          "aspect-ratio",
+          "dvh",
+          "crossfade",
+          "carousel",
+          "css-only"
+        ]
+      }
+    },
+    {
+      "name": "hinged-container-intro",
+      "type": "registry:ui",
+      "title": "Hinged Container Intro",
+      "description": "The page body swings up from below the fold, hinged on its own bottom edge, with captions following it in.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/hinged-container-intro.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/hinged-container-intro.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "intro",
+          "rotatex",
+          "stagger",
+          "page-enter"
+        ]
+      }
+    },
+    {
+      "name": "hover-list-image-trail",
+      "type": "registry:ui",
+      "title": "Hover List Image Trail",
+      "description": "Hovering a row stacks a plate into a column that follows the pointer; the oldest is culled past twenty.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/hover-list-image-trail.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/hover-list-image-trail.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "quickto",
+          "hover",
+          "masked-reveal",
+          "canvas",
+          "cull"
+        ]
+      }
+    },
+    {
+      "name": "hover-prefetch-wipe",
+      "type": "registry:ui",
+      "title": "Prefetch-On-Hover Wipe",
+      "description": "Warms the next page on hover, wipes the screen on click, and navigates once the wipe has actually covered.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/hover-prefetch-wipe.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/hover-prefetch-wipe.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "prefetch",
+          "event-delegation",
+          "bfcache",
+          "overlay",
+          "pointerenter"
+        ]
+      }
+    },
+    {
+      "name": "idle-gated-page-states",
+      "type": "registry:ui",
+      "title": "Idle-Gated Page States",
+      "description": "A page entrance that will not start until a floor delay has elapsed and the main thread has reported itself idle.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/idle-gated-page-states.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/idle-gated-page-states.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "route",
+          "gsap",
+          "requestIdleCallback",
+          "state-machine",
+          "preloader",
+          "scheduling"
+        ]
+      }
+    },
+    {
+      "name": "instanced-quad-particles",
+      "type": "registry:ui",
+      "title": "Instanced Quad Particles",
+      "description": "Up to 1800 drifting particles in one draw call — quads rather than point sprites, so each one has its own size, spin and shape.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "ogl@^1.0.11"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/instanced-quad-particles.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/instanced-quad-particles.tsx"
+        },
+        {
+          "path": "registry/shaders/instanced-quad-particles.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/instanced-quad-particles.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "ogl",
+          "instancing",
+          "particles",
+          "additive",
+          "sdf"
+        ]
+      }
+    },
+    {
+      "name": "inverse-scroll-scale",
+      "type": "registry:ui",
+      "title": "Inverse Scroll Scale",
+      "description": "Media enters oversized at 1.25x and settles to exactly 1.0 as it rises through the first 60% of the scroller.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/inverse-scroll-scale.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/inverse-scroll-scale.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "scroll",
+          "transform",
+          "raf",
+          "parallax",
+          "intersection-observer",
+          "no-deps"
+        ]
+      }
+    },
+    {
+      "name": "io-reveal-lite",
+      "type": "registry:ui",
+      "title": "IntersectionObserver Reveal",
+      "description": "One element, one fade-and-rise on entry, no stylesheet and no library — with a single observer shared across every instance.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/io-reveal-lite.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/io-reveal-lite.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "css",
+        "tags": [
+          "intersection-observer",
+          "reveal",
+          "shared-observer",
+          "no-dependencies",
+          "inline-transition"
+        ]
+      }
+    },
+    {
+      "name": "keyframe-param-object",
+      "type": "registry:ui",
+      "title": "Single Param Object Timeline",
+      "description": "One plain object holds every animated value; the scroll story is a table of keyframes anchored to real sections.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/keyframe-param-object.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/keyframe-param-object.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "scrub",
+          "keyframes",
+          "architecture",
+          "timeline"
+        ]
+      }
+    },
+    {
+      "name": "knockout-zoom-pin",
+      "type": "registry:ui",
+      "title": "Knockout Zoom Pin",
+      "description": "A word the size of the screen shrinks into a headline as you scroll, with the scene showing through its letters.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/easing.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/knockout-zoom-pin.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/knockout-zoom-pin.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "scroll",
+          "pin",
+          "zoom",
+          "typography",
+          "damping"
+        ]
+      }
+    },
+    {
+      "name": "layout-lerp-scalar",
+      "type": "registry:ui",
+      "title": "Layout Lerp Scalar",
+      "description": "Row, stack, drum and fan are one placement function of seven numbers. Switching layout is a tween over an object.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [
+        "three@^0.185.1",
+        "gsap@^3.15.0"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/layout-lerp-scalar.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/layout-lerp-scalar.tsx"
+        },
+        {
+          "path": "registry/shaders/layout-lerp-scalar.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/layout-lerp-scalar.ts"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "layout",
+          "morph",
+          "parameters",
+          "gsap",
+          "wrap"
+        ]
+      }
+    },
+    {
+      "name": "lenis-gsap-ticker",
+      "type": "registry:ui",
+      "title": "Lenis On The GSAP Ticker",
+      "description": "Smooth scroll and ScrollTrigger on one clock, with the lag-smoothing line everyone omits.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0",
+        "lenis@^1.3.11"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-lenis.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/lenis-gsap-ticker.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/lenis-gsap-ticker.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "scroll",
+          "lenis",
+          "gsap",
+          "scrolltrigger",
+          "smooth-scroll"
+        ]
+      }
+    },
+    {
+      "name": "looping-scroll-cue",
+      "type": "registry:ui",
+      "title": "Looping Scroll Cue",
+      "description": "The hairline that dives down a hero. One keyframe pair, a hard ease, and a seamless loop.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/looping-scroll-cue.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/looping-scroll-cue.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "css",
+          "keyframes",
+          "scroll-cue",
+          "hero",
+          "loop"
+        ]
+      }
+    },
+    {
+      "name": "lottie-ratio-poster",
+      "type": "registry:ui",
+      "title": "Lottie Ratio Poster",
+      "description": "Reserves the box, holds a drawn poster, fetches the JSON only in view, then corrects the ratio from the animation's own w and h.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/lottie-ratio-poster.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/lottie-ratio-poster.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "lazy-load",
+          "aspect-ratio",
+          "layout-shift",
+          "poster",
+          "lottie"
+        ]
+      }
+    },
+    {
+      "name": "magnetic-button",
+      "type": "registry:ui",
+      "title": "Magnetic Pointer Button",
+      "description": "A button that leans toward the cursor and springs back, with the label leading the box.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/magnetic-button.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/magnetic-button.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "pointer",
+          "button",
+          "quickto",
+          "micro-interaction"
+        ]
+      }
+    },
+    {
+      "name": "manufactured-scroll-range",
+      "type": "registry:ui",
+      "title": "Manufactured Scroll Range",
+      "description": "An empty box N screens tall turns a one-screen scene into a scrollable sequence, with progress as a CSS variable and the index as state.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-raf.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/manufactured-scroll-range.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/manufactured-scroll-range.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "scroll",
+          "sticky",
+          "progress",
+          "index",
+          "css-variables"
+        ]
+      }
+    },
+    {
+      "name": "matchmedia-layout-teardown",
+      "type": "registry:ui",
+      "title": "matchMedia Layout Teardown",
+      "description": "Two layouts behind one gsap.matchMedia block. Cross the breakpoint and the desktop branch reverts itself.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/matchmedia-layout-teardown.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/matchmedia-layout-teardown.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "matchmedia",
+          "responsive",
+          "breakpoint",
+          "cleanup"
+        ]
+      }
+    },
+    {
+      "name": "mixed-scrub-depth-layers",
+      "type": "registry:ui",
+      "title": "Mixed Scrub Depth Layers",
+      "description": "Layers separate while you scroll and converge when you stop, because each depth has its own scrub.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/mixed-scrub-depth-layers.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/mixed-scrub-depth-layers.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "parallax",
+          "scrub",
+          "depth"
+        ]
+      }
+    },
+    {
+      "name": "morphsvg-letter-scramble",
+      "type": "registry:ui",
+      "title": "Letter Scramble",
+      "description": "A word assembles out of noise — each character flips through wrong glyphs, decelerating onto the right one.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/morphsvg-letter-scramble.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/morphsvg-letter-scramble.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scramble",
+          "timeline",
+          "prng",
+          "split"
+        ]
+      }
+    },
+    {
+      "name": "multipass-offscreen-composite",
+      "type": "registry:ui",
+      "title": "Multipass Offscreen Composite",
+      "description": "Four passes into two render targets — ramp, additive fills, half-size bloom — and one composite that writes the canvas once.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/multipass-offscreen-composite.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/multipass-offscreen-composite.tsx"
+        },
+        {
+          "path": "registry/shaders/multipass-offscreen-composite.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/multipass-offscreen-composite.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "render-target",
+          "multipass",
+          "bloom",
+          "composite",
+          "hero"
+        ]
+      }
+    },
+    {
+      "name": "nav-dot-wave",
+      "type": "registry:ui",
+      "title": "Nav Dot Wave",
+      "description": "Nav dots that lift in sequence. The index is an inline custom property; CSS derives the delay.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/nav-dot-wave.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/nav-dot-wave.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "css",
+          "keyframes",
+          "stagger",
+          "navigation",
+          "custom-properties"
+        ]
+      }
+    },
+    {
+      "name": "ndc-mouse-bulge",
+      "type": "registry:ui",
+      "title": "In-Shader Mouse Bulge",
+      "description": "A soft lens that follows the cursor, measured by projecting every vertex to screen space instead of raycasting.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/ndc-mouse-bulge.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/ndc-mouse-bulge.tsx"
+        },
+        {
+          "path": "registry/shaders/ndc-mouse-bulge.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/ndc-mouse-bulge.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "pointer",
+          "vertex-shader",
+          "ndc",
+          "glsl"
+        ]
+      }
+    },
+    {
+      "name": "nested-splittext-restore",
+      "type": "registry:ui",
+      "title": "Nested Split With True Restore",
+      "description": "Splits rich markup into masked lines and restores the original innerHTML byte-for-byte on teardown.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/nested-splittext-restore.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/nested-splittext-restore.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "splittext",
+          "lines",
+          "mask",
+          "revert"
+        ]
+      }
+    },
+    {
+      "name": "orbit-ring-points",
+      "type": "registry:ui",
+      "title": "Single-Draw Orbit Rings",
+      "description": "Concentric rings of dots, one bright marker travelling each ring, all of it in a single draw call.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/orbit-ring-points.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/orbit-ring-points.tsx"
+        },
+        {
+          "path": "registry/shaders/orbit-ring-points.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/orbit-ring-points.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "points",
+          "attributes",
+          "orthographic",
+          "draw-call"
+        ]
+      }
+    },
+    {
+      "name": "page-reveal-overlay",
+      "type": "registry:ui",
+      "title": "Key-Replayed Page Reveal",
+      "description": "An opaque overlay that fades away on every route change, replayed by nothing more than a changed React key.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/page-reveal-overlay.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/page-reveal-overlay.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "css",
+        "tags": [
+          "route",
+          "overlay",
+          "css-animation",
+          "react-key",
+          "no-js-animation"
+        ]
+      }
+    },
+    {
+      "name": "panel-wipe-preloader",
+      "type": "registry:ui",
+      "title": "Staggered Panel Wipe",
+      "description": "An eased 0-100 counter, a word list and a five-column wipe, all on one timeline so they cannot drift.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/panel-wipe-preloader.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/panel-wipe-preloader.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "preloader",
+          "timeline",
+          "counter",
+          "stagger"
+        ]
+      }
+    },
+    {
+      "name": "pause-dont-unmount",
+      "type": "registry:ui",
+      "title": "Pause, Don't Unmount",
+      "description": "React 19's Activity hides a WebGL scene without losing its state. Effects still tear down, so the GL context is genuinely released.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/pause-dont-unmount.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/pause-dont-unmount.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "webgl",
+        "tags": [
+          "activity",
+          "react-19",
+          "lifecycle",
+          "webgl",
+          "three"
+        ]
+      }
+    },
+    {
+      "name": "percent-slide-carousel",
+      "type": "registry:ui",
+      "title": "Percent Slide Carousel",
+      "description": "A flex track translated by -100% per slide. One CSS transition, no measurement, no library.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/percent-slide-carousel.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/percent-slide-carousel.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "css",
+        "tags": [
+          "carousel",
+          "css",
+          "transition",
+          "slider",
+          "no-js-motion"
+        ]
+      }
+    },
+    {
+      "name": "perspective-coverflow-scroller",
+      "type": "registry:ui",
+      "title": "Perspective Coverflow Scroller",
+      "description": "Panels turn away from the centre in real 3D as you scroll a native container — no tween, no loop.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/perspective-coverflow-scroller.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/perspective-coverflow-scroller.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "dom",
+        "tags": [
+          "coverflow",
+          "3d",
+          "scroll-snap",
+          "native-scroll",
+          "carousel"
+        ]
+      }
+    },
+    {
+      "name": "pinned-horizontal-track",
+      "type": "registry:ui",
+      "title": "Pinned Horizontal Track",
+      "description": "A section pins while a strip of panels slides sideways, one scroll pixel per track pixel.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/pinned-horizontal-track.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/pinned-horizontal-track.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "pin",
+          "horizontal",
+          "scrub"
+        ]
+      }
+    },
+    {
+      "name": "pointer-palette-sampling",
+      "type": "registry:ui",
+      "title": "Pointer Palette Sampling",
+      "description": "Point at the artwork and it names the colour — a clamped pixel read snapped to the nearest palette entry.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/pointer-palette-sampling.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/pointer-palette-sampling.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "canvas2d",
+        "tags": [
+          "canvas",
+          "getimagedata",
+          "oklab",
+          "colour",
+          "pointer",
+          "palette"
+        ]
+      }
+    },
+    {
+      "name": "pointer-var-gradient",
+      "type": "registry:ui",
+      "title": "Pointer-Variable Gradient",
+      "description": "A soft glow tracks the pointer through two CSS custom properties. No rAF, no tween, no string rebuilding.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/pointer-var-gradient.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/pointer-var-gradient.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "css",
+        "tags": [
+          "css",
+          "custom-properties",
+          "gradient",
+          "pointer",
+          "no-raf"
+        ]
+      }
+    },
+    {
+      "name": "pooled-image-trail",
+      "type": "registry:ui",
+      "title": "Pooled Cursor Image Trail",
+      "description": "Tiles drop behind the cursor from a fixed ring of 22 reused nodes, one every 130px of travel.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/pooled-image-trail.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/pooled-image-trail.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "pointer",
+          "object-pool",
+          "trail",
+          "canvas",
+          "throttle"
+        ]
+      }
+    },
+    {
+      "name": "prescatter-horizontal-gallery",
+      "type": "registry:ui",
+      "title": "Pre-Scatter Horizontal Gallery",
+      "description": "A pinned strip where each item rests slightly off its slot, flies in from ahead and peels away behind.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/pinned-horizontal-track.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/prescatter-horizontal-gallery.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/prescatter-horizontal-gallery.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "containeranimation",
+          "horizontal",
+          "scatter",
+          "seeded"
+        ]
+      }
+    },
+    {
+      "name": "proximity-snap-track",
+      "type": "registry:ui",
+      "title": "Proximity Snap Track",
+      "description": "A horizontal rail of variable-width cards that snaps only when you stop near one, and never skips past two at once.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proximity-snap-track.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/proximity-snap-track.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "css",
+        "tags": [
+          "scroll-snap",
+          "css",
+          "track",
+          "scroll-snap-stop",
+          "rail"
+        ]
+      }
+    },
+    {
+      "name": "quickto-cursor-preview",
+      "type": "registry:ui",
+      "title": "quickTo Cursor Preview",
+      "description": "A preview panel drifts a full second behind the pointer, driven by two reused quickTo tweens.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/quickto-cursor-preview.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/quickto-cursor-preview.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "quickto",
+          "pointer",
+          "hover",
+          "preview",
+          "canvas"
+        ]
+      }
+    },
+    {
+      "name": "radial-mask-spotlight",
+      "type": "registry:ui",
+      "title": "Radial Mask Spotlight",
+      "description": "A layer masked to a soft disc follows the pointer, with a flat core that makes it read as a beam.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-smooth-pointer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/radial-mask-spotlight.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/radial-mask-spotlight.tsx"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "dom",
+        "tags": [
+          "mask-image",
+          "pointer",
+          "spotlight",
+          "raf",
+          "css-mask"
+        ]
+      }
+    },
+    {
+      "name": "radial-ripple-dot-cloud",
+      "type": "registry:ui",
+      "title": "Radial Ripple Dot Cloud",
+      "description": "A dot field with a travelling wave running out of one off-centre point, its density drawn by hand as a B-spline.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/radial-ripple-dot-cloud.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/radial-ripple-dot-cloud.tsx"
+        },
+        {
+          "path": "registry/shaders/radial-ripple-dot-cloud.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/radial-ripple-dot-cloud.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "points",
+          "vertex-shader",
+          "travelling-wave",
+          "b-spline",
+          "density"
+        ]
+      }
+    },
+    {
+      "name": "realtime-cube-envmap",
+      "type": "registry:ui",
+      "title": "Realtime Cube EnvMap",
+      "description": "A metal knot reflecting panels that are actually orbiting it, captured six faces at a time every other frame.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/realtime-cube-envmap.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/realtime-cube-envmap.tsx"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "cube-camera",
+          "reflection",
+          "envmap",
+          "render-target"
+        ]
+      }
+    },
+    {
+      "name": "rekey-caption-replay",
+      "type": "registry:ui",
+      "title": "Re-Key Caption Replay",
+      "description": "A caption block whose staggered entrance replays on every index change, restarted by a changed React key.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/rekey-caption-replay.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/rekey-caption-replay.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "css",
+        "tags": [
+          "react-key",
+          "css-animation",
+          "stagger",
+          "slideshow",
+          "caption"
+        ]
+      }
+    },
+    {
+      "name": "relaxed-seeded-scatter",
+      "type": "registry:ui",
+      "title": "Relaxed Seeded Scatter",
+      "description": "Seeded angles around a ring, pushed apart until nothing collides. Ghost ticks mark where they started.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/easing.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/relaxed-seeded-scatter.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/relaxed-seeded-scatter.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "prng",
+          "lloyd-relaxation",
+          "scatter",
+          "deterministic",
+          "layout"
+        ]
+      }
+    },
+    {
+      "name": "rotary-drag-carousel",
+      "type": "registry:ui",
+      "title": "Rotary Drag Carousel",
+      "description": "A wheel of cards you grab and spin. Angular drag, projected inertia, and it always lands on a station.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/rotary-drag-carousel.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/rotary-drag-carousel.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "dom",
+        "tags": [
+          "drag",
+          "rotation",
+          "inertia",
+          "snap",
+          "pointer-events",
+          "dial"
+        ]
+      }
+    },
+    {
+      "name": "safe-preloader",
+      "type": "registry:ui",
+      "title": "Preloader That Cannot Hang",
+      "description": "An intro overlay with a hard ceiling, a minimum visible time and a once-per-session flag, so a stalled load cannot trap the page.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/safe-preloader.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/safe-preloader.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "preloader",
+          "overlay",
+          "timeout",
+          "sessionstorage",
+          "resilience"
+        ]
+      }
+    },
+    {
+      "name": "scroll-deform-wave",
+      "type": "registry:ui",
+      "title": "Scroll Deformation Wave",
+      "description": "An image that ripples with scroll speed and bends the other way on the way back, from two sine terms.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-scroll-velocity.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/scroll-deform-wave.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/scroll-deform-wave.tsx"
+        },
+        {
+          "path": "registry/shaders/scroll-deform-wave.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/scroll-deform-wave.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "scroll",
+          "vertex-shader",
+          "velocity",
+          "glsl"
+        ]
+      }
+    },
+    {
+      "name": "scroll-scrubbed-video",
+      "type": "registry:ui",
+      "title": "Scroll-Scrubbed Video",
+      "description": "The scroll-to-frame mapping a scrubbed hero actually needs: smoothing, a snap, a frame quantiser and a loop that parks itself.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/scroll-scrubbed-video.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/scroll-scrubbed-video.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "scroll",
+          "video",
+          "canvas",
+          "scrub",
+          "throttle"
+        ]
+      }
+    },
+    {
+      "name": "scrub-char-color-reveal",
+      "type": "registry:ui",
+      "title": "Scrubbed Character Colour Reveal",
+      "description": "A dim paragraph resolves character by character as it crosses the viewport, tied to scroll position not a clock.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/scrub-char-color-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/scrub-char-color-reveal.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "scrub",
+          "stagger",
+          "split"
+        ]
+      }
+    },
+    {
+      "name": "scrub-timeline-spine",
+      "type": "registry:ui",
+      "title": "Scrub Timeline Spine",
+      "description": "A rule that fills as you scroll, with entries alternating either side and reversing on the way back.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/scrub-timeline-spine.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/scrub-timeline-spine.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "timeline",
+          "toggleactions",
+          "scrub",
+          "reversible"
+        ]
+      }
+    },
+    {
+      "name": "seamless-marquee",
+      "type": "registry:ui",
+      "title": "Pixels-Per-Second Marquee",
+      "description": "A marquee whose duration is derived from measured width and a px/second speed, so every strip moves at the same rate.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/seamless-marquee.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/seamless-marquee.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "marquee",
+          "loop",
+          "resize-observer",
+          "ticker"
+        ]
+      }
+    },
+    {
+      "name": "self-parking-raf",
+      "type": "registry:ui",
+      "title": "Self-Parking RAF",
+      "description": "An epsilon snap lets a damped value reach its target exactly, so the frame loop hits its exit test and dies.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-visibility.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/self-parking-raf.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/self-parking-raf.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "raf",
+          "damping",
+          "epsilon",
+          "idle",
+          "performance"
+        ]
+      }
+    },
+    {
+      "name": "slab-page-transition",
+      "type": "registry:ui",
+      "title": "Slab Page Transition",
+      "description": "An opaque slab rises through the frame, the route changes under it, and it keeps going — nothing ever reverses.",
+      "categories": [
+        "transition"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/slab-page-transition.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/slab-page-transition.tsx"
+        }
+      ],
+      "meta": {
+        "category": "transition",
+        "cost": "dom",
+        "tags": [
+          "route",
+          "gsap",
+          "timeline",
+          "slab",
+          "overlay",
+          "directional"
+        ]
+      }
+    },
+    {
+      "name": "slow-float-idle",
+      "type": "registry:ui",
+      "title": "Slow Idle Float",
+      "description": "A 14px rise and fall over 5 seconds, on the independent translate property so hover transforms still work.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/slow-float-idle.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/slow-float-idle.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "css",
+          "idle",
+          "keyframes",
+          "translate",
+          "zero-js"
+        ]
+      }
+    },
+    {
+      "name": "spring-lattice-field",
+      "type": "registry:ui",
+      "title": "Spring Lattice Field",
+      "description": "A CPU damped-spring lattice uploaded as a texture each frame, displacing a procedural grid the cursor can push around.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/spring-lattice-field.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/spring-lattice-field.tsx"
+        },
+        {
+          "path": "registry/shaders/spring-lattice-field.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/spring-lattice-field.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "webgl2",
+          "shader",
+          "grid",
+          "physics",
+          "spring",
+          "pointer"
+        ]
+      }
+    },
+    {
+      "name": "spring-to-linear-easing",
+      "type": "registry:ui",
+      "title": "Spring To CSS linear()",
+      "description": "Solves a spring once, samples it into a CSS linear() string, and runs the whole bounce on the compositor.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/easing.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/spring-to-linear-easing.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/spring-to-linear-easing.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "css",
+        "tags": [
+          "easing",
+          "spring",
+          "linear",
+          "css",
+          "compositor"
+        ]
+      }
+    },
+    {
+      "name": "step-end-caret",
+      "type": "registry:ui",
+      "title": "Step-End Blinking Caret",
+      "description": "A text caret that snaps on and off instead of fading, using step-end timing and an uneven blink rhythm.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/step-end-caret.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/step-end-caret.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "css",
+        "tags": [
+          "css",
+          "caret",
+          "cursor",
+          "keyframes",
+          "terminal"
+        ]
+      }
+    },
+    {
+      "name": "stepped-film-grain",
+      "type": "registry:ui",
+      "title": "Stepped Film Grain",
+      "description": "A transparent grain overlay whose pattern jumps twelve times a second instead of every frame, so it reads as film.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/stepped-film-grain.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/stepped-film-grain.tsx"
+        },
+        {
+          "path": "registry/shaders/stepped-film-grain.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/stepped-film-grain.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "fragment-shader",
+          "grain",
+          "overlay",
+          "quantised-time"
+        ]
+      }
+    },
+    {
+      "name": "stroke-to-fill-hover",
+      "type": "registry:ui",
+      "title": "Stroke-To-Fill Hover Rows",
+      "description": "An index of outlined type where the hovered row fills in solid, drops its stroke, and steps sideways.",
+      "categories": [
+        "text"
+      ],
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/stroke-to-fill-hover.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/stroke-to-fill-hover.tsx"
+        }
+      ],
+      "meta": {
+        "category": "text",
+        "cost": "css",
+        "tags": [
+          "css",
+          "hover",
+          "text-stroke",
+          "color-mix",
+          "index"
+        ]
+      }
+    },
+    {
+      "name": "superellipse-text-avoidance",
+      "type": "registry:ui",
+      "title": "Superellipse Text Avoidance",
+      "description": "A particle field that flows around the headline, held off by a 6-norm superellipse fitted to the measured text box.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "ogl@^1.0.11"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/superellipse-text-avoidance.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/superellipse-text-avoidance.tsx"
+        },
+        {
+          "path": "registry/shaders/superellipse-text-avoidance.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/superellipse-text-avoidance.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "ogl",
+          "webgl",
+          "instancing",
+          "superellipse",
+          "squircle",
+          "text",
+          "particles",
+          "pointer"
+        ]
+      }
+    },
+    {
+      "name": "surface-sampled-particles",
+      "type": "registry:ui",
+      "title": "Area-Weighted Surface Particles",
+      "description": "Any mesh becomes a particle shell of even density, assembling bottom-up, with orbit rings measured off the sampled silhouette.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/surface-sampled-particles.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/surface-sampled-particles.tsx"
+        },
+        {
+          "path": "registry/shaders/surface-sampled-particles.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/surface-sampled-particles.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "points",
+          "sampling",
+          "area-weighting",
+          "assembly",
+          "vertex-shader"
+        ]
+      }
+    },
+    {
+      "name": "text-target-particle-glyphs",
+      "type": "registry:ui",
+      "title": "Text-Target Particle Glyphs",
+      "description": "A particle cloud gathers into a word rasterised from a font already on the page, written left to right, then lets it go.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/prng.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/text-target-particle-glyphs.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/text-target-particle-glyphs.tsx"
+        },
+        {
+          "path": "registry/shaders/text-target-particle-glyphs.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/text-target-particle-glyphs.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "points",
+          "text",
+          "canvas-raster",
+          "morph",
+          "vertex-shader"
+        ]
+      }
+    },
+    {
+      "name": "throttled-scrub-state",
+      "type": "registry:ui",
+      "title": "Throttled Scrub To State",
+      "description": "A scrubbed trigger fires 120x a second; a time, distance and frame gate turns that into a handful of React renders.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-gsap.json",
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/throttled-scrub-state.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/throttled-scrub-state.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "scrolltrigger",
+          "scrub",
+          "react-state",
+          "throttle",
+          "performance"
+        ]
+      }
+    },
+    {
+      "name": "tweened-cursor-uniform",
+      "type": "registry:ui",
+      "title": "Tweened Cursor Uniform",
+      "description": "A shader grid with a lens under the pointer, whose position is tweened into the uniform so it settles instead of chasing.",
+      "categories": [
+        "cursor"
+      ],
+      "dependencies": [
+        "three@^0.185.1",
+        "gsap@^3.15.0"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/tweened-cursor-uniform.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/tweened-cursor-uniform.tsx"
+        },
+        {
+          "path": "registry/shaders/tweened-cursor-uniform.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/tweened-cursor-uniform.ts"
+        }
+      ],
+      "meta": {
+        "category": "cursor",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "gsap",
+          "shader",
+          "pointer",
+          "uniform",
+          "lens"
+        ]
+      }
+    },
+    {
+      "name": "uv-cover-fit",
+      "type": "registry:ui",
+      "title": "Cover-Fit UV Maths",
+      "description": "object-fit: cover for a textured quad, solved in UV space so the crop follows a frame that reshapes every frame.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/easing.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/uv-cover-fit.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/uv-cover-fit.tsx"
+        },
+        {
+          "path": "registry/shaders/uv-cover-fit.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/uv-cover-fit.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "glsl",
+          "uv",
+          "aspect-ratio",
+          "fragment-shader"
+        ]
+      }
+    },
+    {
+      "name": "velocity-afterimage-pass",
+      "type": "registry:ui",
+      "title": "Velocity Afterimage Pass",
+      "description": "Marks that smear into a tail when the pointer moves fast and stay crisp when it slows, from two targets swapping roles.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/velocity-afterimage-pass.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/velocity-afterimage-pass.tsx"
+        },
+        {
+          "path": "registry/shaders/velocity-afterimage-pass.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/velocity-afterimage-pass.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "shader",
+          "render-target",
+          "ping-pong",
+          "trail",
+          "velocity"
+        ]
+      }
+    },
+    {
+      "name": "velocity-deform-cards",
+      "type": "registry:ui",
+      "title": "Velocity-Deformed Cards",
+      "description": "Cards skew, stretch and trail in proportion to scroll speed, then settle on their own with no easing curve anywhere.",
+      "categories": [
+        "scroll"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-scroll-velocity.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/velocity-deform-cards.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/velocity-deform-cards.tsx"
+        }
+      ],
+      "meta": {
+        "category": "scroll",
+        "cost": "dom",
+        "tags": [
+          "scroll",
+          "velocity",
+          "skew",
+          "cards",
+          "damping"
+        ]
+      }
+    },
+    {
+      "name": "vertex-cylinder-bend",
+      "type": "registry:ui",
+      "title": "Vertex Shader Cylinder Bend",
+      "description": "A flat plane wrapped around a cylinder on the GPU, with the curvature living in a uniform you can animate.",
+      "categories": [
+        "webgl"
+      ],
+      "dependencies": [
+        "three@^0.185.1"
+      ],
+      "devDependencies": [
+        "@types/three@^0.185.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-in-view.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/use-smooth-pointer.json",
+        "http://localhost:8927/r/use-visibility.json",
+        "http://localhost:8927/r/webgl.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/vertex-cylinder-bend.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/vertex-cylinder-bend.tsx"
+        },
+        {
+          "path": "registry/shaders/vertex-cylinder-bend.ts",
+          "type": "registry:lib",
+          "target": "components/motion/shaders/vertex-cylinder-bend.ts"
+        }
+      ],
+      "meta": {
+        "category": "webgl",
+        "cost": "webgl",
+        "tags": [
+          "three",
+          "vertex-shader",
+          "glsl",
+          "geometry",
+          "curvature"
+        ]
+      }
+    },
+    {
+      "name": "web-audio-scheduler",
+      "type": "registry:ui",
+      "title": "Web Audio Scheduling Kit",
+      "description": "A lookahead sequencer: a coarse timer queues beats onto the sample-accurate audio clock, so tempo never drifts.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/web-audio-scheduler.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/web-audio-scheduler.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "web-audio",
+          "lookahead",
+          "sequencer",
+          "timing",
+          "setinterval"
+        ]
+      }
+    },
+    {
+      "name": "wheel-accumulator-stepper",
+      "type": "registry:ui",
+      "title": "Wheel Accumulator Stepper",
+      "description": "Wheel input normalised by deltaMode and accumulated to a threshold, so one flick of any device moves exactly one step.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-reduced-motion.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/wheel-accumulator-stepper.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/wheel-accumulator-stepper.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "wheel",
+          "deltamode",
+          "trackpad",
+          "momentum",
+          "input",
+          "stepper"
+        ]
+      }
+    },
+    {
+      "name": "wrapped-ring-offset",
+      "type": "registry:ui",
+      "title": "Shortest Signed Ring Offset",
+      "description": "Ten dots on a ring, each showing its wrapped offset and the raw index difference it replaces.",
+      "categories": [
+        "primitive"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-drag.json",
+        "http://localhost:8927/r/use-raf.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/wrapped-ring-offset.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/wrapped-ring-offset.tsx"
+        }
+      ],
+      "meta": {
+        "category": "primitive",
+        "cost": "dom",
+        "tags": [
+          "wrap",
+          "modulo",
+          "carousel",
+          "infinite",
+          "math"
+        ]
+      }
+    },
+    {
+      "name": "wrapping-drum-carousel",
+      "type": "registry:ui",
+      "title": "Wrapping Drum Carousel",
+      "description": "An endless carousel that reads as a rotating drum with no 3D at all — only x, scale and fading opacity.",
+      "categories": [
+        "layout"
+      ],
+      "dependencies": [
+        "gsap@^3.15.0"
+      ],
+      "registryDependencies": [
+        "http://localhost:8927/r/use-drag.json",
+        "http://localhost:8927/r/use-reduced-motion.json",
+        "http://localhost:8927/r/use-resize-observer.json",
+        "http://localhost:8927/r/wrap.json"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/wrapping-drum-carousel.tsx",
+          "type": "registry:ui",
+          "target": "components/motion/wrapping-drum-carousel.tsx"
+        }
+      ],
+      "meta": {
+        "category": "layout",
+        "cost": "dom",
+        "tags": [
+          "gsap",
+          "carousel",
+          "wrap",
+          "drag",
+          "infinite",
+          "fake-3d"
+        ]
+      }
+    },
+    {
+      "name": "damp",
+      "type": "registry:lib",
+      "title": "damp",
+      "description": "Shared utility used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/lib/damp.ts",
+          "type": "registry:lib",
+          "target": "lib/damp.ts"
+        }
+      ]
+    },
+    {
+      "name": "easing",
+      "type": "registry:lib",
+      "title": "easing",
+      "description": "Shared utility used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/lib/easing.ts",
+          "type": "registry:lib",
+          "target": "lib/easing.ts"
+        }
+      ]
+    },
+    {
+      "name": "prng",
+      "type": "registry:lib",
+      "title": "prng",
+      "description": "Shared utility used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/lib/prng.ts",
+          "type": "registry:lib",
+          "target": "lib/prng.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-drag",
+      "type": "registry:hook",
+      "title": "use-drag",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-drag.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-drag.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-gsap",
+      "type": "registry:hook",
+      "title": "use-gsap",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-gsap.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-gsap.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-in-view",
+      "type": "registry:hook",
+      "title": "use-in-view",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-in-view.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-in-view.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-lenis",
+      "type": "registry:hook",
+      "title": "use-lenis",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-lenis.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-lenis.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-raf",
+      "type": "registry:hook",
+      "title": "use-raf",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-raf.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-raf.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-reduced-motion",
+      "type": "registry:hook",
+      "title": "use-reduced-motion",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-reduced-motion.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-reduced-motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-resize-observer",
+      "type": "registry:hook",
+      "title": "use-resize-observer",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-resize-observer.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-resize-observer.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-scroll-velocity",
+      "type": "registry:hook",
+      "title": "use-scroll-velocity",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-raf.json"
+      ],
+      "files": [
+        {
+          "path": "registry/hooks/use-scroll-velocity.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-scroll-velocity.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-smooth-pointer",
+      "type": "registry:hook",
+      "title": "use-smooth-pointer",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [
+        "http://localhost:8927/r/damp.json",
+        "http://localhost:8927/r/use-raf.json"
+      ],
+      "files": [
+        {
+          "path": "registry/hooks/use-smooth-pointer.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-smooth-pointer.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-visibility",
+      "type": "registry:hook",
+      "title": "use-visibility",
+      "description": "Shared hook used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-visibility.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-visibility.ts"
+        }
+      ]
+    },
+    {
+      "name": "webgl",
+      "type": "registry:lib",
+      "title": "webgl",
+      "description": "Shared utility used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/lib/webgl.ts",
+          "type": "registry:lib",
+          "target": "lib/webgl.ts"
+        }
+      ]
+    },
+    {
+      "name": "wrap",
+      "type": "registry:lib",
+      "title": "wrap",
+      "description": "Shared utility used by Kinetic components.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/lib/wrap.ts",
+          "type": "registry:lib",
+          "target": "lib/wrap.ts"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+# Kinetic
+
+> 119 motion components for React. Every component ships its full source, a
+> shadcn registry item, and a prompt written for coding agents.
+
+Each component has a prompt at http://localhost:8927/prompts/<slug>.md
+
+## Scroll
+
+- [Banded Scrollspy Rail](http://localhost:8927/c/banded-scrollspy-rail): A tick rail whose active mark widens as a section crosses a 7% band through the middle of the screen.
+- [Batched Blur Reveal](http://localhost:8927/c/batched-blur-reveal): Cards that enter together focus in as one staggered group instead of arriving as a slab.
+- [One Reveal Engine, Two Axes](http://localhost:8927/c/container-animation-reveals): The same staggered line reveal fires for vertical sections and for panels on a horizontal track.
+- [Converging Flow Steps](http://localhost:8927/c/converging-flow-steps): A process diagram that closes from both ends while the connectors pop in a third of the way through.
+- [CSS Variable Stagger Reveal](http://localhost:8927/c/css-var-stagger-reveal): Groups reveal as they enter their scroll container; the stagger delay is a CSS calc over an index the JS writes once.
+- [Dataset-Driven Parallax](http://localhost:8927/c/dataset-parallax): Layers drift at a rate written on the element itself, over the widest possible scroll window.
+- [Drag-Throw Scroll](http://localhost:8927/c/drag-throw-scroll): Grab the page and pull it; let go mid-move and it coasts on, decaying, as far as the flick earned.
+- [Drag Mapped To Pin Progress](http://localhost:8927/c/drag-to-pin-progress): Drag a pinned horizontal strip and it moves exactly one pixel per pixel, then throws and settles.
+- [Dual-Direction Scrub Entrance](http://localhost:8927/c/dual-direction-scrub-entrance): Copy rises while a panel slides in from the side, both on one scrub with 600ms of lag.
+- [Inverse Scroll Scale](http://localhost:8927/c/inverse-scroll-scale): Media enters oversized at 1.25x and settles to exactly 1.0 as it rises through the first 60% of the scroller.
+- [IntersectionObserver Reveal](http://localhost:8927/c/io-reveal-lite): One element, one fade-and-rise on entry, no stylesheet and no library — with a single observer shared across every instance.
+- [Single Param Object Timeline](http://localhost:8927/c/keyframe-param-object): One plain object holds every animated value; the scroll story is a table of keyframes anchored to real sections.
+- [Knockout Zoom Pin](http://localhost:8927/c/knockout-zoom-pin): A word the size of the screen shrinks into a headline as you scroll, with the scene showing through its letters.
+- [Lenis On The GSAP Ticker](http://localhost:8927/c/lenis-gsap-ticker): Smooth scroll and ScrollTrigger on one clock, with the lag-smoothing line everyone omits.
+- [Manufactured Scroll Range](http://localhost:8927/c/manufactured-scroll-range): An empty box N screens tall turns a one-screen scene into a scrollable sequence, with progress as a CSS variable and the index as state.
+- [Mixed Scrub Depth Layers](http://localhost:8927/c/mixed-scrub-depth-layers): Layers separate while you scroll and converge when you stop, because each depth has its own scrub.
+- [Pinned Horizontal Track](http://localhost:8927/c/pinned-horizontal-track): A section pins while a strip of panels slides sideways, one scroll pixel per track pixel.
+- [Pre-Scatter Horizontal Gallery](http://localhost:8927/c/prescatter-horizontal-gallery): A pinned strip where each item rests slightly off its slot, flies in from ahead and peels away behind.
+- [Scroll-Scrubbed Video](http://localhost:8927/c/scroll-scrubbed-video): The scroll-to-frame mapping a scrubbed hero actually needs: smoothing, a snap, a frame quantiser and a loop that parks itself.
+- [Scrub Timeline Spine](http://localhost:8927/c/scrub-timeline-spine): A rule that fills as you scroll, with entries alternating either side and reversing on the way back.
+- [Throttled Scrub To State](http://localhost:8927/c/throttled-scrub-state): A scrubbed trigger fires 120x a second; a time, distance and frame gate turns that into a handful of React renders.
+- [Velocity-Deformed Cards](http://localhost:8927/c/velocity-deform-cards): Cards skew, stretch and trail in proportion to scroll speed, then settle on their own with no easing curve anywhere.
+
+## WebGL
+
+- [Anti-Aliased Point Discs](http://localhost:8927/c/antialiased-disc-fragment): A phyllotaxis field of dots that stay the same weight at every pixel ratio, with no MSAA and no texture.
+- [Bayer-Quantised Plasma](http://localhost:8927/c/bayer-plasma-hero): An iterated domain-warped plasma crushed to eleven grey levels, so the hero reads as a dot-matrix proof.
+- [Bit-Math Bayer8 Dither](http://localhost:8927/c/bayer8-ordered-dither): A smooth gradient crushed to five levels through an 8x8 ordered matrix derived from six integer ops.
+- [Cursor-Reactive Shader Glow](http://localhost:8927/c/cursor-reactive-shader-glow): A warped-noise atmosphere with a light that trails the cursor, held under a hard luminance ceiling so copy stays readable.
+- [Dot-Cloud Score Cylinder](http://localhost:8927/c/cylinder-dot-score): Two counter-rotating cylinders of dots — rings, bar lines, notes — drawn from one buffer with no depth buffer.
+- [Cylinder Gallery Drum](http://localhost:8927/c/cylinder-gallery): Nineteen planes wrapped around a drum in the vertex shader, spun by wheel or scroll, focus falling off from centre.
+- [Depth Fade And Travelling Pulse](http://localhost:8927/c/depth-pulse-travelling-wave): A dot lattice on an arc: z drives alpha and point size together, and a per-column phase sweeps the pulse across the field.
+- [Domain-Warped FBM Fog](http://localhost:8927/c/domain-warped-fbm): Slow, low-contrast fog that flows rather than fades, with a faint light that trails the cursor.
+- [Dual-Canvas Depth Split](http://localhost:8927/c/dual-canvas-z-split): One particle field rendered twice with the depth sign flipped, so the text sits inside the field rather than on top of it.
+- [Fractional Render Scale](http://localhost:8927/c/fractional-render-scale): A field rendered into a backing store 0.6x its box — 36% of the fragments — with a grid measured in texels so the upscale never shows.
+- [Fullscreen Triangle Pass](http://localhost:8927/c/fullscreen-triangle-pass): One 3-vertex triangle covers the viewport and runs your fragment shader. No three, no ogl, no seam.
+- [GPU Cubic-Bezier Burst](http://localhost:8927/c/gpu-bezier-burst): Rings of dots that burst on click, every particle solving its own cubic-bezier easing in the vertex shader.
+- [Instanced Quad Particles](http://localhost:8927/c/instanced-quad-particles): Up to 1800 drifting particles in one draw call — quads rather than point sprites, so each one has its own size, spin and shape.
+- [Multipass Offscreen Composite](http://localhost:8927/c/multipass-offscreen-composite): Four passes into two render targets — ramp, additive fills, half-size bloom — and one composite that writes the canvas once.
+- [In-Shader Mouse Bulge](http://localhost:8927/c/ndc-mouse-bulge): A soft lens that follows the cursor, measured by projecting every vertex to screen space instead of raycasting.
+- [Single-Draw Orbit Rings](http://localhost:8927/c/orbit-ring-points): Concentric rings of dots, one bright marker travelling each ring, all of it in a single draw call.
+- [Radial Ripple Dot Cloud](http://localhost:8927/c/radial-ripple-dot-cloud): A dot field with a travelling wave running out of one off-centre point, its density drawn by hand as a B-spline.
+- [Realtime Cube EnvMap](http://localhost:8927/c/realtime-cube-envmap): A metal knot reflecting panels that are actually orbiting it, captured six faces at a time every other frame.
+- [Scroll Deformation Wave](http://localhost:8927/c/scroll-deform-wave): An image that ripples with scroll speed and bends the other way on the way back, from two sine terms.
+- [Spring Lattice Field](http://localhost:8927/c/spring-lattice-field): A CPU damped-spring lattice uploaded as a texture each frame, displacing a procedural grid the cursor can push around.
+- [Stepped Film Grain](http://localhost:8927/c/stepped-film-grain): A transparent grain overlay whose pattern jumps twelve times a second instead of every frame, so it reads as film.
+- [Superellipse Text Avoidance](http://localhost:8927/c/superellipse-text-avoidance): A particle field that flows around the headline, held off by a 6-norm superellipse fitted to the measured text box.
+- [Area-Weighted Surface Particles](http://localhost:8927/c/surface-sampled-particles): Any mesh becomes a particle shell of even density, assembling bottom-up, with orbit rings measured off the sampled silhouette.
+- [Text-Target Particle Glyphs](http://localhost:8927/c/text-target-particle-glyphs): A particle cloud gathers into a word rasterised from a font already on the page, written left to right, then lets it go.
+- [Cover-Fit UV Maths](http://localhost:8927/c/uv-cover-fit): object-fit: cover for a textured quad, solved in UV space so the crop follows a frame that reshapes every frame.
+- [Velocity Afterimage Pass](http://localhost:8927/c/velocity-afterimage-pass): Marks that smear into a tail when the pointer moves fast and stay crisp when it slows, from two targets swapping roles.
+- [Vertex Shader Cylinder Bend](http://localhost:8927/c/vertex-cylinder-bend): A flat plane wrapped around a cylinder on the GPU, with the curvature living in a uniform you can animate.
+
+## Cursor
+
+- [Blend-Difference Cursor](http://localhost:8927/c/blend-difference-cursor): A white dot in difference blend mode inverts whatever it crosses, growing 16 to 44 to 150px on hover.
+- [Cursor Clip-Path Mask](http://localhost:8927/c/cursor-clip-path-mask): A disc of a second layer follows the pointer; hovering the trigger grows it until it covers the panel.
+- [Cursor Repulsion Burst](http://localhost:8927/c/cursor-repulsion-burst): An orbiting particle field the pointer pushes out of the way, and a press detonates into a shock wave with a heat band.
+- [Dither Trail Image Reveal](http://localhost:8927/c/dither-trail-image-reveal): A dimmed image restored through a trail of Bayer-thresholded blocks that smear in the direction the pointer moved.
+- [GSAP Cursor Follower](http://localhost:8927/c/gsap-cursor-follower): A puck that replaces the arrow inside a panel, trailing 0.4s behind and swelling to a label over targets.
+- [Hover List Image Trail](http://localhost:8927/c/hover-list-image-trail): Hovering a row stacks a plate into a column that follows the pointer; the oldest is culled past twenty.
+- [Magnetic Pointer Button](http://localhost:8927/c/magnetic-button): A button that leans toward the cursor and springs back, with the label leading the box.
+- [Pointer Palette Sampling](http://localhost:8927/c/pointer-palette-sampling): Point at the artwork and it names the colour — a clamped pixel read snapped to the nearest palette entry.
+- [Pointer-Variable Gradient](http://localhost:8927/c/pointer-var-gradient): A soft glow tracks the pointer through two CSS custom properties. No rAF, no tween, no string rebuilding.
+- [Pooled Cursor Image Trail](http://localhost:8927/c/pooled-image-trail): Tiles drop behind the cursor from a fixed ring of 22 reused nodes, one every 130px of travel.
+- [quickTo Cursor Preview](http://localhost:8927/c/quickto-cursor-preview): A preview panel drifts a full second behind the pointer, driven by two reused quickTo tweens.
+- [Radial Mask Spotlight](http://localhost:8927/c/radial-mask-spotlight): A layer masked to a soft disc follows the pointer, with a flat core that makes it read as a beam.
+- [Tweened Cursor Uniform](http://localhost:8927/c/tweened-cursor-uniform): A shader grid with a lens under the pointer, whose position is tweened into the uniform so it settles instead of chasing.
+
+## Transition
+
+- [A/B Layer Ping-Pong](http://localhost:8927/c/ab-layer-crossfade): Two stacked layers alternate so any change crossfades, however fast you move between rows.
+- [Asymmetric In/Out Staggers](http://localhost:8927/c/asymmetric-stagger): A list that arrives item by item after a hold and leaves twice as fast, from the last row backwards.
+- [Canvas Handoff Transition](http://localhost:8927/c/canvas-handoff-transition): The live WebGL canvas is handed to the next page and flies to its new slot, instead of being destroyed and rebuilt.
+- [CSS Variable Clip-Path Tween](http://localhost:8927/c/clip-path-variable-tween): One tweened custom property drives every clip-path on the panel, and reversing the timeline is the exit.
+- [Delayed-Unmount Loader](http://localhost:8927/c/delayed-unmount-loader): A loading overlay that stays mounted 600ms past the signal so its fade can actually play before it leaves.
+- [Exit Warp Before Navigate](http://localhost:8927/c/exit-warp-navigation): A ring of cards tears itself apart and rushes past the camera, and only then does the route change.
+- [Hinged Container Intro](http://localhost:8927/c/hinged-container-intro): The page body swings up from below the fold, hinged on its own bottom edge, with captions following it in.
+- [Prefetch-On-Hover Wipe](http://localhost:8927/c/hover-prefetch-wipe): Warms the next page on hover, wipes the screen on click, and navigates once the wipe has actually covered.
+- [Idle-Gated Page States](http://localhost:8927/c/idle-gated-page-states): A page entrance that will not start until a floor delay has elapsed and the main thread has reported itself idle.
+- [Key-Replayed Page Reveal](http://localhost:8927/c/page-reveal-overlay): An opaque overlay that fades away on every route change, replayed by nothing more than a changed React key.
+- [Staggered Panel Wipe](http://localhost:8927/c/panel-wipe-preloader): An eased 0-100 counter, a word list and a five-column wipe, all on one timeline so they cannot drift.
+- [Re-Key Caption Replay](http://localhost:8927/c/rekey-caption-replay): A caption block whose staggered entrance replays on every index change, restarted by a changed React key.
+- [Preloader That Cannot Hang](http://localhost:8927/c/safe-preloader): An intro overlay with a hard ceiling, a minimum visible time and a once-per-session flag, so a stalled load cannot trap the page.
+- [Slab Page Transition](http://localhost:8927/c/slab-page-transition): An opaque slab rises through the frame, the route changes under it, and it keeps going — nothing ever reverses.
+
+## Text
+
+- [Asymmetric Typewriter](http://localhost:8927/c/asymmetric-typewriter): Rotating phrases that delete at twice the speed they type, with a beat of nothing at the empty string.
+- [Char Stagger Then Scale-Up](http://localhost:8927/c/char-stagger-scale-up): Characters resolve left to right, then the whole word scales up with an overshoot as the last one lands.
+- [Converging Headline Words](http://localhost:8927/c/converging-scrub-words): Headline words slide in from opposite margins and lock into a sentence, pinned to scroll position.
+- [Eased Number Counter](http://localhost:8927/c/eased-number-counter): A statistic that counts up on an eased curve and settles on its exact final figure without shifting the layout.
+- [Font-Safe Text Splitting](http://localhost:8927/c/font-safe-text-split): Line splitting gated on document.fonts.ready, re-split on late fonts and on width change, debounced.
+- [Letter Scramble](http://localhost:8927/c/morphsvg-letter-scramble): A word assembles out of noise — each character flips through wrong glyphs, decelerating onto the right one.
+- [Nested Split With True Restore](http://localhost:8927/c/nested-splittext-restore): Splits rich markup into masked lines and restores the original innerHTML byte-for-byte on teardown.
+- [Scrubbed Character Colour Reveal](http://localhost:8927/c/scrub-char-color-reveal): A dim paragraph resolves character by character as it crosses the viewport, tied to scroll position not a clock.
+- [Pixels-Per-Second Marquee](http://localhost:8927/c/seamless-marquee): A marquee whose duration is derived from measured width and a px/second speed, so every strip moves at the same rate.
+- [Step-End Blinking Caret](http://localhost:8927/c/step-end-caret): A text caret that snaps on and off instead of fading, using step-end timing and an uneven blink rhythm.
+- [Stroke-To-Fill Hover Rows](http://localhost:8927/c/stroke-to-fill-hover): An index of outlined type where the hovered row fills in solid, drops its stroke, and steps sideways.
+
+## Layout
+
+- [Auto-Advance Filmstrip](http://localhost:8927/c/auto-advance-filmstrip): A centred strip that steps one panel every few seconds, neighbours dimmed and shrunk, on one CSS transition.
+- [Drag Marquee](http://localhost:8927/c/drag-marquee): An endless row that drifts, takes a drag and a throw, and scatters its cards while your hand is down.
+- [FOV-Derived Row Spacing](http://localhost:8927/c/fov-derived-row-step): A row whose item spacing is solved from a field of view and a camera distance, so it spans the frame exactly at any size.
+- [Height-First Media Stage](http://localhost:8927/c/height-first-media-stage): A media stage sized from its height, with the width derived from the ratio, cross-fading layers and a caption that replays per index.
+- [Layout Lerp Scalar](http://localhost:8927/c/layout-lerp-scalar): Row, stack, drum and fan are one placement function of seven numbers. Switching layout is a tween over an object.
+- [matchMedia Layout Teardown](http://localhost:8927/c/matchmedia-layout-teardown): Two layouts behind one gsap.matchMedia block. Cross the breakpoint and the desktop branch reverts itself.
+- [Percent Slide Carousel](http://localhost:8927/c/percent-slide-carousel): A flex track translated by -100% per slide. One CSS transition, no measurement, no library.
+- [Perspective Coverflow Scroller](http://localhost:8927/c/perspective-coverflow-scroller): Panels turn away from the centre in real 3D as you scroll a native container — no tween, no loop.
+- [Proximity Snap Track](http://localhost:8927/c/proximity-snap-track): A horizontal rail of variable-width cards that snaps only when you stop near one, and never skips past two at once.
+- [Rotary Drag Carousel](http://localhost:8927/c/rotary-drag-carousel): A wheel of cards you grab and spin. Angular drag, projected inertia, and it always lands on a station.
+- [Wrapping Drum Carousel](http://localhost:8927/c/wrapping-drum-carousel): An endless carousel that reads as a rotating drum with no 3D at all — only x, scale and fading opacity.
+
+## Primitives
+
+- [Analytic Disc Picking](http://localhost:8927/c/analytic-disc-picking): Hit-test camera-facing discs by intersecting the pointer ray with their plane. Exact, allocation-free, and correct for shader billboards.
+- [Browser Chrome Frame](http://localhost:8927/c/browser-chrome-frame): A macOS window frame with hover-revealed traffic lights and an address pill whose check draws itself on copy.
+- [Chord-Synced Particle Burst](http://localhost:8927/c/burst-audio-sync): Fires an arpeggio and its visual flares off one schedule, so each flash lands on its own note.
+- [Capture-Phase Click Swallow](http://localhost:8927/c/capture-phase-click-swallow): Cancels the single click a finished drag would fire, in the capture phase, without eating the next real click or keyboard activation.
+- [Compound Group Hover Card](http://localhost:8927/c/compound-group-hover): One hover drives four changes on three elements, each with its own duration and curve. Keyboard gets all four.
+- [Conic @property Border](http://localhost:8927/c/conic-property-border): A gradient ring that rotates around a rounded box. Two highlights chase each other; no JavaScript runs.
+- [Raycaster-Free Hover Picking](http://localhost:8927/c/cpu-mirror-picking): Run the GPU's transform again on the CPU and hit-test the result. No raycaster, no rect reads.
+- [Dotted Notepad Surface](http://localhost:8927/c/dotted-notepad-surface): A tiled dot grid that dissolves at the panel edges, with a hard-stopped folded corner.
+- [Drag with a Dead Zone and Pointer Capture](http://localhost:8927/c/drag-deadzone-capture): Captures the pointer on press but only commits to a drag past a distance threshold, so a shaky click stays a click.
+- [Drifting Smoke Layers](http://localhost:8927/c/drifting-smoke-layers): Slow volumetric fog built from blurred radial gradients on three coprime cycles. No texture, no canvas.
+- [Looping Scroll Cue](http://localhost:8927/c/looping-scroll-cue): The hairline that dives down a hero. One keyframe pair, a hard ease, and a seamless loop.
+- [Lottie Ratio Poster](http://localhost:8927/c/lottie-ratio-poster): Reserves the box, holds a drawn poster, fetches the JSON only in view, then corrects the ratio from the animation's own w and h.
+- [Nav Dot Wave](http://localhost:8927/c/nav-dot-wave): Nav dots that lift in sequence. The index is an inline custom property; CSS derives the delay.
+- [Pause, Don't Unmount](http://localhost:8927/c/pause-dont-unmount): React 19's Activity hides a WebGL scene without losing its state. Effects still tear down, so the GL context is genuinely released.
+- [Relaxed Seeded Scatter](http://localhost:8927/c/relaxed-seeded-scatter): Seeded angles around a ring, pushed apart until nothing collides. Ghost ticks mark where they started.
+- [Self-Parking RAF](http://localhost:8927/c/self-parking-raf): An epsilon snap lets a damped value reach its target exactly, so the frame loop hits its exit test and dies.
+- [Slow Idle Float](http://localhost:8927/c/slow-float-idle): A 14px rise and fall over 5 seconds, on the independent translate property so hover transforms still work.
+- [Spring To CSS linear()](http://localhost:8927/c/spring-to-linear-easing): Solves a spring once, samples it into a CSS linear() string, and runs the whole bounce on the compositor.
+- [Web Audio Scheduling Kit](http://localhost:8927/c/web-audio-scheduler): A lookahead sequencer: a coarse timer queues beats onto the sample-accurate audio clock, so tempo never drifts.
+- [Wheel Accumulator Stepper](http://localhost:8927/c/wheel-accumulator-stepper): Wheel input normalised by deltaMode and accumulated to a threshold, so one flick of any device moves exactly one step.
+- [Shortest Signed Ring Offset](http://localhost:8927/c/wrapped-ring-offset): Ten dots on a ring, each showing its wrapped offset and the raw index difference it replaces.

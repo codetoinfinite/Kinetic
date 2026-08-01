@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "inverse-scroll-scale",
+  "title": "Inverse Scroll Scale",
+  "description": "Media enters oversized at 1.25x and settles to exactly 1.0 as it rises through the first 60% of the scroller.",
+  "dependencies": [],
+  "registryDependencies": [
+    "http://localhost:8927/r/damp.json",
+    "http://localhost:8927/r/use-raf.json",
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/inverse-scroll-scale.tsx",
+      "content": "'use client';\n\nimport { useEffect, useRef, type ReactNode, type RefObject } from 'react';\nimport { cn } from '@/lib/utils';\nimport { useRaf } from '@/hooks/use-raf';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\nimport { clamp, damp } from '@/lib/damp';\n\n/* ==========================================================================\n   Inverse Scroll Scale\n   --------------------------------------------------------------------------\n   The usual scroll-scale grows an image as it rises. This one shrinks it:\n   the media starts oversized at 1.25x and settles to exactly 1.0 as its top\n   edge climbs through the first 60% of the scroller. It resolves *into* its\n   frame instead of bursting out of it.\n\n   Two details carry the whole effect.\n\n   1. The 0.6 divisor. Scaling over the full viewport height means the image\n      is still moving while you are already reading it. Finishing at 60%\n      means it is at rest for the entire time it is the thing you are\n      looking at — the motion is an arrival, not an ongoing state.\n\n   2. It lands on exactly 1.0, so the frame is filled by construction. Any\n      scale below 1 on an element sized to its frame would show a seam, so\n      `from` must be >= 1 and the end of the ramp must be the identity.\n\n   No GSAP. One rAF callback, gated by an IntersectionObserver so an\n   off-screen instance costs nothing, and one transform write per frame.\n   ========================================================================== */\n\nexport interface InverseScrollScaleProps {\n  /** The media. Sized to fill the frame; it is what gets scaled. */\n  children: ReactNode;\n  /** Starting scale. Must be >= 1 or the frame shows through at the edges. */\n  from?: number;\n  /**\n   * Fraction of the scroller height over which the scale resolves, measured\n   * from the bottom edge upward. 0.6 finishes well before the top.\n   */\n  span?: number;\n  /**\n   * Fraction of the remaining gap left after one second. 0 writes the scroll\n   * position straight through, which is the sharp, correct default.\n   */\n  smoothing?: number;\n  /** The scroll container that owns the scroll position. Omit for the document. */\n  scrollerRef?: RefObject<HTMLElement | null>;\n  className?: string;\n}\n\n// #region critical\nexport function InverseScrollScale({\n  children,\n  from = 1.25,\n  span = 0.6,\n  smoothing = 0,\n  scrollerRef,\n  className,\n}: InverseScrollScaleProps) {\n  const frame = useRef<HTMLDivElement>(null);\n  const media = useRef<HTMLDivElement>(null);\n  const active = useRef(false);\n  const scale = useRef(from);\n  const written = useRef(-1);\n  const reduced = useReducedMotion();\n\n  // Gate the rAF work on visibility. Hand-rolled rather than `useInView`\n  // because the observer needs a custom `root` — the demo's own scroller —\n  // and a pooled observer keyed only by threshold would hand back one rooted\n  // at the document.\n  useEffect(() => {\n    const el = frame.current;\n    if (!el || reduced) return;\n\n    const observer = new IntersectionObserver(\n      (entries) => {\n        for (const entry of entries) active.current = entry.isIntersecting;\n      },\n      { root: scrollerRef?.current ?? null, rootMargin: '20% 0px 20% 0px' },\n    );\n    observer.observe(el);\n    return () => observer.disconnect();\n  }, [reduced, scrollerRef]);\n\n  useRaf(\n    (dt) => {\n      const el = frame.current;\n      const target = media.current;\n      if (!el || !target || !active.current) return;\n\n      // One read pass, then one write pass. Reading the rect after writing a\n      // transform in the same frame forces a synchronous layout.\n      const scroller = scrollerRef?.current ?? null;\n      const rect = el.getBoundingClientRect();\n      const height = scroller ? scroller.clientHeight : window.innerHeight;\n      const top = scroller ? rect.top - scroller.getBoundingClientRect().top : rect.top;\n\n      // t is 0 while the frame's top edge is at the bottom of the scroller and\n      // reaches 1 once it has risen `span` of the scroller's height.\n      const t = clamp((height - top) / (span * height), 0, 1);\n      const wanted = from - (from - 1) * t;\n\n      scale.current =\n        smoothing > 0 ? damp(scale.current, wanted, smoothing, dt) : wanted;\n\n      // Four decimals is below one device pixel on a 4000px element, and the\n      // equality check skips the style write on the many frames where nothing\n      // changed — an idle instance then costs a rect read and nothing else.\n      const next = Number(scale.current.toFixed(4));\n      if (next === written.current) return;\n      written.current = next;\n      target.style.transform = `scale(${next})`;\n    },\n    !reduced,\n  );\n  // #endregion critical\n\n  return (\n    <div ref={frame} className={cn('relative overflow-hidden', className)}>\n      <div\n        ref={media}\n        className=\"h-full w-full will-change-transform\"\n        // Reduced motion renders the resolved state: scale 1, frame filled.\n        style={{ transform: `scale(${reduced ? 1 : from})` }}\n      >\n        {children}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/inverse-scroll-scale.tsx"
+    }
+  ],
+  "meta": {
+    "category": "scroll",
+    "cost": "dom",
+    "tags": [
+      "scroll",
+      "transform",
+      "raf",
+      "parallax",
+      "intersection-observer",
+      "no-deps"
+    ]
+  },
+  "categories": [
+    "scroll"
+  ],
+  "type": "registry:ui"
+}

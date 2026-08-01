@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "conic-property-border",
+  "title": "Conic @property Border",
+  "description": "A gradient ring that rotates around a rounded box. Two highlights chase each other; no JavaScript runs.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/conic-property-border.tsx",
+      "content": "'use client';\n\nimport type { CSSProperties, ReactNode } from 'react';\nimport { cn } from '@/lib/utils';\n\n/* ==========================================================================\n   Conic @property Border\n   --------------------------------------------------------------------------\n   A gradient ring that rotates around a rounded box, in pure CSS. Two things\n   make it work and both are non-obvious:\n\n   1. `@property` registration. A custom property is a *token stream* by\n      default — the browser has no idea `0deg` is an angle, so a keyframe from\n      `0deg` to `360deg` has nothing to interpolate and the value flips at the\n      50% mark. Registering it with `syntax: \"<angle>\"` gives it a type, and\n      typed values interpolate.\n\n   2. Two backgrounds with different clip boxes. A flat fill clipped to\n      `padding-box` covers the interior; the conic gradient clipped to\n      `border-box` runs underneath the border. With a transparent border, the\n      only place the gradient survives the clip is the ring itself — which is\n      how you get a gradient border that follows `border-radius`.\n      `border-image` cannot do that.\n   ========================================================================== */\n\n/** Lets an inline `style` object carry custom properties without a cast. */\ntype StyleWithVars = CSSProperties & Record<`--${string}`, string | number>;\n\nexport interface ConicBorderProps {\n  children: ReactNode;\n  /** One full revolution, in milliseconds. */\n  durationMs?: number;\n  /** Ring thickness. Any CSS length. */\n  thickness?: string;\n  /** Corner radius. Any CSS length or percentage. */\n  radius?: string;\n  /** Colour of the two travelling highlights. Defaults to `currentColor`. */\n  glow?: string;\n  /** Colour of the dim majority of the ring. */\n  rest?: string;\n  /** Interior fill. Must be opaque, or the gradient shows through the middle. */\n  fill?: string;\n  /** Holds the ring still without unmounting the animation. */\n  paused?: boolean;\n  className?: string;\n}\n\n// #region critical\n/* Injected once per document. React 19 hoists `<style href precedence>` into\n   <head> and de-duplicates by `href`, so a hundred rings ship one rule set —\n   and `@property` registration is global anyway, so re-declaring it per\n   instance would be pure waste. */\nconst CONIC_BORDER_CSS = `\n@property --kx-conic-angle {\n  syntax: \"<angle>\";\n  inherits: false;\n  initial-value: 0deg;\n}\n\n@keyframes kx-conic-spin {\n  to { --kx-conic-angle: 360deg; }\n}\n\n.kx-conic {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  isolation: isolate;\n\n  border: var(--kx-conic-width, 1.5px) solid transparent;\n  border-radius: var(--kx-conic-radius, 9999px);\n\n  /* padding-box layer paints the interior, border-box layer paints under the\n     ring. Order matters: the first background listed is the topmost. */\n  background:\n    linear-gradient(var(--kx-conic-fill), var(--kx-conic-fill)) padding-box,\n    conic-gradient(\n      from var(--kx-conic-angle),\n      var(--kx-conic-rest)   0deg,\n      var(--kx-conic-glow)  55deg,\n      var(--kx-conic-rest) 130deg,\n      var(--kx-conic-rest) 230deg,\n      var(--kx-conic-glow) 305deg,\n      var(--kx-conic-rest) 360deg\n    ) border-box;\n\n  animation: kx-conic-spin var(--kx-conic-duration, 4s) linear infinite;\n}\n\n.kx-conic[data-paused='true'] {\n  animation-play-state: paused;\n}\n\n/* No motion: keep the ring, stop the revolution, and park a highlight\n   off-axis so the border still reads as decorated rather than broken. */\n@media (prefers-reduced-motion: reduce) {\n  .kx-conic {\n    animation: none;\n    --kx-conic-angle: 132deg;\n  }\n}\n`;\n\nexport function ConicBorder({\n  children,\n  durationMs = 4000,\n  thickness = '1.5px',\n  radius = '9999px',\n  glow,\n  rest,\n  fill,\n  paused = false,\n  className,\n}: ConicBorderProps) {\n  /* Every colour resolves through a `var(..., fallback)` chain, so the\n     component works with zero configuration and is themeable by setting one\n     property on any ancestor. `Canvas` is the system background keyword — a\n     last resort that is at least the right polarity in both colour schemes. */\n  const style: StyleWithVars = {\n    '--kx-conic-duration': `${durationMs}ms`,\n    '--kx-conic-width': thickness,\n    '--kx-conic-radius': radius,\n    '--kx-conic-glow': glow ?? 'var(--conic-glow, currentColor)',\n    '--kx-conic-rest':\n      rest ?? 'var(--conic-rest, color-mix(in oklab, currentColor 10%, transparent))',\n    '--kx-conic-fill': fill ?? 'var(--conic-fill, var(--color-bg, Canvas))',\n  };\n\n  return (\n    <>\n      <style href=\"kinetic-conic-property-border\" precedence=\"medium\">\n        {CONIC_BORDER_CSS}\n      </style>\n      <div\n        className={cn('kx-conic', className)}\n        style={style}\n        data-paused={paused ? 'true' : undefined}\n      >\n        {children}\n      </div>\n    </>\n  );\n}\n// #endregion critical\n",
+      "type": "registry:ui",
+      "target": "components/motion/conic-property-border.tsx"
+    }
+  ],
+  "meta": {
+    "category": "primitive",
+    "cost": "css",
+    "tags": [
+      "css",
+      "at-property",
+      "conic-gradient",
+      "border",
+      "zero-js"
+    ]
+  },
+  "categories": [
+    "primitive"
+  ],
+  "type": "registry:ui"
+}

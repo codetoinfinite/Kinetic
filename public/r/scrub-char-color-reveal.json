@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scrub-char-color-reveal",
+  "title": "Scrubbed Character Colour Reveal",
+  "description": "A dim paragraph resolves character by character as it crosses the viewport, tied to scroll position not a clock.",
+  "dependencies": [
+    "gsap@^3.15.0"
+  ],
+  "registryDependencies": [
+    "http://localhost:8927/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/scrub-char-color-reveal.tsx",
+      "content": "'use client';\n\nimport gsap from 'gsap';\nimport ScrollTrigger from 'gsap/ScrollTrigger';\nimport { Fragment, useEffect, useRef } from 'react';\nimport { cn } from '@/lib/utils';\nimport { useReducedMotion } from '@/hooks/use-reduced-motion';\n\n/* ==========================================================================\n   Scrubbed Character Colour Reveal\n   --------------------------------------------------------------------------\n   A paragraph sitting at 16% strength resolves character by character as it\n   crosses the viewport, the reveal position pinned to the scrollbar rather\n   than to a clock. Scroll back up and the characters ghost out again in\n   reverse, because a scrubbed timeline is a function of position, not a\n   playback.\n\n   The stagger and the durations are *ratios*, not seconds. ScrollTrigger maps\n   the timeline's total length onto the distance between `start` and `end`, so\n   `stagger: 0.1` with `duration: 0.35` means \"each character begins 0.1/total\n   of the way through the scroll range and takes 0.35/total to resolve\". Change\n   the paragraph length and the pacing per character is unchanged; change the\n   scroll range and everything rescales together.\n\n   `scrub: 0.75` rather than `scrub: true`. `true` welds the reveal to the\n   scrollbar exactly, which on a trackpad exposes every jitter in the input.\n   Three quarters of a second of catch-up smooths the input without ever\n   feeling like the text is animating on its own.\n   ========================================================================== */\n\nexport interface ScrubCharColorRevealProps {\n  /** Body copy. Split to words then characters in JSX. */\n  text: string;\n  /** Resting strength of an unrevealed character, 0-1. */\n  dim?: number;\n  /** Timeline units between adjacent characters. */\n  stagger?: number;\n  /** Timeline units for one character to resolve. */\n  charDuration?: number;\n  /** Seconds of catch-up between the scrollbar and the reveal. */\n  scrub?: number;\n  start?: string;\n  end?: string;\n  /** Scroll container, when the text is not in the document scroller. */\n  scroller?: Element | null;\n  className?: string;\n}\n\n// #region critical\nconst DIM = 0.16;\nconst STAGGER = 0.1;\nconst CHAR_DURATION = 0.35;\nconst SCRUB = 0.75;\nconst START = 'top 78%';\nconst END = 'bottom 55%';\n\nexport function ScrubCharColorReveal({\n  text,\n  dim = DIM,\n  stagger = STAGGER,\n  charDuration = CHAR_DURATION,\n  scrub = SCRUB,\n  start = START,\n  end = END,\n  scroller = null,\n  className,\n}: ScrubCharColorRevealProps) {\n  const root = useRef<HTMLParagraphElement>(null);\n  const reduced = useReducedMotion();\n\n  useEffect(() => {\n    const el = root.current;\n    if (!el || reduced) return;\n\n    gsap.registerPlugin(ScrollTrigger);\n\n    const chars = Array.from(el.querySelectorAll<HTMLElement>('[data-char]'));\n    if (chars.length === 0) return;\n\n    const ctx = gsap.context(() => {\n      gsap.to(chars, {\n        opacity: 1,\n        duration: charDuration,\n        ease: 'power1.out',\n        stagger,\n        scrollTrigger: {\n          trigger: el,\n          scroller: scroller ?? undefined,\n          start,\n          end,\n          scrub,\n        },\n      });\n    }, el);\n\n    return () => ctx.revert();\n  }, [text, dim, stagger, charDuration, scrub, start, end, scroller, reduced]);\n  // #endregion critical\n\n  const idle = reduced ? 1 : dim;\n  const words = text.split(' ');\n\n  return (\n    <p\n      ref={root}\n      className={cn('text-balance', className)}\n      // The characters are decoration; the paragraph is read once, whole.\n      // Without this a screen reader announces two hundred single letters.\n      aria-label={text}\n    >\n      <span aria-hidden>\n        {words.map((w, wi) => (\n          <Fragment key={`${wi}-${w}`}>\n            {/* Word boxes keep line breaks between words. Splitting straight\n                to characters lets a line break land inside a word. */}\n            <span className=\"inline-block whitespace-nowrap\">\n              {Array.from(w).map((ch, ci) => (\n                <span\n                  key={ci}\n                  data-char\n                  className=\"inline-block\"\n                  style={{ opacity: idle }}\n                >\n                  {ch}\n                </span>\n              ))}\n            </span>\n            {wi < words.length - 1 ? ' ' : null}\n          </Fragment>\n        ))}\n      </span>\n    </p>\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "components/motion/scrub-char-color-reveal.tsx"
+    }
+  ],
+  "meta": {
+    "category": "text",
+    "cost": "dom",
+    "tags": [
+      "gsap",
+      "scrolltrigger",
+      "scrub",
+      "stagger",
+      "split"
+    ]
+  },
+  "categories": [
+    "text"
+  ],
+  "type": "registry:ui"
+}
