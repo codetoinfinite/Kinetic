@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar",
+  "type": "registry:ui",
+  "title": "Avatar",
+  "description": "Round photo or initials avatar in four sizes (20 to 36px) and four tints, with a lazy-loaded image that fills the disc.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/avatar.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/avatar.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/avatar/avatar.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n/* eslint-disable @next/next/no-img-element */\nimport type { HTMLAttributes, Ref } from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Figma source: Board UI → Avatar (styles Avatar/1…Avatar/26; used throughout\n * dashboard 1, node 3731:2932).\n *\n * Sizes used in the designs (px):\n *   xs = 20   breadcrumb workspace marks     (initials 10/15 semibold)\n *   sm = 24   table rows                     (initials 12/16 semibold)\n *   md = 32   sidebar workspace / team card  (initials 16/22 semibold)\n *   lg = 36   people cards                   (initials 18/24 semibold)\n *\n * Renders a photo when `src` is given, otherwise centered initials on a\n * tinted disc. Initial tints from Figma:\n *   neutral → bg avatar/neutral/background, text text/secondary\n *   blue    → bg color/blue/300,    text color/blue/900\n *   lime    → bg color/lime/200,    text color/lime/700\n *   pink    → bg color/pink/200,    text color/pink/500\n */\n\ntype AvatarSize = \"xs\" | \"sm\" | \"md\" | \"lg\";\ntype AvatarColor = \"neutral\" | \"blue\" | \"lime\" | \"pink\";\n\nexport interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {\n  size?: AvatarSize;\n  color?: AvatarColor;\n  /** Photo URL. Wins over `initials`. */\n  src?: string;\n  alt?: string;\n  /** Fallback initials, e.g. \"M\". */\n  initials?: string;\n  ref?: Ref<HTMLSpanElement>;\n}\n\n// #region critical\nconst styles = sortCx({\n  base: \"inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-full text-center align-middle transition-[width,height,font-size] duration-200 ease\",\n  size: {\n    xs: \"size-5 text-[10px] leading-[15px] font-semibold\",\n    sm: \"size-6 text-caption-1-semibold tracking-normal\",\n    md: \"size-8 text-headline-semibold\",\n    lg: \"size-9 text-[18px] leading-6 font-semibold\",\n  },\n  color: {\n    neutral: \"bg-avatar-neutral-background text-text-secondary\",\n    blue: \"bg-blue-300 text-blue-900\",\n    lime: \"bg-lime-200 text-lime-700\",\n    pink: \"bg-pink-200 text-pink-500\",\n  },\n});\n\nexport function Avatar({\n  size = \"md\",\n  color = \"neutral\",\n  src,\n  alt,\n  initials,\n  className,\n  ref,\n  ...props\n}: AvatarProps) {\n  return (\n    <span\n      ref={ref}\n      className={cx(styles.base, styles.size[size], styles.color[color], className)}\n      {...props}\n    >\n      {src ? (\n        <img\n          src={src}\n          alt={alt ?? \"\"}\n          loading=\"lazy\"\n          decoding=\"async\"\n          className=\"size-full object-cover\"\n        />\n      ) : (\n        initials\n      )}\n    </span>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "avatar",
+      "initials",
+      "profile",
+      "user",
+      "boardui"
+    ]
+  }
+}

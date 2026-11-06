@@ -24,7 +24,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A double buffer for DOM content. Incoming content is written into whichever of two absolutely-positioned layers is currently invisible, then the two swap opacity. Because the outgoing content is still on screen, every change is a real crossfade rather than a swap with a fade bolted on — and running two of these at different durations is how a hover preview gets its lag between thumbnail and full-bleed background.',

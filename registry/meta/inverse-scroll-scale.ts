@@ -36,7 +36,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'The inverse of the usual scroll-scale. Instead of growing as it rises, the media starts oversized and resolves down to exactly 1.0 over the first 60% of the scroller, so it settles into its frame rather than bursting out of it — and it is at rest for the whole time it is the thing you are actually looking at. No animation library: one rAF callback, gated by an IntersectionObserver.',

@@ -2,7 +2,9 @@
    Theme, resolved before the first paint.
    --------------------------------------------------------------------------
    Dark is the default and lives on :root, so only the light theme needs a
-   class. Reading localStorage in an effect would paint dark first and then
+   class. The server also renders `dark` on <html> for the BoardUI-derived
+   components, whose tokens are light on :root and dark under `.dark`; the
+   script swaps the two classes together so they can never disagree. Reading localStorage in an effect would paint dark first and then
    flip — a white flash in reverse, which on a near-black site is worse than
    the usual one. This runs synchronously in <head> order, before body paints.
 
@@ -21,7 +23,7 @@ import { site } from '@/site.config';
 const SCRIPT = `(function(){try{
 var s=localStorage.getItem(${JSON.stringify(site.themeStorageKey)});
 var m=window.matchMedia('(prefers-color-scheme: light)').matches;
-if(s==='light'||(s===null&&m))document.documentElement.classList.add('light');
+if(s==='light'||(s===null&&m)){var c=document.documentElement.classList;c.add('light');c.remove('dark');}
 }catch(e){}})();`;
 
 export function ThemeScript() {

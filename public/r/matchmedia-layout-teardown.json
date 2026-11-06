@@ -21,6 +21,7 @@
   ],
   "meta": {
     "category": "layout",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "gsap",

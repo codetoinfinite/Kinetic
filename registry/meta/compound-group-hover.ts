@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A content card that answers a hover with a short sequence rather than a single state flip: it lifts, its icon tilts and overshoots its scale, a corner blob brightens, and the affordance arrow slides in — each on its own duration and delay. The trigger is `:hover, :has(:focus-visible)`, so a keyboard user tabbing to the link inside gets exactly the same four changes.',

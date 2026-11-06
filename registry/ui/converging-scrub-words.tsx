@@ -58,6 +58,20 @@ export function ConvergingScrubWords({
   const root = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
+  /* The words by content, not by array identity. A caller writes
+     `words={['Between', 'Signals']}` inline, which is a new array on every
+     parent render — and this component's parent re-renders often, because the
+     preview host's `useInView` sets state on every IntersectionObserver entry
+     and there are five thresholds. With the array itself in the dep list below,
+     a single scroll past the card tore the timeline and its ScrollTrigger down
+     and rebuilt them up to five times, each rebuild forcing a layout-reading
+     `refresh()` and visibly resetting the scrub mid-gesture. The effect never
+     reads `words` anyway — it works off the rendered `[data-word]` nodes — so
+     content is the only thing that should re-run it. */
+  // Joined on an escaped NUL rather than a space: ['a b'] and ['a', 'b']
+  // render a different number of nodes and must not share a key.
+  const wordsKey = words.join('\u0000');
+
   useEffect(() => {
     const el = root.current;
     // Reduced motion: the JSX below already renders the assembled headline at
@@ -97,7 +111,9 @@ export function ConvergingScrubWords({
     }, el);
 
     return () => ctx.revert();
-  }, [words, travel, scrub, start, end, scroller, reduced]);
+    // `wordsKey` stands in for `words`, which the effect never reads.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wordsKey, travel, scrub, start, end, scroller, reduced]);
   // #endregion critical
 
   return (

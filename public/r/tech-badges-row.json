@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tech-badges-row",
+  "type": "registry:ui",
+  "title": "Tech Badges Row",
+  "description": "A \"built with\" strip of monogram glyphs, names and versions; each badge lifts on hover or focus and names itself in a tooltip.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/tooltip.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/tech-badges-row.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/tech-badges-row.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Tech Badges Row\" (boardui.com/).\n * No BoardUI source was used.\n */\n\"use client\";\n\nimport { Focusable } from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\nimport { Tooltip, TooltipTrigger } from \"@/components/motion/tooltip\";\n\n/**\n * Tech Badges Row — the \"built with\" strip under a hero: a small glyph, the\n * name and a version per technology, separated by dots. Each badge lifts on\n * hover or keyboard focus and names itself in a tooltip.\n *\n *   <TechBadgesRow />                       // Next.js, React, Tailwind CSS…\n *   <TechBadgesRow variant=\"icon\" />        // glyph tiles only, names in tooltips\n *\n * Glyphs are plain monogram tiles drawn inline (a rounded square and one or\n * two letters), not brand marks, so any technology can be added with a\n * `monogram` and a `tone`.\n */\n\nexport interface TechBadge {\n  id: string;\n  /** Display and accessible name, e.g. \"Tailwind CSS\". */\n  name: string;\n  /** Shown after the name as \"v19.2\". */\n  version?: string;\n  /** One or two letters drawn on the glyph tile. */\n  monogram: string;\n  /** Tile colour (any CSS colour; the glyph is SVG artwork). */\n  tone: string;\n  /** Second line of the tooltip, e.g. \"UI runtime\". */\n  description?: string;\n}\n\nexport interface TechBadgesRowProps {\n  badges?: TechBadge[];\n  /** `label` shows glyph + name + version; `icon` shows glyph tiles only. */\n  variant?: \"label\" | \"icon\";\n  /** Accessible name of the list. */\n  label?: string;\n  className?: string;\n}\n\nexport const DEFAULT_TECH_BADGES: TechBadge[] = [\n  { id: \"next\", name: \"Next.js\", version: \"16\", monogram: \"N\", tone: \"#18181b\", description: \"App framework\" },\n  { id: \"react\", name: \"React\", version: \"19.2\", monogram: \"R\", tone: \"#0891b2\", description: \"UI runtime\" },\n  { id: \"tailwind\", name: \"Tailwind CSS\", version: \"4\", monogram: \"Tw\", tone: \"#0284c7\", description: \"Utility-first styles\" },\n  { id: \"typescript\", name: \"TypeScript\", version: \"5.9\", monogram: \"TS\", tone: \"#2563eb\", description: \"Typed JavaScript\" },\n  { id: \"motion\", name: \"Motion\", version: \"12\", monogram: \"M\", tone: \"#d97706\", description: \"Animation library\" },\n  { id: \"react-aria\", name: \"React Aria\", version: \"1.17\", monogram: \"Ra\", tone: \"#7c3aed\", description: \"Accessible primitives\" },\n];\n\n// #region critical\n/** A rounded tile with a 1px inner highlight and the monogram centred on it. */\nfunction MonogramGlyph({ monogram, tone, className }: { monogram: string; tone: string; className?: string }) {\n  const small = monogram.length > 1;\n  return (\n    <svg viewBox=\"0 0 20 20\" aria-hidden className={cx(\"shrink-0\", className)}>\n      <rect width=\"20\" height=\"20\" rx=\"5.5\" fill={tone} />\n      <rect x=\"0.5\" y=\"0.5\" width=\"19\" height=\"19\" rx=\"5\" fill=\"none\" stroke=\"#ffffff\" strokeOpacity=\"0.18\" />\n      <text\n        x=\"10\"\n        y=\"10\"\n        dy=\"0.36em\"\n        textAnchor=\"middle\"\n        fill=\"#ffffff\"\n        fontSize={small ? 8.5 : 11}\n        fontWeight={700}\n        letterSpacing={small ? -0.3 : 0}\n        style={{ fontFamily: \"inherit\" }}\n      >\n        {monogram}\n      </text>\n    </svg>\n  );\n}\n\n/*\n * The lift: on hover or focus-visible the badge rises 2px (4px for icon\n * tiles) and picks up a surface, border and shadow, over 200ms ease-out.\n * Under reduced motion the surface still appears but nothing moves.\n */\nconst LIFT =\n  \"transition-[translate,background-color,border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none \" +\n  \"hover:shadow-md hover:bg-background-primary-default hover:border-border-button-default \" +\n  \"focus-visible:shadow-md focus-visible:bg-background-primary-default focus-visible:border-border-button-default \" +\n  \"outline-none focus-visible:ring-2 focus-visible:ring-border-focus-ring\";\n\nfunction Badge({ badge, variant }: { badge: TechBadge; variant: \"label\" | \"icon\" }) {\n  const full = badge.version ? `${badge.name} ${badge.version}` : badge.name;\n  return (\n    <TooltipTrigger>\n      <Focusable>\n        <span\n          role=\"img\"\n          aria-label={full}\n          className={cx(\n            \"inline-flex cursor-default items-center border select-none\",\n            LIFT,\n            variant === \"label\"\n              ? \"gap-1.5 rounded-full border-transparent px-2.5 py-1 hover:-translate-y-0.5 focus-visible:-translate-y-0.5 motion-reduce:hover:translate-y-0 motion-reduce:focus-visible:translate-y-0\"\n              : \"size-10 justify-center rounded-xl border-border-button-default bg-background-primary-default shadow-xs hover:-translate-y-1 focus-visible:-translate-y-1 motion-reduce:hover:translate-y-0 motion-reduce:focus-visible:translate-y-0\",\n          )}\n        >\n          <MonogramGlyph monogram={badge.monogram} tone={badge.tone} className={variant === \"label\" ? \"size-4\" : \"size-5\"} />\n          {variant === \"label\" && (\n            <>\n              <span className=\"text-body-2-medium whitespace-nowrap text-text-primary\">{badge.name}</span>\n              {badge.version && (\n                <span className=\"text-caption-1-regular whitespace-nowrap text-text-tertiary\">v{badge.version}</span>\n              )}\n            </>\n          )}\n        </span>\n      </Focusable>\n      <Tooltip placement=\"top\" offset={8}>\n        <span className=\"text-caption-1-semibold\">{full}</span>\n        {badge.description && <span className=\"block text-caption-2-regular text-text-secondary\">{badge.description}</span>}\n      </Tooltip>\n    </TooltipTrigger>\n  );\n}\n\nexport function TechBadgesRow({\n  badges = DEFAULT_TECH_BADGES,\n  variant = \"label\",\n  label = \"Built with\",\n  className,\n}: TechBadgesRowProps) {\n  return (\n    <ul\n      aria-label={label}\n      className={cx(\n        \"flex flex-wrap items-center justify-center\",\n        variant === \"label\" ? \"gap-x-1 gap-y-2\" : \"gap-2\",\n        className,\n      )}\n    >\n      {badges.map((b, i) => (\n        <li key={b.id} className=\"flex items-center gap-1\">\n          {variant === \"label\" && i > 0 && (\n            <span aria-hidden className=\"hidden px-1 text-text-disabled sm:inline\">\n              ·\n            </span>\n          )}\n          <Badge badge={b} variant={variant} />\n        </li>\n      ))}\n    </ul>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "badges",
+      "tech stack",
+      "built with",
+      "tooltip",
+      "hero",
+      "logos",
+      "boardui"
+    ]
+  }
+}

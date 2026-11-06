@@ -267,6 +267,14 @@ export function TextTargetParticleGlyphs({
   box.current = { width, height };
 
   const reduced = useReducedMotion();
+  // Mirrored into a ref for the same reason `progress` is: the build effect
+  // below has to know whether to hand back a still frame or a live one, but
+  // making `reduced` a dependency of it would destroy the WebGL context and
+  // re-raster the word every time the OS setting is toggled. The ref is read,
+  // never depended on.
+  const reducedRef = useRef(reduced);
+  reducedRef.current = reduced;
+
   const visible = useVisibility();
   const { inView } = useInView(host, { rootMargin: '10%' });
   const ready = width > 0 && height > 0;
@@ -290,7 +298,17 @@ export function TextTargetParticleGlyphs({
     // Under StrictMode a React-owned `<canvas ref>` survives the double invoke
     // while the context does not, and the second mount is handed a context that
     // cleanup already killed.
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setUnsupported(true);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio());
     renderer.setClearAlpha(0);
     const dpr = renderer.getPixelRatio();
@@ -450,7 +468,17 @@ export function TextTargetParticleGlyphs({
 
     resize(box.current.width, box.current.height);
     stage.current = { resize, step, still };
-    render();
+    // The first frame a reduced-motion visitor gets has to be the still one.
+    // `render()` draws whatever `morph` happens to be, and `morph` starts at 0
+    // — the scattered cloud, no word in it — while `useRaf` below is disabled
+    // under reduced motion, so that first frame would also be the last one they
+    // ever see. The resize effect further down does call `still()`, but only
+    // when the observed size or `reduced` itself changes; every rebuild driven
+    // by this effect's own dependencies (a new `text`, a different colour, a new
+    // `count`) happens at a size that has not moved, so nothing reaches it and
+    // the word silently stops being drawn.
+    if (reducedRef.current) still();
+    else render();
 
     // A webfont that is still loading measures and rasters as the fallback
     // family, so the particles would land on the wrong letterforms and stay
@@ -468,7 +496,14 @@ export function TextTargetParticleGlyphs({
           targetData.set(sampleGlyphTargets(next, total, createRng(seed)));
           targetAttr.needsUpdate = true;
           fit(box.current.width);
-          render();
+          // Redraw the still rather than the current frame. When the first
+          // raster failed because the webfont had not resolved yet, `still()`
+          // has already run with `hasTarget` false and pinned `morph` to 0;
+          // `render()` alone would faithfully redraw that 0 and leave a
+          // reduced-motion visitor staring at a scattered cloud forever, since
+          // the RAF loop that would otherwise write the word is switched off.
+          if (reducedRef.current) still();
+          else render();
         })
         .catch(() => undefined);
     }
@@ -506,6 +541,14 @@ export function TextTargetParticleGlyphs({
 
   // Resize is its own effect: a container reflow costs a `setSize` and a refit,
   // never a re-raster of the text or a re-upload of the destinations.
+  //
+  // `reduced` is a dependency, not an accident. It covers the two cases the
+  // build effect cannot: the OS setting being switched to `reduce` mid-session
+  // — `useReducedMotion` subscribes to the media query, so this really does
+  // change after mount — and a resize while it is on, where the refit above
+  // changes the projection but nothing would otherwise draw a frame through it.
+  // `still()` only assigns fixed values and renders once, so running it again
+  // when it is already the current frame costs a draw and changes nothing.
   useEffect(() => {
     stage.current?.resize(width, height);
     if (reduced) stage.current?.still();

@@ -22,16 +22,23 @@ import { createHighlighter, type Highlighter } from 'shiki';
 
 const LANGS = ['tsx', 'ts', 'js', 'jsx', 'css', 'json', 'bash', 'markdown', 'glsl'] as const;
 
-let highlighterPromise: Promise<Highlighter> | null = null;
+// Held on globalThis, not in a module-level `let`: the dev server re-evaluates
+// this module on every hot reload, and each fresh `let` built a new
+// highlighter while the old one kept its WASM heap. Around the tenth instance
+// Oniguruma ran out of memory and every component page 500'd with a garbled
+// ShikiError. A production build evaluates the module once either way.
+const cache = globalThis as typeof globalThis & {
+  __kineticHighlighter?: Promise<Highlighter>;
+};
 
 function get(): Promise<Highlighter> {
   // Cached as the *promise*, not the resolved value: two concurrent requests
   // arriving before the first resolves would otherwise each build one.
-  highlighterPromise ??= createHighlighter({
+  cache.__kineticHighlighter ??= createHighlighter({
     themes: ['github-light', 'github-dark'],
     langs: [...LANGS],
   });
-  return highlighterPromise;
+  return cache.__kineticHighlighter;
 }
 
 function normalise(lang: string): string {

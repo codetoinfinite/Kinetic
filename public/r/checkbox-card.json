@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox-card",
+  "type": "registry:ui",
+  "title": "Checkbox Card",
+  "description": "Bordered option card with title and description on the left and the kit checkbox on the right; a click anywhere on it toggles.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/checkbox.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/checkbox-card.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/checkbox-card.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/checkbox/checkbox-card.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ReactNode, Ref } from \"react\";\nimport { Checkbox as AriaCheckbox } from \"react-aria-components\";\nimport type { CheckboxProps as AriaCheckboxProps } from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\nimport { CheckboxGlyph } from \"@/components/motion/checkbox-glyph\";\n\n/**\n * Figma source: Board UI → Checkbox items (node 3793:2966).\n *\n * Selectable card: title + description on the left, checkbox on the right.\n *   card    radius/2lg (10px), 1px border/button/default, pl 16 pr 20 py 12\n *   hover   bg background/primary/hover (#f7f7f7)\n *   title   Body 1/Medium, text/primary\n *   desc    Body 1/Regular, text/secondary\n *\n * The whole card toggles the checkbox (react-aria Checkbox renders the label),\n * so a click anywhere flips the state.\n */\n\nexport interface CheckboxCardProps extends Omit<AriaCheckboxProps, \"children\"> {\n  title: ReactNode;\n  description?: ReactNode;\n  ref?: Ref<HTMLLabelElement>;\n}\n\n// #region critical\nexport function CheckboxCard({\n  className,\n  title,\n  description,\n  ref,\n  ...props\n}: CheckboxCardProps) {\n  return (\n    <AriaCheckbox\n      ref={ref}\n      {...props}\n      className={(state) =>\n        cx(\n          \"group flex w-full items-center justify-between gap-3 rounded-2lg border border-border-button-default py-3 pe-5 ps-4 select-none\",\n          \"transition-colors duration-150 ease\",\n          state.isHovered && !state.isDisabled\n            ? \"bg-background-primary-hover\"\n            : \"bg-background-primary-default\",\n          state.isDisabled ? \"cursor-not-allowed opacity-50\" : \"cursor-pointer\",\n          typeof className === \"function\" ? className(state) : className,\n        )\n      }\n    >\n      {(state) => (\n        <>\n          <span className=\"flex min-w-0 flex-col gap-0.5\">\n            <span className=\"truncate text-body-medium text-text-primary\">{title}</span>\n            {description !== undefined && description !== null && (\n              <span className=\"truncate text-body-regular text-text-secondary\">{description}</span>\n            )}\n          </span>\n          <span className=\"flex shrink-0 items-center py-1\">\n            <CheckboxGlyph state={state} />\n          </span>\n        </>\n      )}\n    </AriaCheckbox>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "checkbox",
+      "card",
+      "selectable",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

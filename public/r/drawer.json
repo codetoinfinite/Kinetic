@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "drawer",
+  "type": "registry:ui",
+  "title": "Drawer",
+  "description": "Panel that slides in from any edge over a dimmed page, for filters, details and bottom sheets, sharing Modal's header, body and actions.",
+  "categories": [
+    "overlay"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/modal.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/direction.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/drawer.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/drawer.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/drawer/drawer.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ReactNode } from \"react\";\nimport { Modal as AriaModal, ModalOverlay as AriaModalOverlay } from \"react-aria-components\";\nimport type { DialogRenderProps, ModalOverlayProps } from \"react-aria-components\";\nimport {\n  ModalBody,\n  ModalDialog,\n  ModalFooter,\n  ModalHeader,\n  ModalTrigger,\n} from \"@/components/motion/modal\";\nimport { useDirection } from \"@/lib/direction\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Drawer — a panel that slides in from an edge of the screen over a dimmed\n * page. It is Modal's sibling on the same React Aria ModalOverlay, so focus\n * is trapped and returns to the trigger, the page stops scrolling, and\n * Escape or a press on the backdrop closes it. The header, body, footer,\n * and trigger are Modal's, re-exported under Drawer names.\n *\n *   <DrawerTrigger>\n *     <Button>Filters</Button>\n *     <Drawer placement=\"end\">\n *       {({ close }) => (\n *         <>\n *           <DrawerHeader title=\"Filters\" />\n *           <DrawerBody>…</DrawerBody>\n *           <DrawerFooter>…</DrawerFooter>\n *         </>\n *       )}\n *     </Drawer>\n *   </DrawerTrigger>\n *\n * The panel floats 12px inside the viewport (8px on phones) at radius/3xl,\n * the same surface as Modal and the floating sidebar. `start` and `end`\n * follow the reading direction, so an end drawer opens from the left in RTL.\n *\n * Motion: the panel slides in from past its edge and sharpens from a 4px\n * blur over 300ms on the iOS sheet curve (Modal's timing), and slides back\n * out the same way; the black/40 backdrop fades with it. Reduced motion\n * swaps the slide for a fade.\n */\n\nexport type DrawerPlacement = \"start\" | \"end\" | \"top\" | \"bottom\";\nexport type DrawerSize = \"sm\" | \"md\" | \"lg\";\n\n// #region critical\nconst styles = sortCx({\n  overlay: \"group/drawer fixed inset-x-0 top-0 z-100 flex h-(--visual-viewport-height) p-2 sm:p-3\",\n  backdrop: [\n    \"absolute inset-0 bg-black/40\",\n    \"transition-opacity duration-300 ease-out\",\n    \"group-data-[entering]/drawer:opacity-0 group-data-[exiting]/drawer:opacity-0\",\n  ].join(\" \"),\n  modal: [\n    \"relative flex w-full flex-col outline-none\",\n    \"transform-gpu transition-[translate,filter,opacity] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]\",\n    \"motion-safe:data-[entering]:blur-[4px] motion-safe:data-[exiting]:blur-[4px]\",\n    \"motion-reduce:data-[entering]:opacity-0 motion-reduce:data-[exiting]:opacity-0\",\n  ].join(\" \"),\n  dialog: \"flex-1\",\n  // Each panel starts 24px past its edge (the 12px inset plus its shadow),\n  // so no sliver of it shows before it moves. Literal per edge and direction\n  // so Tailwind can see every class.\n  placement: {\n    end: {\n      overlay: \"justify-end\",\n      modal: [\n        \"h-full\",\n        \"motion-safe:ltr:data-[entering]:translate-x-[calc(100%+24px)] motion-safe:ltr:data-[exiting]:translate-x-[calc(100%+24px)]\",\n        \"motion-safe:rtl:data-[entering]:-translate-x-[calc(100%+24px)] motion-safe:rtl:data-[exiting]:-translate-x-[calc(100%+24px)]\",\n      ].join(\" \"),\n    },\n    start: {\n      overlay: \"justify-start\",\n      modal: [\n        \"h-full\",\n        \"motion-safe:ltr:data-[entering]:-translate-x-[calc(100%+24px)] motion-safe:ltr:data-[exiting]:-translate-x-[calc(100%+24px)]\",\n        \"motion-safe:rtl:data-[entering]:translate-x-[calc(100%+24px)] motion-safe:rtl:data-[exiting]:translate-x-[calc(100%+24px)]\",\n      ].join(\" \"),\n    },\n    bottom: {\n      overlay: \"items-end\",\n      modal: \"max-h-[85%] motion-safe:data-[entering]:translate-y-[calc(100%+24px)] motion-safe:data-[exiting]:translate-y-[calc(100%+24px)]\",\n    },\n    top: {\n      overlay: \"items-start\",\n      modal: \"max-h-[85%] motion-safe:data-[entering]:-translate-y-[calc(100%+24px)] motion-safe:data-[exiting]:-translate-y-[calc(100%+24px)]\",\n    },\n  },\n  // Side drawers only; top and bottom drawers span the screen.\n  size: {\n    sm: \"max-w-[320px]\",\n    md: \"max-w-[400px]\",\n    lg: \"max-w-[600px]\",\n  },\n});\n\nexport interface DrawerProps extends Omit<ModalOverlayProps, \"children\" | \"className\" | \"style\"> {\n  /** The edge the panel slides in from. `start` and `end` follow the reading direction. */\n  placement?: DrawerPlacement;\n  /** Width of a start or end drawer: 320, 400 (default), or 600px. */\n  size?: DrawerSize;\n  /** Accessible name when the content has no DrawerHeader title. */\n  \"aria-label\"?: string;\n  /** Classes on the panel surface. */\n  className?: string;\n  /** Classes on the full-screen overlay. */\n  overlayClassName?: string;\n  children: ReactNode | ((renderProps: DialogRenderProps) => ReactNode);\n}\n\nexport function Drawer({\n  placement = \"end\",\n  size = \"md\",\n  \"aria-label\": ariaLabel,\n  className,\n  overlayClassName,\n  isDismissable = true,\n  children,\n  ...props\n}: DrawerProps) {\n  const direction = useDirection();\n  const edge = styles.placement[placement];\n  const side = placement === \"start\" || placement === \"end\";\n\n  return (\n    <AriaModalOverlay\n      {...props}\n      dir={direction}\n      isDismissable={isDismissable}\n      className={cx(styles.overlay, edge.overlay, overlayClassName)}\n    >\n      <div aria-hidden className={styles.backdrop} />\n      <AriaModal className={cx(styles.modal, edge.modal, side && styles.size[size])}>\n        <ModalDialog aria-label={ariaLabel} className={cx(styles.dialog, className)}>\n          {children}\n        </ModalDialog>\n      </AriaModal>\n    </AriaModalOverlay>\n  );\n}\n\n// #endregion\n\nexport {\n  ModalBody as DrawerBody,\n  ModalFooter as DrawerFooter,\n  ModalHeader as DrawerHeader,\n  ModalTrigger as DrawerTrigger,\n};\nexport type {\n  ModalBodyProps as DrawerBodyProps,\n  ModalHeaderProps as DrawerHeaderProps,\n  ModalTriggerProps as DrawerTriggerProps,\n} from \"@/components/motion/modal\";\n"
+    }
+  ],
+  "meta": {
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "drawer",
+      "sheet",
+      "side-panel",
+      "bottom-sheet",
+      "overlay",
+      "react-aria",
+      "boardui"
+    ]
+  }
+}

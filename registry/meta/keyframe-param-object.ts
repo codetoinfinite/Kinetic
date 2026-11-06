@@ -36,7 +36,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A scroll-driven scene written as data instead of as tweens. One mutable object holds every animated quantity, GSAP tweens the object rather than the DOM, and a single onUpdate writes one transform string and two opacities. The story is then an array of rows — section id, point through the section, params to move to — each anchored to where its section actually sits after layout.',

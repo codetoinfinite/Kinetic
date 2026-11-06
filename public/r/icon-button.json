@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon-button",
+  "type": "registry:ui",
+  "title": "Icon Button",
+  "description": "Square bordered icon-only button in 36 and 32px with a fixed 10px radius, plus an anchor twin for navigational actions.",
+  "categories": [
+    "action"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/directional-icon.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/icon-button.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/icon-button.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/buttons/icon-button.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport type {\n  AnchorHTMLAttributes,\n  ButtonHTMLAttributes,\n  ComponentType,\n  Ref,\n} from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\nimport { directionalIconClass } from \"@/lib/directional-icon\";\n\n/**\n * Figma source: Board UI → dashboard 1 icon-only buttons (notification button\n * node 3731:3035, table row actions nodes 3731:3284/3287/3290).\n *\n * Square icon-only button. Unlike `Button` (whose small size is radius/lg with\n * an 18px icon), the icon button keeps radius/2lg (10px) at both sizes:\n *\n *            container   padding   icon\n *   medium   36×36       8         20×20\n *   small    32×32       8         16×16\n *\n * One variant in the designs: secondary (white fill, border/button/default,\n * shadow/xs). Hover/active/disabled states reuse the secondary Button tokens.\n */\n\ntype IconButtonSize = \"medium\" | \"small\";\n\ntype IconComponent = ComponentType<{\n  className?: string;\n  \"aria-hidden\"?: boolean | \"true\" | \"false\";\n}>;\n\nexport interface IconButtonProps\n  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"children\"> {\n  icon: IconComponent;\n  size?: IconButtonSize;\n  /** Accessible name — required since there is no visible label. */\n  \"aria-label\": string;\n  ref?: Ref<HTMLButtonElement>;\n}\n\nexport interface IconLinkButtonProps\n  extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, \"children\"> {\n  icon: IconComponent;\n  size?: IconButtonSize;\n  /** Accessible name — required since there is no visible label. */\n  \"aria-label\": string;\n  ref?: Ref<HTMLAnchorElement>;\n}\n\nconst styles = sortCx({\n  base: [\n    \"relative inline-flex shrink-0 items-center justify-center overflow-visible rounded-2lg\",\n    \"bg-background-primary-default text-foreground-icon-primary\",\n    \"border border-border-button-default shadow-xs\",\n    \"select-none cursor-pointer\",\n    \"transition-[background-color,border-color,box-shadow,color] duration-150 ease\",\n    \"outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-border-focus-ring\",\n    \"hover:bg-background-primary-hover hover:border-border-button-hover\",\n    \"active:bg-background-primary-active active:border-border-button-active\",\n    \"disabled:cursor-not-allowed disabled:bg-background-primary-disabled disabled:border-border-button-default disabled:text-icon-button-disabled-foreground disabled:opacity-60 disabled:shadow-none\",\n  ].join(\" \"),\n  size: {\n    medium: \"size-9\",\n    small: \"size-8\",\n  },\n  icon: {\n    medium: \"size-5 shrink-0\",\n    small: \"size-4 shrink-0\",\n  },\n});\n\n// #region critical\nexport function IconButton({\n  icon: Icon,\n  size = \"medium\",\n  className,\n  type = \"button\",\n  ref,\n  ...props\n}: IconButtonProps) {\n  return (\n    <button\n      ref={ref}\n      type={type}\n      className={cx(styles.base, styles.size[size], className)}\n      {...props}\n    >\n      <Icon className={cx(styles.icon[size], directionalIconClass(Icon))} aria-hidden />\n    </button>\n  );\n}\n// #endregion\n\n/** Anchor counterpart to IconButton for external and navigational actions. */\nexport function IconLinkButton({\n  icon: Icon,\n  size = \"medium\",\n  className,\n  ref,\n  ...props\n}: IconLinkButtonProps) {\n  return (\n    <a\n      ref={ref}\n      className={cx(styles.base, styles.size[size], className)}\n      {...props}\n    >\n      <Icon className={cx(styles.icon[size], directionalIconClass(Icon))} aria-hidden />\n    </a>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "button",
+      "icon",
+      "toolbar",
+      "action",
+      "boardui"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner",
+  "type": "registry:ui",
+  "title": "Spinner",
+  "description": "An orbiting light in three layers (crisp arc, tight glow, wide bloom) in five sizes and any text colour, announced as loading.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/spinner.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/spinner.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/spinner/spinner.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { CSSProperties } from \"react\";\nimport { ProgressBar as AriaProgressBar } from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Spinner — an orbiting light for work of unknown length.\n *\n *   <Spinner />                                  // 20px, accent\n *   <Spinner size=\"sm\" className=\"text-white\" /> // inside a primary button\n *\n * The light is drawn the way Composer Loader draws its band: the same arc\n * at three scales, a crisp line with a rounded head, a tight glow and a wide\n * bloom, each on its own blur. The soft layers carry shorter arcs and turn a\n * few degrees behind, so the sharp head always leads and the glow gathers\n * just behind it like the tail of a comet. A faint track completes the\n * circle. Everything is drawn in `currentColor`, so a text colour sets it.\n *\n * Announced as an indeterminate progress bar labelled \"Loading\" (override\n * with `aria-label`). Pass `aria-hidden` where the surrounding control\n * already says it is busy, e.g. a pending button. Reduced motion slows the\n * orbit rather than stopping it: the motion is the message.\n */\n\nexport type SpinnerSize = \"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\";\n\n// #region critical\n/** Box size and line width in px. */\nconst SIZES: Record<SpinnerSize, { box: number; line: number }> = {\n  xs: { box: 12, line: 1.5 },\n  sm: { box: 16, line: 2 },\n  md: { box: 20, line: 2 },\n  lg: { box: 24, line: 2.5 },\n  xl: { box: 32, line: 3 },\n};\n\n/** One scale of the light: a conic arc masked to a ring, blurred by its wrapper. */\nfunction Arc({\n  box,\n  line,\n  width,\n  blur,\n  opacity,\n  arc,\n  lag,\n}: {\n  box: number;\n  line: number;\n  /** Ring thickness, px. */\n  width: number;\n  blur: number;\n  opacity: number;\n  /** Arc length in degrees; the head sits at 12 o'clock before the turn. */\n  arc: number;\n  /** Degrees this layer trails the crisp head. */\n  lag: number;\n}) {\n  const center = box / 2 - line / 2;\n  const inner = center - width / 2;\n  const outer = center + width / 2;\n  // The wrapper is grown to hold the ring plus its blur, so nothing clips.\n  const bleed = Math.max(0, outer + blur * 2 - box / 2);\n  const ring = `radial-gradient(circle, transparent ${inner}px, #000 ${inner + 0.5}px, #000 ${outer - 0.5}px, transparent ${outer}px)`;\n  const style: CSSProperties = {\n    inset: -bleed,\n    filter: blur > 0 ? `blur(${blur}px)` : undefined,\n    opacity,\n    rotate: `${-lag}deg`,\n  };\n  return (\n    <span aria-hidden className=\"absolute\" style={style}>\n      <span\n        className=\"absolute inset-0\"\n        style={{\n          background: `conic-gradient(transparent ${360 - arc}deg, currentColor 360deg)`,\n          maskImage: ring,\n          WebkitMaskImage: ring,\n        }}\n      />\n    </span>\n  );\n}\n\nexport interface SpinnerProps {\n  /** 12, 16, 20 (default), 24, or 32px. */\n  size?: SpinnerSize;\n  /** Draw the faint full circle under the light. Default true. */\n  track?: boolean;\n  /** Accessible name. Default \"Loading\". */\n  \"aria-label\"?: string;\n  /** Hide it from assistive technology when a parent already announces the wait. */\n  \"aria-hidden\"?: boolean;\n  /** Colour comes from the text colour, e.g. `text-white`. Default accent. */\n  className?: string;\n}\n\nexport function SpinnerGlyph({ size = \"md\", track = true, className }: Omit<SpinnerProps, \"aria-label\" | \"aria-hidden\">) {\n  const { box, line } = SIZES[size];\n  return (\n    <span\n      aria-hidden\n      className={cx(\"relative inline-flex shrink-0 text-accent-500\", className)}\n      style={{ width: box, height: box }}\n    >\n      {track ? (\n        <span className=\"absolute inset-0 rounded-full border-current opacity-15\" style={{ borderWidth: line }} />\n      ) : null}\n      <span className=\"absolute inset-0 animate-spin [animation-duration:900ms] motion-reduce:[animation-duration:2400ms]\">\n        <Arc box={box} line={line} width={line * 4} blur={line * 1.6} opacity={0.32} arc={110} lag={22} />\n        <Arc box={box} line={line} width={line * 2} blur={line * 0.6} opacity={0.6} arc={200} lag={9} />\n        <Arc box={box} line={line} width={line} blur={0} opacity={1} arc={290} lag={0} />\n        {/* The crisp line's rounded head, at the arc's leading end. */}\n        <span\n          className=\"absolute left-1/2 top-0 rounded-full bg-current\"\n          style={{ width: line, height: line, translate: \"-50% 0\" }}\n        />\n      </span>\n    </span>\n  );\n}\n// #endregion\n\nexport function Spinner({ size = \"md\", track = true, \"aria-label\": ariaLabel = \"Loading\", \"aria-hidden\": ariaHidden, className }: SpinnerProps) {\n  if (ariaHidden) return <SpinnerGlyph size={size} track={track} className={className} />;\n  return (\n    <AriaProgressBar isIndeterminate aria-label={ariaLabel} className=\"inline-flex shrink-0\">\n      <SpinnerGlyph size={size} track={track} className={className} />\n    </AriaProgressBar>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "spinner",
+      "loading",
+      "progress",
+      "indeterminate",
+      "boardui"
+    ]
+  }
+}

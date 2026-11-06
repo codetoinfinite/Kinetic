@@ -23,16 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['ogl@^1.0.11'],
-  registryDependencies: [
-    'webgl',
-    'prng',
-    'damp',
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-  ],
 
   summary:
     'Four vertices and six indices are shared by every particle; three instanced attributes carry position, size, spin, alpha, tint and shape. One `drawElementsInstanced` puts the whole field on screen. Quads instead of `gl_PointSize` because point sprites are capped at 255px on many drivers, cannot be rotated, and are culled whole the instant their centre leaves the viewport — a large sprite disappears while half of it is still visible.',

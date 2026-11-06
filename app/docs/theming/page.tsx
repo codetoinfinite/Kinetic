@@ -6,6 +6,7 @@ import { site } from '@/site.config';
 export const metadata: Metadata = {
   title: 'Theming',
   description: `How ${site.name} components pick up your colours, and the token layer behind them.`,
+  alternates: { canonical: '/docs/theming' },
 };
 
 export default function ThemingPage() {

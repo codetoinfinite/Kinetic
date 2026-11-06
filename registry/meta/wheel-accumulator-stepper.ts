@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/wheel-accumulator-stepper.tsx', type: 'registry:ui', role: 'hook' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     '`wheel` is four input devices wearing one event name. A mouse notch is a single event carrying 100 units; a trackpad swipe is forty events of four units each, followed by a synthesised momentum tail that keeps arriving for about a second after the fingers lift; and `deltaMode` decides whether those numbers are pixels, lines, or whole pages. This hook scales the delta by `deltaMode`, sums it, and emits one step per 90 normalised pixels — then latches, and re-arms only when the incoming magnitude stops decaying, which is the one signal that separates a fresh flick from the tail of the last one.',

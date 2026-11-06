@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: ['use-resize-observer', 'use-reduced-motion', 'damp'],
 
   summary:
     'A surface you paint into a 2D canvas, plus a pointer that reads the pixel underneath it and snaps that read to the nearest entry in a named palette. The colour comes out as a CSS custom property on the root and as a throttled callback, so a chip can follow the cursor with no JavaScript per frame. It turns a palette from a legend you read into something you find by pointing.',

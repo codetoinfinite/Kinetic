@@ -142,8 +142,12 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
             </span>
           </div>
 
-          <div className="mt-7 grid gap-x-16 gap-y-7 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
-            <h1 className="text-display-1 max-w-[20ch] text-fg">{meta.title}</h1>
+          <div className="mt-7 grid grid-cols-[minmax(0,1fr)] gap-x-16 gap-y-7 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
+            {/* Titles are data, and some of them are a single 20-character
+                identifier ("IntersectionObserver Reveal"). At the clamp floor
+                of 2.5rem that word is wider than a phone, and without a break
+                opportunity it took the whole document with it. */}
+            <h1 className="text-display-1 max-w-[20ch] wrap-anywhere text-fg">{meta.title}</h1>
 
             <div className="lg:pb-1.5">
               <p className="text-lead max-w-prose text-muted">{meta.summary}</p>
@@ -192,6 +196,8 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
               slug={slug}
               cost={meta.cost}
               motif={meta.motif}
+              kit={meta.kit}
+              category={meta.category}
               focused
               className="aspect-square w-full border border-line sm:aspect-[16/10] xl:aspect-[21/9]"
             />
@@ -200,7 +206,13 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
       </section>
 
       <div className="mx-auto max-w-[100rem] px-5 pt-14 pb-20 sm:px-8 sm:pt-16">
-        <div className="grid gap-x-16 gap-y-16 xl:grid-cols-[minmax(0,1fr)_17rem]">
+        {/* The base `grid-cols` is load-bearing, not decoration. Without it the
+            single implicit column is `auto`, which sizes to the max-content of
+            its items — and one item is a code panel holding unwrapped source
+            lines. That pushed the track past the viewport on a phone and gave
+            the whole document a horizontal scrollbar. `minmax(0,1fr)` pins the
+            track to the container so the code scrolls inside its own panel. */}
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-x-16 gap-y-16 xl:grid-cols-[minmax(0,1fr)_17rem]">
           <div className="min-w-0 space-y-16 sm:space-y-20">
             {/* -- 02 install ------------------------------------------------ */}
             <section id="install" aria-labelledby="install-title" className="rise scroll-mt-32">

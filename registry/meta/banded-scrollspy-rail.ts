@@ -24,7 +24,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A section rail that never flickers, because only one section can be "active" at a time by construction. The IntersectionObserver root is shrunk to a 7%-tall band across the middle of the scroller, so a section registers only while it crosses that line. The active tick grows from 16 to 32 pixels — a size change, legible in peripheral vision, rather than a tint change that is not. No animation library: one observer, one CSS width transition.',

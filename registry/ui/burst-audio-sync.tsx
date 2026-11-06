@@ -162,11 +162,17 @@ export function useBurstAudioSync(options: UseBurstAudioSyncOptions = {}): Burst
         osc.type = 'sine';
         osc.frequency.value = freq;
         env.gain.setValueAtTime(peak, at);
-        env.gain.exponentialRampToValueAtTime(SILENCE, at + decay);
+        // `cfg.decay`, not the closed-over `decay`. This callback is memoised
+        // with an empty dep array — deliberately, so a parent re-render never
+        // changes its identity — which freezes every prop it closes over at
+        // first render. Every other value here already comes through the ref;
+        // these two lines read the prop directly, so changing `decay` after
+        // mount left the envelope on whatever the first render happened to be.
+        env.gain.exponentialRampToValueAtTime(SILENCE, at + cfg.decay);
         osc.connect(env);
         env.connect(ctx.destination);
         osc.start(at);
-        osc.stop(at + decay + TAIL);
+        osc.stop(at + cfg.decay + TAIL);
         // Without this every burst leaves two live nodes attached to the
         // destination. A few hundred bursts and the graph audibly degrades.
         osc.onended = () => {

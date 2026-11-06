@@ -14,7 +14,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/browser-chrome-frame.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion'],
 
   summary:
     'A title bar plus a content well, drawn entirely in CSS, wrapped around anything you want to present as a live site rather than a picture of one. The address pill copies the URL and confirms with a checkmark that draws along its own path and holds for 1600 ms. Every state change happens inside a fixed-width pill, so nothing in the bar ever reflows.',

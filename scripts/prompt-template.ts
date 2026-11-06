@@ -31,7 +31,7 @@ function numbered(items: readonly string[]): string {
 }
 
 export interface PromptInput {
-  meta: ComponentMeta;
+  meta: Omit<ComponentMeta, 'registryDependencies'>;
   /** The `// #region <criticalRegion>` block, lifted from the real source. */
   excerpt: string | null;
   /** Language tag for the excerpt fence. */

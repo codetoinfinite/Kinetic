@@ -34,10 +34,12 @@ export const metadata: Metadata = {
   applicationName: site.name,
   keywords: ['react', 'motion', 'animation', 'components', 'tailwind', 'shadcn registry'],
   metadataBase: new URL(SITE_ORIGIN),
-  // Self-referencing canonical for the home page. Every other route sets its
-  // own relative `alternates.canonical`, which Next resolves against
-  // `metadataBase` — so a preview deployment never claims the production URL.
-  alternates: { canonical: '/' },
+  // No canonical here. `metadata` is inherited, not scoped to the segment that
+  // declares it, so a `'/'` written at the root is what every route that does
+  // not set its own ends up emitting — which had `/components` and all four
+  // `/docs/*` pages telling search engines they were the home page. Each route
+  // declares its own relative canonical, resolved against `metadataBase`, so a
+  // preview deployment never claims the production URL.
   robots: { index: true, follow: true },
   // `icons` and `openGraph.images` are deliberately absent: `app/icon.svg`,
   // `app/apple-icon.tsx` and `app/opengraph-image.tsx` are file conventions,
@@ -87,7 +89,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       // The theme script writes `class` before paint, so the server HTML and
       // the first client render legitimately disagree on this one element.
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      // `dark` is the server default. BoardUI-derived components key their
+      // tokens off `.dark` (light lives on :root there), so the class has to
+      // be present before the script runs, or they paint light on a dark page.
+      className={`${inter.variable} ${jetbrainsMono.variable} dark`}
     >
       {/* Column layout so the footer is pushed to the bottom of the viewport on
           pages shorter than the window — a footer floating mid-screen above

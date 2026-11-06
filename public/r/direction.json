@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "direction",
+  "type": "registry:lib",
+  "title": "direction",
+  "description": "Shared utility used by Kinetic components.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/lib/direction.tsx",
+      "type": "registry:lib",
+      "target": "lib/direction.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/foundations/direction/direction.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { I18nProvider, useLocale } from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\n\nexport type Direction = \"ltr\" | \"rtl\";\n\nexport interface DirectionProviderProps extends Omit<HTMLAttributes<HTMLDivElement>, \"dir\" | \"lang\" | \"children\"> {\n  /** BCP 47 language tag. Arabic and Hebrew resolve to RTL; Chinese to LTR. */\n  locale: string;\n  children: ReactNode;\n}\n\n/** Keeps CSS direction, React Aria keyboard behavior and portalled menus in sync.\n * Use at the app root, or nest providers for regions in another language.\n * The default display: contents boundary preserves the surrounding layout.\n */\nexport function DirectionProvider({ locale, ...props }: DirectionProviderProps) {\n  return (\n    <I18nProvider locale={locale}>\n      <DirectionBoundary {...props} />\n    </I18nProvider>\n  );\n}\n\nfunction DirectionBoundary({ children, className, ...props }: Omit<DirectionProviderProps, \"locale\">) {\n  const { locale, direction } = useLocale();\n  return <div {...props} lang={locale} dir={direction} className={cx(\"contents\", className)}>{children}</div>;\n}\n\n/** Also works inside a React Aria I18nProvider. */\nexport function useDirection(): Direction {\n  return useLocale().direction;\n}\n"
+    }
+  ]
+}

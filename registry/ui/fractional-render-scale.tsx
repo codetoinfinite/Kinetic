@@ -141,20 +141,30 @@ export function FractionalRenderScale({
     const el = host.current;
     if (!el || !ready) return;
 
-    const renderer = new THREE.WebGLRenderer({
-      // Nothing in the field has a geometric edge, so MSAA has nothing to
-      // sample — and at a fractional scale it would be antialiasing the wrong
-      // grid anyway.
-      antialias: false,
-      // Opaque: the shader covers every pixel, and an alpha channel would make
-      // the compositor blend the canvas over the page for no reason.
-      alpha: false,
-      depth: false,
-      stencil: false,
-      // The entire point of the component. On a laptop with switchable
-      // graphics this keeps a decorative background off the discrete GPU.
-      powerPreference: 'low-power',
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        // Nothing in the field has a geometric edge, so MSAA has nothing to
+        // sample — and at a fractional scale it would be antialiasing the wrong
+        // grid anyway.
+        antialias: false,
+        // Opaque: the shader covers every pixel, and an alpha channel would make
+        // the compositor blend the canvas over the page for no reason.
+        alpha: false,
+        depth: false,
+        stencil: false,
+        // The entire point of the component. On a laptop with switchable
+        // graphics this keeps a decorative background off the discrete GPU.
+        powerPreference: 'low-power',
+      });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setSupported(false);
+      return;
+    }
     renderer.setClearColor(0x000000, 1);
     renderer.domElement.style.display = 'block';
     // CSS size is 1x and fixed to the box; the backing store is set separately

@@ -22,16 +22,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-    'use-smooth-pointer',
-    'damp',
-    'webgl',
-  ],
 
   summary:
     'A motion trail that stores no history. Two render targets take turns: one holds everything that has happened, the other receives that accumulation multiplied by a decay factor with the current frame composited over it, and next frame they swap roles. Because the trail is a texture rather than a list of past positions, its length is one float — so it can be driven straight from how fast the marks are moving and change continuously without allocating anything. Fast movement smears; slow movement is perfectly crisp.',

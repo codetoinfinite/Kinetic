@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A white circle replaces the pointer and inverts everything under it via `mix-blend-mode: difference`, so it is legible over any background without a single contrast rule. It has three sizes — 16px idle, 44px over a link, 150px over a `data-cursor="view"` target, the last carrying a text label — and the size change is CSS while the position is GSAP, deliberately kept on different properties.',

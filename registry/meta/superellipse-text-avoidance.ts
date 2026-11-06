@@ -23,7 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['ogl@^1.0.11'],
-  registryDependencies: ['prng'],
 
   summary:
     'The headline is real DOM on top of an instanced particle field, and the field is pushed out of a 6-norm superellipse fitted to the headline\'s measured rect. Interior particles are remapped into a band hugging the shape rather than clamped onto it, so the hole has a bright rim instead of a pile-up. The same avoidance function runs a second time at exponent 2 for the damped pointer, because a disc is a superellipse with a lower exponent.',

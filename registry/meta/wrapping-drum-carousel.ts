@@ -19,7 +19,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['use-drag', 'use-reduced-motion', 'use-resize-observer', 'wrap'],
 
   summary:
     'Cards sit stacked at the centre of the stage and are pushed outward by their signed distance from a fractional carousel position. That distance is wrapped into a ring, so the sequence has no first or last card and the position variable can drift forever. The drum reads as three-dimensional but every transform is flat: `rotationY` and `z` are pinned to zero on purpose.',

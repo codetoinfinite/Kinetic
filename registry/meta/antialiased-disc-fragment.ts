@@ -24,7 +24,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: ['webgl', 'prng', 'use-raf', 'use-resize-observer', 'use-reduced-motion'],
 
   summary:
     'A point sprite is a square; this is the pair of shader tricks that makes it a dot. The fragment shader carves a disc with one smoothstep across the outer few percent of the sprite and discards everything below a visibility threshold, and the vertex shader clamps the point size to the hardware floor and then divides the alpha by the area that clamp invented. The field is laid out as a phyllotaxis spiral with a size ramp so both ends of the problem — sub-pixel dots and twenty-pixel dots — are on screen at once.',

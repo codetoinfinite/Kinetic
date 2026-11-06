@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A rounded box wearing an animated conic-gradient border. Two bright stops travel around the ring in opposite quadrants, so the ring reads as rotating rather than blinking. The whole thing is one element and one keyframe — the only moving part is a registered custom property holding an angle, which the browser interpolates for you.',

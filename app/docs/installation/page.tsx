@@ -13,6 +13,7 @@ const NAMESPACE = `@${site.registryName}`;
 export const metadata: Metadata = {
   title: 'Installation',
   description: `Add a ${site.name} component to a React project with the shadcn CLI, or copy it by hand.`,
+  alternates: { canonical: '/docs/installation' },
 };
 
 export default function InstallationPage() {

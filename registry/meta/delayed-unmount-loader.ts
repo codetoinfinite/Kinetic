@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'An inverted full-cover loading panel that fades out on a plain CSS transition. The mechanism is the timing of its own removal: when `loading` goes false the element sets `data-exit` and starts a 600ms fade, and a matching 600ms timeout is what finally unmounts it. Nothing is animated in JavaScript — one boolean, one timeout, one transition.',

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar-stack",
+  "type": "registry:ui",
+  "title": "Avatar Stack",
+  "description": "Overlapping assignee discs with surface-coloured rings, a +N overflow disc and a name tooltip on every avatar.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/avatar.json",
+    "https://kinetic.example.com/r/tooltip.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/avatar-stack.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/avatar-stack.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Avatar Stack\" (boardui.com/templates/project-board).\n * No BoardUI source was used.\n */\n\"use client\";\n\nimport type { HTMLAttributes, Ref } from \"react\";\nimport { Focusable } from \"react-aria-components\";\nimport { Avatar, type AvatarProps } from \"@/components/motion/avatar\";\nimport { Tooltip, TooltipTrigger } from \"@/components/motion/tooltip\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Overlapping assignee avatars from the project board cards: each disc sits\n * a quarter over the previous one with a ring in the surface colour, so the\n * stack reads as cut-outs. Past `max`, the rest collapse into a \"+N\" disc.\n * Every disc is focusable and names its person in a tooltip.\n */\n\nexport type AvatarStackSize = NonNullable<AvatarProps[\"size\"]>;\nexport type AvatarStackColor = NonNullable<AvatarProps[\"color\"]>;\n\nexport interface AvatarStackPerson {\n  /** Stable key; falls back to `name`. */\n  id?: string;\n  name: string;\n  /** Defaults to the first letters of the first two words of `name`. */\n  initials?: string;\n  /** Initial tint. Defaults to a colour hashed from `name`, so it is stable. */\n  color?: AvatarStackColor;\n  /** Photo URL (wins over initials). */\n  src?: string;\n  /** Muted second line in the tooltip, e.g. a role. */\n  description?: string;\n}\n\nexport interface AvatarStackProps extends Omit<HTMLAttributes<HTMLDivElement>, \"children\"> {\n  people: readonly AvatarStackPerson[];\n  /** Discs shown before the rest collapse into \"+N\". Default 3. */\n  max?: number;\n  size?: AvatarStackSize;\n  /** Name tooltips on hover and focus. When off, discs are not tab stops. Default true. */\n  tooltips?: boolean;\n  /** Ring colour; match it to the surface the stack sits on. */\n  ringClassName?: string;\n  /** Prefix for the group's accessible name. Default \"Assignees\". */\n  label?: string;\n  /** Makes the \"+N\" disc a button (e.g. to open a member list). */\n  onOverflowPress?: () => void;\n  ref?: Ref<HTMLDivElement>;\n}\n\nconst TINTS: readonly AvatarStackColor[] = [\"blue\", \"lime\", \"pink\", \"neutral\"];\n\n/** First letters of the first two words: \"Ana de Wit\" → \"AD\". */\nexport function initialsOf(name: string) {\n  const words = name.trim().split(/\\s+/).filter(Boolean);\n  return words\n    .slice(0, 2)\n    .map((w) => w.charAt(0).toUpperCase())\n    .join(\"\");\n}\n\n/** Stable tint from the name (djb2 hash), so a person keeps their colour everywhere. */\nexport function tintOf(name: string): AvatarStackColor {\n  let h = 5381;\n  for (let i = 0; i < name.length; i++) h = ((h << 5) + h + name.charCodeAt(i)) | 0;\n  return TINTS[Math.abs(h) % TINTS.length] ?? \"neutral\";\n}\n\nconst styles = sortCx({\n  overlap: { xs: \"-ms-1.5\", sm: \"-ms-1.5\", md: \"-ms-2\", lg: \"-ms-2.5\" },\n  overflow: {\n    xs: \"size-5 text-[10px] leading-[15px] font-semibold\",\n    sm: \"size-6 text-caption-1-semibold\",\n    md: \"size-8 text-body-2-semibold\",\n    lg: \"size-9 text-body-semibold\",\n  },\n  disc: [\n    \"relative ring-2 outline-none\",\n    \"transition-transform duration-150 ease-out motion-reduce:transition-none\",\n    \"hover:z-10 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0\",\n    \"focus-visible:z-10 focus-visible:ring-border-focus-ring\",\n  ].join(\" \"),\n});\n\n// #region critical\nexport function AvatarStack({\n  people,\n  max = 3,\n  size = \"sm\",\n  tooltips = true,\n  ringClassName = \"ring-background-primary-default\",\n  label = \"Assignees\",\n  onOverflowPress,\n  className,\n  ref,\n  ...props\n}: AvatarStackProps) {\n  // Showing \"+1\" in place of the last avatar saves no room, so only collapse\n  // when at least two people would hide.\n  const limit = Math.max(1, max);\n  const visibleCount = people.length > limit + 1 ? limit : people.length;\n  const shown = people.slice(0, visibleCount);\n  const hidden = people.slice(visibleCount);\n  const names = people.map((p) => p.name);\n\n  const discClass = (index: number) => cx(styles.disc, ringClassName, index > 0 && styles.overlap[size]);\n\n  const overflowDisc = hidden.length > 0 && (\n    <OverflowDisc\n      count={hidden.length}\n      names={hidden.map((p) => p.name)}\n      className={cx(\n        discClass(shown.length),\n        styles.overflow[size],\n        \"inline-flex shrink-0 select-none items-center justify-center rounded-full bg-background-tertiary-default text-text-secondary\",\n      )}\n      tooltips={tooltips}\n      onPress={onOverflowPress}\n    />\n  );\n\n  return (\n    <div\n      ref={ref}\n      role=\"group\"\n      aria-label={people.length ? `${label}: ${names.join(\", \")}` : `${label}: none`}\n      className={cx(\"inline-flex shrink-0 items-center isolate\", className)}\n      {...props}\n    >\n      {shown.map((person, i) => {\n        const disc = (\n          <Avatar\n            key={person.id ?? person.name}\n            size={size}\n            color={person.color ?? tintOf(person.name)}\n            src={person.src}\n            alt=\"\"\n            initials={person.initials ?? initialsOf(person.name)}\n            role=\"img\"\n            aria-label={person.name}\n            className={discClass(i)}\n          />\n        );\n        if (!tooltips) return disc;\n        return (\n          <TooltipTrigger key={person.id ?? person.name} delay={150}>\n            <Focusable>{disc}</Focusable>\n            <Tooltip placement=\"top\">\n              <span className=\"block\">{person.name}</span>\n              {person.description && <span className=\"block text-text-secondary\">{person.description}</span>}\n            </Tooltip>\n          </TooltipTrigger>\n        );\n      })}\n      {overflowDisc}\n    </div>\n  );\n}\n// #endregion\n\nfunction OverflowDisc({\n  count,\n  names,\n  className,\n  tooltips,\n  onPress,\n}: {\n  count: number;\n  names: string[];\n  className: string;\n  tooltips: boolean;\n  onPress?: () => void;\n}) {\n  const a11y = `${count} more: ${names.join(\", \")}`;\n  const disc = onPress ? (\n    <button type=\"button\" aria-label={a11y} onClick={onPress} className={cx(className, \"cursor-pointer hover:bg-background-tertiary-hover\")}>\n      +{count}\n    </button>\n  ) : (\n    <span role=\"img\" aria-label={a11y} className={className}>\n      +{count}\n    </span>\n  );\n  if (!tooltips) return disc;\n  return (\n    <TooltipTrigger delay={150}>\n      <Focusable>{disc}</Focusable>\n      <Tooltip placement=\"top\">\n        {names.map((n, i) => (\n          <span key={`${n}-${i}`} className=\"block\">\n            {n}\n          </span>\n        ))}\n      </Tooltip>\n    </TooltipTrigger>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "avatar",
+      "group",
+      "assignees",
+      "tooltip",
+      "boardui"
+    ]
+  }
+}

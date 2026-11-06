@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A looping strip of content whose speed is expressed in pixels per second and whose duration is derived from it, never the other way round. A fixed `duration` means a 900px strip crawls while a 4000px strip sprints, so two marquees on the same page visibly disagree about how fast scrolling is — and adding one word to either changes its speed. The loop distance is exactly one content set plus its gap, so the wrap frame is pixel-identical to the frame before it and the seam is invisible.',

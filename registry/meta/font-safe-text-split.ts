@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'Splitting text into lines is a measurement, and measuring before the webfont arrives measures the fallback face. The line boxes are then wrapped in the wrong places and never re-flow when the real font swaps in — with a line mask, the visible symptom is words sliced in half by an invisible edge, and it only reproduces on a cold cache. This component owns the whole lifecycle: gate the first split on `document.fonts.ready`, re-split when a late font finishes loading, and re-split on width change behind a debounce.',

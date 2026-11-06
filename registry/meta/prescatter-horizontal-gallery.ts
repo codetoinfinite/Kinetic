@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['pinned-horizontal-track', 'use-reduced-motion', 'prng'],
 
   summary:
     'A pinned horizontal strip whose media is deliberately off-grid: every item gets a small seeded resting offset, then rides in from ahead of its slot and runs out behind it, rotating through zero on the way past. Two `fromTo` pairs per item — one entry, one exit — measured against the strip\'s own tween rather than against scroll position, so the choreography is a property of where an item is in the container, not of where the page is.',

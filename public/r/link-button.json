@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "link-button",
+  "type": "registry:ui",
+  "title": "Link Button",
+  "description": "Container-less text action that renders an anchor with href or a button without, with an underline as its only hover cue.",
+  "categories": [
+    "action"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/directional-icon.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/link-button.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/link-button.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/buttons/link-button.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport type {\n  AnchorHTMLAttributes,\n  ButtonHTMLAttributes,\n  ComponentType,\n  ReactNode,\n  Ref,\n} from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\nimport { directionalIconClass } from \"@/lib/directional-icon\";\n\n/**\n * Link button — an inline text action styled like a link, sized on the same\n * scale as `Button` but without the container: no fill, no border, just the\n * label (plus optional icons) with an underline on hover.\n *\n * Variant / size matrix (mirrors Button's structure):\n *   Variant = primary (blue/600 text) | secondary (text/secondary)\n *   Size    = medium (Body 1/Medium, 20px icons)\n *           | small  (Body 1/Medium, 18px icons)\n *           | xs     (Caption 1/Semibold, 14px icons)\n *\n * Renders an `<a>` when `href` is passed, otherwise a `<button>` — the same\n * action can live in copy (\"Learn more →\") or trigger a handler. Icons are\n * rendered by the component itself via `leadingIcon` / `trailingIcon` (pass\n * the Remix Icon reference, e.g. `RiArrowRightLine`, not an element).\n */\n\ntype LinkButtonVariant = \"primary\" | \"secondary\";\ntype LinkButtonSize = \"medium\" | \"small\" | \"xs\";\n\ntype IconComponent = ComponentType<{\n  className?: string;\n  \"aria-hidden\"?: boolean | \"true\" | \"false\";\n}>;\n\ninterface LinkButtonBaseProps {\n  variant?: LinkButtonVariant;\n  size?: LinkButtonSize;\n  leadingIcon?: IconComponent;\n  trailingIcon?: IconComponent;\n  children?: ReactNode;\n  className?: string;\n  disabled?: boolean;\n}\n\nexport interface LinkButtonAnchorProps\n  extends LinkButtonBaseProps,\n    Omit<AnchorHTMLAttributes<HTMLAnchorElement>, \"children\" | \"className\"> {\n  href: string;\n  ref?: Ref<HTMLAnchorElement>;\n}\n\nexport interface LinkButtonButtonProps\n  extends LinkButtonBaseProps,\n    Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"children\" | \"className\"> {\n  href?: undefined;\n  ref?: Ref<HTMLButtonElement>;\n}\n\nexport type LinkButtonProps = LinkButtonAnchorProps | LinkButtonButtonProps;\n\nconst styles = sortCx({\n  base: [\n    \"inline-flex items-center justify-center gap-1 whitespace-nowrap\",\n    \"font-sans select-none cursor-pointer rounded-sm\",\n    \"underline-offset-3 hover:underline\",\n    \"transition-colors duration-150 ease\",\n    \"outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-border-focus-ring\",\n    \"disabled:cursor-not-allowed disabled:no-underline aria-disabled:cursor-not-allowed aria-disabled:no-underline\",\n  ].join(\" \"),\n\n  size: {\n    medium: \"text-body-medium\",\n    small: \"text-body-medium\",\n    xs: \"text-caption-1-semibold\",\n  },\n\n  icon: {\n    medium: \"size-5 shrink-0\",\n    small: \"size-[18px] shrink-0\",\n    xs: \"size-3.5 shrink-0\",\n  },\n\n  variant: {\n    // Hover keeps the resting color — the underline is the hover cue; only\n    // the press darkens.\n    primary: [\n      \"text-accent-600 active:text-accent-800\",\n      \"disabled:text-text-tertiary aria-disabled:text-text-tertiary\",\n    ].join(\" \"),\n    secondary: [\n      \"text-text-secondary active:text-text-primary\",\n      \"disabled:text-text-tertiary aria-disabled:text-text-tertiary\",\n    ].join(\" \"),\n  },\n});\n\n// #region critical\nexport function LinkButton({\n  variant = \"primary\",\n  size = \"medium\",\n  leadingIcon: Leading,\n  trailingIcon: Trailing,\n  children,\n  className,\n  disabled = false,\n  ...props\n}: LinkButtonProps) {\n  const classes = cx(styles.base, styles.size[size], styles.variant[variant], className);\n  const content = (\n    <>\n      {Leading ? <Leading className={cx(styles.icon[size], directionalIconClass(Leading))} aria-hidden /> : null}\n      {children !== undefined && children !== null && <span>{children}</span>}\n      {Trailing ? <Trailing className={cx(styles.icon[size], directionalIconClass(Trailing))} aria-hidden /> : null}\n    </>\n  );\n\n  if (props.href !== undefined) {\n    const { ref, href, ...anchorProps } = props as LinkButtonAnchorProps;\n    return (\n      <a\n        ref={ref}\n        href={disabled ? undefined : href}\n        aria-disabled={disabled || undefined}\n        className={classes}\n        {...anchorProps}\n      >\n        {content}\n      </a>\n    );\n  }\n\n  const { ref, type = \"button\", ...buttonProps } = props as LinkButtonButtonProps;\n  return (\n    <button ref={ref} type={type} disabled={disabled} className={classes} {...buttonProps}>\n      {content}\n    </button>\n  );\n}\n// #endregion\n\n/** Style maps, exported for advanced composition and the dev Design Tuner. */\nexport const linkButtonStyles = styles;\n"
+    }
+  ],
+  "meta": {
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "button",
+      "link",
+      "text",
+      "inline",
+      "boardui"
+    ]
+  }
+}

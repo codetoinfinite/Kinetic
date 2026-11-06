@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "plan-usage-card",
+  "type": "registry:ui",
+  "title": "Plan Usage Card",
+  "description": "A plan's rolling limits as thin meters with reset times, turning amber then red as they fill, plus renewal date and upgrade.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1",
+    "@remixicon/react@^4.9.0"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/button.json",
+    "https://kinetic.example.com/r/progress.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/plan-usage-card.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/plan-usage-card.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Plan Usage Card\" (boardui.com/).\n * No BoardUI source was used.\n */\n\"use client\";\n\nimport type { ReactNode } from \"react\";\nimport { Meter as AriaMeter } from \"react-aria-components\";\nimport { RiArrowRightUpLine } from \"@remixicon/react\";\nimport { Button } from \"@/components/motion/button\";\nimport { ProgressTrack } from \"@/components/motion/progress\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Plan Usage Card — the limits of a subscription plan as a stack of thin\n * meters (a rolling 5-hour window, weekly caps), each with when it resets,\n * plus the renewal date and an upgrade action in the footer.\n *\n *   <PlanUsageCard\n *     plan=\"Max (5x)\"\n *     renews=\"Renews Dec 1\"\n *     limits={[{ id: \"5h\", label: \"5-hour limit\", used: 38, resets: \"Resets in 2 hr 46 min\" }]}\n *     onUpgrade={() => openBilling()}\n *   />\n *\n * Each meter turns amber past `warnAt` and red past `criticalAt`, so a limit\n * that is about to run out reads before its number does. `bare` drops the\n * surface for nesting under another tile (e.g. a context window card).\n */\n\nexport interface PlanLimit {\n  id: string;\n  label: string;\n  /** Share of the limit used, 0–100. */\n  used: number;\n  /** When the window resets, e.g. \"Resets Tue 3:00 PM\". */\n  resets?: string;\n}\n\nexport interface PlanUsageCardProps {\n  /** Plan name shown after the title, e.g. \"Max (5x)\". */\n  plan: ReactNode;\n  limits: PlanLimit[];\n  /** Header title. Default \"Plan usage limits\". */\n  title?: ReactNode;\n  /** Renewal line in the footer, e.g. \"Renews Dec 1\". */\n  renews?: ReactNode;\n  /** Shows the upgrade button when set. */\n  onUpgrade?: () => void;\n  upgradeLabel?: ReactNode;\n  /** Percent at which a meter turns amber. Default 70. */\n  warnAt?: number;\n  /** Percent at which a meter turns red. Default 90. */\n  criticalAt?: number;\n  /** Drop the card surface and padding, for nesting in another tile. */\n  bare?: boolean;\n  className?: string;\n}\n\ntype Tone = \"accent\" | \"warning\" | \"error\";\n\nconst fill = sortCx({\n  accent: \"text-accent-500\",\n  warning: \"text-chart-8-active\",\n  error: \"text-notification-error-foreground\",\n});\n\nconst figure = sortCx({\n  accent: \"text-text-primary\",\n  warning: \"text-chart-8-active\",\n  error: \"text-notification-error-foreground\",\n});\n\n// #region critical\nexport function PlanUsageCard({\n  plan,\n  limits,\n  title = \"Plan usage limits\",\n  renews,\n  onUpgrade,\n  upgradeLabel = \"Upgrade\",\n  warnAt = 70,\n  criticalAt = 90,\n  bare = false,\n  className,\n}: PlanUsageCardProps) {\n  const toneOf = (pct: number): Tone => (pct >= criticalAt ? \"error\" : pct >= warnAt ? \"warning\" : \"accent\");\n\n  return (\n    <section\n      className={cx(\n        \"flex w-full min-w-0 flex-col gap-3\",\n        !bare && \"rounded-[14px] bg-background-secondary-default p-3.5\",\n        className,\n      )}\n    >\n      <h3 className=\"flex min-w-0 items-center gap-1.5 text-caption-1-medium text-text-secondary\">\n        <span className=\"truncate\">{title}</span>\n        <span aria-hidden>·</span>\n        <span className=\"shrink-0 text-text-primary\">{plan}</span>\n      </h3>\n\n      <ul className=\"flex flex-col gap-3\">\n        {limits.map((limit) => {\n          const pct = Math.round(Math.min(100, Math.max(0, limit.used)));\n          const tone = toneOf(pct);\n          return (\n            <li key={limit.id}>\n              <AriaMeter\n                value={pct}\n                aria-label={limit.label}\n                valueLabel={limit.resets ? `${pct}% used, ${limit.resets}` : `${pct}% used`}\n                className=\"flex flex-col gap-1.5\"\n              >\n                {({ percentage }) => (\n                  <>\n                    <div className=\"flex items-baseline gap-2 text-caption-1-medium\">\n                      <span className=\"min-w-0 flex-1 truncate text-text-primary\">{limit.label}</span>\n                      {limit.resets ? (\n                        <span className=\"shrink-0 truncate text-text-tertiary\">{limit.resets}</span>\n                      ) : null}\n                      <span\n                        className={cx(\n                          \"w-9 shrink-0 text-end text-caption-1-semibold tabular-nums transition-colors duration-300 ease-out motion-reduce:transition-none\",\n                          figure[tone],\n                        )}\n                      >\n                        {pct}%\n                      </span>\n                    </div>\n                    <ProgressTrack percentage={percentage} size=\"sm\" className={fill[tone]} />\n                  </>\n                )}\n              </AriaMeter>\n            </li>\n          );\n        })}\n      </ul>\n\n      {renews != null || onUpgrade ? (\n        <div className=\"flex items-center justify-between gap-3 border-t border-border-table pt-3\">\n          <span className=\"min-w-0 truncate text-caption-1-medium text-text-tertiary\">{renews}</span>\n          {onUpgrade ? (\n            <Button variant=\"primary\" size=\"xs\" trailingIcon={RiArrowRightUpLine} onClick={onUpgrade}>\n              {upgradeLabel}\n            </Button>\n          ) : null}\n        </div>\n      ) : null}\n    </section>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "usage",
+      "billing",
+      "plan",
+      "meter",
+      "limits",
+      "boardui"
+    ]
+  }
+}

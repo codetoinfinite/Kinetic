@@ -42,7 +42,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A sticky section holds a single word while a manufactured scroll range plays a zoom out: the word starts several screens wide, showing a gradient through its letters, and settles into a normal headline position. No library — the progress is read from the sticky section\'s own rect, smoothed exponentially in wall-clock time, and written as one composited transform per changed frame.',

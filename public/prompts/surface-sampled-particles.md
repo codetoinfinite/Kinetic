@@ -380,6 +380,14 @@ export function SurfaceSampledParticles({
   box.current = { width, height };
 
   const reduced = useReducedMotion();
+  // Mirrored into a ref for the same reason `source` is: the build effect below
+  // has to know whether to hand back a still frame or a live one, but making
+  // `reduced` a dependency of it would re-sample the entire surface and rebuild
+  // the WebGL context every time the OS setting is toggled. The ref is read,
+  // never depended on.
+  const reducedRef = useRef(reduced);
+  reducedRef.current = reduced;
+
   const visible = useVisibility();
   const { inView } = useInView(host, { rootMargin: '10%' });
   const ready = width > 0 && height > 0;
@@ -406,7 +414,17 @@ export function SurfaceSampledParticles({
       return;
     }
 
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setUnsupported(true);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio());
     renderer.setClearAlpha(0);
     const dpr = renderer.getPixelRatio();
@@ -532,7 +550,18 @@ export function SurfaceSampledParticles({
 
     resize(box.current.width, box.current.height);
     stage.current = { resize, step, still };
-    render();
+    // The first frame a reduced-motion visitor gets has to be the still one.
+    // `render()` draws whatever `form` happens to be, and `form` starts at 0 —
+    // the fully scattered cloud, with the rings at `ringOpacity * 0`, i.e.
+    // invisible — while `useRaf` below is disabled under reduced motion, so
+    // that first frame would also be the last one they ever see. The resize
+    // effect further down does call `still()`, but only when the observed size
+    // or `reduced` itself changes; every rebuild driven by this effect's own
+    // dependencies (a new `count`, a different colour, a new `seed`) happens at
+    // a size that has not moved, so nothing reaches it and the shell silently
+    // stops assembling.
+    if (reducedRef.current) still();
+    else render();
 
     return () => {
       stage.current = null;
@@ -562,6 +591,14 @@ export function SurfaceSampledParticles({
 
   // Resize is its own effect: a container reflow costs a `setSize` and a
   // camera refit, never a re-sample of the surface.
+  //
+  // `reduced` is a dependency, not an accident. It covers the two cases the
+  // build effect cannot: the OS setting being switched to `reduce` mid-session
+  // — `useReducedMotion` subscribes to the media query, so this really does
+  // change after mount — and a resize while it is on, where the refit above
+  // moves the camera but nothing would otherwise draw a frame through it.
+  // `still()` only assigns fixed values and renders once, so running it again
+  // when it is already the current frame costs a draw and changes nothing.
   useEffect(() => {
     stage.current?.resize(width, height);
     if (reduced) stage.current?.still();

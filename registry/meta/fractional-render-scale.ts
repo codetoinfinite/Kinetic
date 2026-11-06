@@ -22,16 +22,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [
-    'webgl',
-    'damp',
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-    'use-smooth-pointer',
-  ],
 
   summary:
     'A drifting fog field with a latent grid that develops under the cursor, rendered into a canvas whose backing store is deliberately 0.6x the size of the element it fills. The browser upscales it, and the upscale is invisible because the content was authored for it: no detail finer than a dozen pixels, and the one thing with an edge — the grid — has its line width specified in backing-store pixels rather than CSS pixels. It is a background you can afford, and a demonstration of the cheapest large performance win in WebGL.',

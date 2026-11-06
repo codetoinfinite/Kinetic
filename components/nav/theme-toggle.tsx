@@ -29,7 +29,10 @@ const ICON =
   'duration-control ease-out-quart';
 
 function setTheme(next: 'dark' | 'light') {
-  document.documentElement.classList.toggle('light', next === 'light');
+  const root = document.documentElement.classList;
+  root.toggle('light', next === 'light');
+  // BoardUI-derived components read `.dark`, not the absence of `.light`.
+  root.toggle('dark', next === 'dark');
   try {
     // Same key as `theme-script.tsx` reads, from the same constant.
     localStorage.setItem(site.themeStorageKey, next);

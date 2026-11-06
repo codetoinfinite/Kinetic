@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "announcement",
+  "type": "registry:ui",
+  "title": "Announcement",
+  "description": "A compact sidebar card with an icon, title, note and full-width call to action that blurs and shrinks away when dismissed.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0",
+    "motion@^12.43.0"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/button.json",
+    "https://kinetic.example.com/r/close-button.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/announcement.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/announcement.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/announcement/announcement.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ComponentType, HTMLAttributes, ReactNode, Ref } from \"react\";\nimport { useState } from \"react\";\nimport { AnimatePresence, motion } from \"motion/react\";\nimport { RiShieldStarFill } from \"@remixicon/react\";\nimport { Button } from \"@/components/motion/button\";\nimport { CloseButton } from \"@/components/motion/close-button\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Figma source: Board UI → \"Event card\" (node 3718:2317).\n *\n * A compact announcement / onboarding card sized for the sidebar (fills its\n * container — 236px inside the 260px sidebar). Structure, 1:1 with Figma:\n *\n *   card            flex-col, gap 12, p 12, radius 12, border, white, no shadow\n *   ├─ content      flex-col, gap 4\n *   │  ├─ icon      shield-star-fill, 20×20 (RiShieldStarFill)\n *   │  ├─ close     CloseButton size=\"xs\" (absolute, top-right)\n *   │  └─ text      flex-col, gap 2\n *   │     ├─ title  Body 1/Medium (14/20), text/primary\n *   │     └─ desc   Body 2/Medium (13/18), text/secondary\n *   └─ action       Button secondary / small, full width\n *\n * Height math: 12 + 20 + 4 + (20 + 2 + 36) + 12 + 32 + 12 = 150 (matches frame).\n *\n * Everything after the title is optional:\n *   - `description` omitted → text block is title-only.\n *   - `actionLabel` omitted → no CTA button.\n *   - `dismissible` false → no close button.\n *\n * Dismissal is self-managed: clicking the close button plays a soft blur +\n * scale-down (0.85) exit via `motion/react`, then unmounts and fires the\n * optional `onClose` callback. The leading `icon` defaults to the shield used\n * in the frame; pass any Remix Icon component reference (`RiSparklingFill`,\n * not `<RiSparklingFill />`).\n *\n * `introDelay` opts into a matching entrance: blur + fade + scale up from\n * 0.85, rising 15px up from below into place, after the given delay (seconds).\n * Off by default (card just appears) — set it for placements where the\n * banner should call attention after the surrounding UI has settled, e.g. the\n * sidebar slot in `DashboardSidebar`.\n */\n\ntype IconComponent = ComponentType<{\n  className?: string;\n  \"aria-hidden\"?: boolean | \"true\" | \"false\";\n}>;\n\nexport interface AnnouncementProps\n  extends Omit<\n    HTMLAttributes<HTMLDivElement>,\n    \"title\" | \"onDrag\" | \"onDragStart\" | \"onDragEnd\" | \"onAnimationStart\" | \"onAnimationEnd\"\n  > {\n  title: ReactNode;\n  description?: ReactNode;\n  /** Leading icon. Defaults to the shield-star from the Figma frame. */\n  icon?: IconComponent;\n  /** CTA label. When set, a full-width secondary button is rendered. */\n  actionLabel?: ReactNode;\n  onAction?: () => void;\n  /** Show a dismiss button in the top-right corner. */\n  dismissible?: boolean;\n  /** Called once the dismiss exit animation finishes. */\n  onClose?: () => void;\n  /** Accessible name for the dismiss button. */\n  closeLabel?: string;\n  /**\n   * Seconds to wait before playing the blur/fade/scale-up entrance. Omit to\n   * skip the entrance entirely (card just appears).\n   */\n  introDelay?: number;\n  ref?: Ref<HTMLDivElement>;\n}\n\nconst styles = sortCx({\n  card: [\n    \"relative flex w-full flex-col items-start gap-3 p-3\",\n    \"rounded-xl border border-border-button-default bg-background-primary-default\",\n  ].join(\" \"),\n  content: \"flex w-full flex-col items-start gap-1\",\n  icon: \"size-5 shrink-0 text-foreground-icon-secondary\",\n  close: \"absolute end-3 top-3\",\n  text: \"flex w-full flex-col items-start gap-0.5\",\n  title: \"w-full text-body-medium text-text-primary\",\n  description: \"w-full text-body-2-medium text-text-secondary\",\n});\n\n// #region critical\nexport function Announcement({\n  title,\n  description,\n  icon: Icon = RiShieldStarFill,\n  actionLabel,\n  onAction,\n  dismissible = false,\n  onClose,\n  closeLabel = \"Dismiss\",\n  introDelay,\n  className,\n  ref,\n  ...props\n}: AnnouncementProps) {\n  const [dismissed, setDismissed] = useState(false);\n  const hasIntro = introDelay !== undefined;\n\n  return (\n    <AnimatePresence onExitComplete={onClose}>\n      {!dismissed && (\n        <motion.div\n          ref={ref}\n          initial={hasIntro ? { opacity: 0, y: 15, scale: 0.85, filter: \"blur(6px)\" } : false}\n          animate={\n            hasIntro\n              ? {\n                  opacity: 1,\n                  y: 0,\n                  scale: 1,\n                  filter: \"blur(0px)\",\n                  transition: { duration: 0.25, ease: \"easeOut\", delay: introDelay },\n                }\n              : undefined\n          }\n          exit={{\n            opacity: 0,\n            scale: 0.85,\n            filter: \"blur(6px)\",\n            transition: { duration: 0.25, ease: \"easeInOut\" },\n          }}\n          className={cx(styles.card, className)}\n          {...props}\n        >\n          <div className={styles.content}>\n            <Icon className={styles.icon} aria-hidden />\n\n            {dismissible ? (\n              <CloseButton\n                size=\"xs\"\n                aria-label={closeLabel}\n                onClick={() => setDismissed(true)}\n                className={styles.close}\n              />\n            ) : null}\n\n            <div className={styles.text}>\n              <p className={styles.title}>{title}</p>\n              {description ? <p className={styles.description}>{description}</p> : null}\n            </div>\n          </div>\n\n          {actionLabel ? (\n            <Button\n              variant=\"secondary\"\n              size=\"small\"\n              onClick={onAction}\n              className=\"w-full\"\n            >\n              {actionLabel}\n            </Button>\n          ) : null}\n        </motion.div>\n      )}\n    </AnimatePresence>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "tags": [
+      "announcement",
+      "banner",
+      "onboarding",
+      "dismissible",
+      "sidebar",
+      "motion",
+      "boardui"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-count-up",
+  "type": "registry:hook",
+  "title": "use-count-up",
+  "description": "Shared hook used by Kinetic components.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/hooks/use-count-up.ts",
+      "type": "registry:hook",
+      "target": "hooks/use-count-up.ts",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (hooks/use-count-up.ts)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport { useEffect, useRef, useState } from \"react\";\n\nconst easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);\n\n/**\n * Rolls the displayed number from its current value to `target` with an\n * ease-out curve. Used by the dashboard chart cards so headline figures\n * animate when the dataset or the hovered point changes.\n */\nexport function useCountUp(target: number, duration = 320) {\n  const [display, setDisplay] = useState(target);\n  const fromRef = useRef(target);\n\n  useEffect(() => {\n    const from = fromRef.current;\n    if (from === target) return;\n    const start = performance.now();\n    let raf = 0;\n    const tick = (now: number) => {\n      const t = Math.min(1, Math.max(0, (now - start) / duration));\n      const value = Math.round(from + (target - from) * easeOutCubic(t));\n      fromRef.current = value;\n      setDisplay(value);\n      if (t < 1) raf = requestAnimationFrame(tick);\n      else fromRef.current = target;\n    };\n    raf = requestAnimationFrame(tick);\n    return () => cancelAnimationFrame(raf);\n  }, [target, duration]);\n\n  return display;\n}\n"
+    }
+  ]
+}

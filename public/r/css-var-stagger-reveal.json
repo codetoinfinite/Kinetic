@@ -19,6 +19,7 @@
   ],
   "meta": {
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "css",
     "tags": [
       "intersection-observer",

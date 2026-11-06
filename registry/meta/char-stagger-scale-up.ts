@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'The headline is on screen from the first frame — small and ghosted, reading as a label. Characters resolve one at a time from left to right, and just before the last one lands the whole word scales to full size with a `back.out` overshoot. It assembles itself, then it asserts itself. Supporting copy fades up a quarter of a second into the scale, so the page is never doing only one thing at a time.',

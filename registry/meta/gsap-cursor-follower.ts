@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A container hides its native cursor and draws its own: a small disc that lags the pointer by a settling tween, and swells into a labelled puck whenever it passes over an element marked `data-cursor-target`. The lag comes from GSAP rather than from a damped rAF loop, which is why the disc comes to rest when the pointer stops instead of asymptoting toward it forever.',

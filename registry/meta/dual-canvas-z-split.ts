@@ -23,16 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['ogl@^1.0.11'],
-  registryDependencies: [
-    'webgl',
-    'prng',
-    'damp',
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-  ],
 
   summary:
     'Two stacked canvases render the same instanced particle system with opposite `uZSign`, and the page content is a DOM sibling between them. Particles with negative depth pass behind the text and positive ones pass in front. Because size, parallax rate, brightness and softness are one continuous ramp across the depth axis, the plane where the split happens cannot be seen — the effect is that the copy is embedded in the field, and it stays live, selectable text throughout.',

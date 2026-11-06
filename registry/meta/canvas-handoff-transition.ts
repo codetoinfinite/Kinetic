@@ -29,7 +29,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1', 'gsap@^3.15.0'],
-  registryDependencies: ['webgl', 'use-reduced-motion'],
 
   summary:
     'The usual way to put a shader on more than one page is to mount it on each of them, and the price is a new context, a new compile and a new first frame every time the route changes. No easing hides that: a field restarting from t = 0 is visibly a different object. Here one canvas is created imperatively, outside React\'s ownership, and moved into the destination page with `appendChild` during the layout phase — no paint happens in between, so the context never blinks. What the viewer sees is the surface they were already looking at, travelling from one rectangle to another.',

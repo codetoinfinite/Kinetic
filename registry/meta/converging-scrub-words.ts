@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A stacked headline assembles out of the margins as you approach it. Odd lines enter from the right, even lines from the left, and both land on zero at the same scrub position, so they cross the frame in opposite directions and lock into a sentence. Because the tween is scrubbed, scrolling back up disassembles it — the headline is a function of scroll position, not a playback that has happened or not happened.',

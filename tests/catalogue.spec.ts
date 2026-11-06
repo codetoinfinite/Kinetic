@@ -21,7 +21,7 @@ import { collectErrors, resolveTargets } from './helpers';
    costs about as much wall-clock as the seven-component sample did.
    ========================================================================== */
 
-const SHARDS = 8;
+const SHARDS = 12;
 
 for (let shard = 0; shard < SHARDS; shard += 1) {
   // Strided rather than chunked, so each shard draws from the whole alphabet
@@ -75,11 +75,12 @@ for (let shard = 0; shard < SHARDS; shard += 1) {
 
         /* -- the code is all of the code --------------------------------- */
         // One tab per file the user actually installs: no duplicate of a
-        // shared hook, and no missing sibling component.
+        // shared hook, and no missing sibling component. `[data-file]` keeps a
+        // demo's own tab panels (the `tabs` component has some) out of the count.
         const expectedTargets = await resolveTargets(page.request, slug);
         const panelTargets = (
           await page
-            .locator('[role="tabpanel"]')
+            .locator('[role="tabpanel"][data-file]')
             .evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-file')))
         ).sort();
 
@@ -96,7 +97,7 @@ for (let shard = 0; shard < SHARDS; shard += 1) {
         }
 
         const empty = await page
-          .locator('[role="tabpanel"]')
+          .locator('[role="tabpanel"][data-file]')
           .evaluateAll((nodes) =>
             nodes
               .filter((node) => (node.textContent ?? '').trim().length < 80)

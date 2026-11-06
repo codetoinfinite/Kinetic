@@ -25,7 +25,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'Ordered dithering with the threshold matrix computed from the fragment coordinate instead of sampled from a texture. Six integer operations reproduce the classic 8x8 Bayer matrix exactly, which turns a banding-prone gradient into a stable newsprint texture that holds at any zoom and costs less than the texture fetch it replaces.',

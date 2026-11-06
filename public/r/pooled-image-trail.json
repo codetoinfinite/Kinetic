@@ -11,7 +11,7 @@
     "gsap@^3.15.0"
   ],
   "registryDependencies": [
-    "http://localhost:8927/r/prng.json"
+    "https://kinetic.example.com/r/prng.json"
   ],
   "files": [
     {
@@ -23,6 +23,7 @@
   ],
   "meta": {
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "gsap",

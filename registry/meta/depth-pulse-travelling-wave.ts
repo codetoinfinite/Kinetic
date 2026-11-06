@@ -25,7 +25,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: ['webgl', 'prng', 'use-raf', 'use-resize-observer', 'use-reduced-motion'],
 
   summary:
     'A lattice of dots bent around a shallow arc and lit by a pulse that travels across it. Depth is faked entirely from model-space z, which drives alpha and point size at the same time, so the arc reads as curved with no depth buffer and no perspective camera. The pulse is a cosine whose phase varies per column, and its crest also pushes dots toward the viewer, so the two techniques compound: the wave arrives as a moving band of brighter, larger dots.',

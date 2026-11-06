@@ -56,6 +56,8 @@ export default async function PreviewPage({ params }: { params: Promise<{ slug: 
         slug={slug}
         cost={entry.cost}
         motif={entry.motif as Motif}
+        kit={entry.kit}
+        category={entry.category}
         focused
         className="h-[calc(100vh-13rem)] min-h-[26rem] w-full border border-line"
       />

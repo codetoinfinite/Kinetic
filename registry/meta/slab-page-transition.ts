@@ -24,7 +24,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['use-gsap', 'use-reduced-motion'],
 
   summary:
     'The outgoing page slides one screen height up and out while a solid slab rises from below to take its place. The route commits under the slab, the slab holds for a beat with the destination name on it, then the slab keeps travelling up and out while the new page follows it in from below. Nothing reverses direction at any point, which is the whole difference between a slab and a curtain: a curtain that drops and lifts reads as an interruption, a slab that passes through reads as travel.',

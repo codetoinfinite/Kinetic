@@ -1,11 +1,12 @@
 @import 'tailwindcss';
+/* BoardUI-kit tokens, type ramp and utilities. Also declares the class-based
+   `dark` variant (`&:where(.dark, .dark *)`) the whole site uses. */
+@import '../registry/styles/boardui-theme.css';
 
 @source '../app';
 @source '../components';
 @source '../registry';
 @source '../__generated__';
-
-@custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
    Kinetic — "Editorial Mono"
@@ -52,6 +53,12 @@
   --k-cat-text: oklch(0.82 0.15 95);
   --k-cat-layout: oklch(0.74 0.13 205);
   --k-cat-primitive: oklch(0.7 0.03 260);
+  --k-cat-action: oklch(0.72 0.17 20);
+  --k-cat-form: oklch(0.78 0.16 140);
+  --k-cat-overlay: oklch(0.74 0.17 340);
+  --k-cat-navigation: oklch(0.8 0.14 75);
+  --k-cat-display: oklch(0.72 0.14 280);
+  --k-cat-block: oklch(0.8 0.06 60);
 }
 
 .light {
@@ -82,6 +89,12 @@
   --k-cat-text: oklch(0.6 0.14 95);
   --k-cat-layout: oklch(0.53 0.13 205);
   --k-cat-primitive: oklch(0.5 0.02 260);
+  --k-cat-action: oklch(0.55 0.19 20);
+  --k-cat-form: oklch(0.52 0.15 140);
+  --k-cat-overlay: oklch(0.55 0.2 340);
+  --k-cat-navigation: oklch(0.56 0.13 70);
+  --k-cat-display: oklch(0.52 0.17 280);
+  --k-cat-block: oklch(0.5 0.06 60);
 }
 
 /* A subtree tagged with its category adopts that category's accent. Every
@@ -93,6 +106,30 @@
 [data-category='text'] { --k-accent: var(--k-cat-text); }
 [data-category='layout'] { --k-accent: var(--k-cat-layout); }
 [data-category='primitive'] { --k-accent: var(--k-cat-primitive); }
+[data-category='action'] { --k-accent: var(--k-cat-action); }
+[data-category='form'] { --k-accent: var(--k-cat-form); }
+[data-category='overlay'] { --k-accent: var(--k-cat-overlay); }
+[data-category='navigation'] { --k-accent: var(--k-cat-navigation); }
+[data-category='display'] { --k-accent: var(--k-cat-display); }
+[data-category='block'] { --k-accent: var(--k-cat-block); }
+
+/* BoardUI-kit components are drawn on Tailwind's default radii; the site's
+   own sharper scale stays everywhere else. Works because the radius tokens
+   live in a plain `@theme` (emitted as variables), not `@theme inline`. */
+[data-kit='boardui'] {
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+}
+
+/* Plain `@theme`, so `rounded-*` reads `var(--radius-*)` and the
+   `[data-kit='boardui']` scope above can swap the scale. */
+@theme {
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+}
 
 @theme inline {
   --color-bg: var(--k-bg);
@@ -115,11 +152,6 @@
     'Segoe UI', Roboto, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular,
     'SF Mono', Menlo, Consolas, monospace;
-
-  --radius-none: 0px;
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 8px;
 
   /* Editorial Mono uses a narrow, deliberate motion vocabulary. Anything that
      is site chrome uses these; component previews bring their own. */
@@ -365,6 +397,11 @@
     border: 1px solid var(--k-line);
     border-radius: 3px;
     padding: 0.12em 0.36em;
+    /* Inline code is routinely one unbreakable token — an API call, a path, a
+       package spec. `anywhere` rather than `break-word` because only `anywhere`
+       also lowers the min-content size, which is what stops a long token from
+       widening the grid track that contains it on a narrow screen. */
+    overflow-wrap: anywhere;
   }
   .prose pre {
     background-color: var(--k-bg-subtle);
@@ -614,9 +651,15 @@
     transform: translate3d(0, calc(var(--k-scrub) * -4rem), 0);
   }
 
-  /* Inverse: appears once travel is underway. */
+  /* Inverse: appears once travel is underway. Opacity alone is not enough:
+     this strip holds two dozen real links across the full width of the stage,
+     and at opacity 0 every one of them was still hit-testable — a click aimed
+     at the board landed on an invisible link instead. `--k-trail-events` is
+     written by the same frame that writes `--k-scrub`; the `none` fallback is
+     what applies before the first frame, with JS off, and during SSR. */
   .scrub-trail {
     opacity: clamp(0, calc(var(--k-scrub) / 0.2 - 0.6), 1);
+    pointer-events: var(--k-trail-events, none);
   }
 
   /* Position along a track, 0 at the top and 1 at the bottom. */
@@ -631,6 +674,23 @@
      Focus forces the strip open. */
   .scrub-trail:focus-within {
     opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* No scrub at all for a reader who asked for no motion — `.scrub-lead`
+     translates, which is the thing being asked about — so the two states the
+     scrub would otherwise move between are simply both shown. They do not
+     collide: the lead's `pb-24` clears the strip's 48px offset by a margin. */
+  @media (prefers-reduced-motion: reduce) {
+    .scrub-lead {
+      opacity: 1;
+      transform: none;
+    }
+
+    .scrub-trail {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }
 

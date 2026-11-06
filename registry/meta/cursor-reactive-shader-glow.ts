@@ -23,7 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [],
 
   summary:
     'A hero backdrop: a slowly drifting domain-warped noise field with a soft light that follows the pointer through it. The pointer never reaches a uniform directly — the listener records a target and the render loop damps toward it, so the light trails the hand at the same rate on a 60Hz and a 120Hz display. The composed colour is then scaled down until its Rec.709 luminance fits under `ceiling`, which is what makes the glow safe to put white headline copy on top of.',

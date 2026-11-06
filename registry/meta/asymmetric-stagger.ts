@@ -30,7 +30,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A list whose entrance and exit are deliberately different animations. In: 24px up, 0.5s each, 0.06s apart, after a 0.25s hold that lets the outgoing view clear. Out: 16px up, 0.3s each, 0.03s apart, running from the last item back to the first. The exit is roughly half the total time of the entrance, which is what makes a view swap feel responsive without making the arrival feel rushed.',

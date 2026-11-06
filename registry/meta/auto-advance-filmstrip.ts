@@ -19,7 +19,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion', 'use-visibility', 'wrap'],
 
   summary:
     'Panels are a fixed number of container-width units wide and the whole track is one `translateX`. The active panel sits centred, its neighbours are dimmed and scaled down, and the strip steps every few seconds until you touch it. All motion is a CSS transition on a value React already recomputes when the index changes — there is no tween and no animation loop.',

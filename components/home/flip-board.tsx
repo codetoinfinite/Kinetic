@@ -632,6 +632,7 @@ export function FlipBoard({ panels, className, children }: FlipBoardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const stageRef = useRef<Stage | null>(null);
   const scrub = useRef({ current: 0, target: 0 });
+  const trailOpen = useRef(false);
 
   const [live, setLive] = useState(false);
   const [supported, setSupported] = useState(true);
@@ -640,8 +641,12 @@ export function FlipBoard({ panels, className, children }: FlipBoardProps) {
   // A slot from the same arbiter every preview uses. `focused` ranks the hero
   // above every card on the page: whatever else scrolls past, this keeps its
   // context.
+  // `supported` is a dependency, not just a guard: when the context is lost the
+  // stage is gone, and a claim held by a dead stage occupies one of the two
+  // WebGL slots for the rest of the page's life. Re-running the effect on the
+  // flip is what releases it.
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || !supported) return;
     if (!hasWebGL()) {
       setSupported(false);
       return;
@@ -650,12 +655,18 @@ export function FlipBoard({ panels, className, children }: FlipBoardProps) {
       { id: 'home:flip-board', cost: 'webgl', weight: priority(1, { focused: true }) },
       setLive,
     );
-  }, [reduced]);
+  }, [reduced, supported]);
 
+  // `supported` and `reduced` belong in the dependency list even though the
+  // effect only reads them through `canvasRef`: they are what decides whether
+  // the canvas is in the tree at all. Left out, a flip of either unmounted the
+  // canvas without ever re-running this effect — so the cleanup below never
+  // ran, and the GL context, the ResizeObserver and the MutationObserver on
+  // <html> all outlived the element they were attached to.
   useEffect(() => {
     const canvas = canvasRef.current;
     const host = hostRef.current;
-    if (!live || !canvas || !host) return;
+    if (!live || !supported || reduced || !canvas || !host) return;
 
     const categories = [...new Set(panels.map((panel) => panel.category))];
     const stage = createStage(canvas, panels, readPalette(host, categories), setPanelIndex);
@@ -701,7 +712,7 @@ export function FlipBoard({ panels, className, children }: FlipBoardProps) {
       stage.dispose();
       stageRef.current = null;
     };
-  }, [live, panels]);
+  }, [live, panels, supported, reduced]);
 
   /**
    * Scroll → progress. The track is taller than the viewport; progress is how
@@ -720,11 +731,32 @@ export function FlipBoard({ panels, className, children }: FlipBoardProps) {
     return Math.min(Math.max(-rect.top / span, 0), 1);
   }, []);
 
+  // The scrub is meaningless once the track has left the viewport, and the loop
+  // below no longer stops when the stage does — without this it would run for
+  // the whole life of the page. Starts `true` so the first frames are scrubbed
+  // before the observer has reported.
+  const [onTrack, setOnTrack] = useState(true);
+  useEffect(() => {
+    const track = hostRef.current?.closest('[data-scrub-track]');
+    if (!(track instanceof HTMLElement)) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setOnTrack(entry?.isIntersecting ?? true);
+    });
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, []);
+
+  // Driven by the scroll position, not by the stage. `--k-scrub` is what fades
+  // the hero copy out and the strip of real component links in, and those links
+  // are the only ones in the hero — gating this on a live WebGL stage left a
+  // reduced-motion, no-WebGL or budget-refused visitor with a hero whose links
+  // never appeared. The stage, when there is one, is one more reader of it.
   useRaf(
     (dt) => {
       const stage = stageRef.current;
       const host = hostRef.current;
-      if (!stage || !host) return;
+      if (!host) return;
 
       scrub.current.target = readProgress();
 
@@ -740,9 +772,20 @@ export function FlipBoard({ panels, className, children }: FlipBoardProps) {
       // same frame.
       host.style.setProperty('--k-scrub', p.toFixed(4));
 
-      stage.render(p, dt);
+      // The trail strip fades in on this same number, and opacity alone leaves
+      // its links clickable while they are invisible. Written on the crossing
+      // rather than every frame, because assigning an identical value still
+      // dirties style. `0.12` is where `clamp(0, --k-scrub / 0.2 - 0.6, 1)`
+      // leaves zero.
+      const open = p > 0.12;
+      if (open !== trailOpen.current) {
+        trailOpen.current = open;
+        host.style.setProperty('--k-trail-events', open ? 'auto' : 'none');
+      }
+
+      stage?.render(p, dt);
     },
-    live && supported,
+    !reduced && onTrack,
   );
 
   const onMove = (event: React.PointerEvent<HTMLCanvasElement>): void => {

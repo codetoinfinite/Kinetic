@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar-toolbar",
+  "type": "registry:ui",
+  "title": "Calendar Toolbar",
+  "description": "Calendar page header: month title, Today, month stepper, Day/Week/Month segments, event search and a New event button.",
+  "categories": [
+    "navigation"
+  ],
+  "dependencies": [
+    "@internationalized/date@^3.12.4",
+    "@remixicon/react@^4.9.0"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/button.json",
+    "https://kinetic.example.com/r/month-stepper.json",
+    "https://kinetic.example.com/r/search-field.json",
+    "https://kinetic.example.com/r/segmented-control.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/calendar-toolbar.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/calendar-toolbar.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Calendar Toolbar\" (boardui.com/templates/calendar).\n * No BoardUI source was used.\n */\n\"use client\";\n\nimport { useMemo, useState } from \"react\";\nimport type { ReactNode, Ref } from \"react\";\nimport { DateFormatter, getLocalTimeZone, startOfMonth, today as todayIn } from \"@internationalized/date\";\nimport type { CalendarDate } from \"@internationalized/date\";\nimport { RiAddLine } from \"@remixicon/react\";\nimport { Button } from \"@/components/motion/button\";\nimport { MonthStepper } from \"@/components/motion/month-stepper\";\nimport { SearchField } from \"@/components/motion/search-field\";\nimport { SegmentedControl, SegmentedControlItem } from \"@/components/motion/segmented-control\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * The calendar page header: the month as a title with a Today button, then\n * the month stepper, a Day / Week / Month segmented control, a search field\n * and the primary \"New event\" button. Every piece of state (month, view,\n * search) is controlled or uncontrolled on its own, and the row wraps into\n * two (then more) lines as the container narrows.\n */\n\nexport type CalendarView = \"day\" | \"week\" | \"month\";\n\nconst VIEW_LABELS: Record<CalendarView, string> = { day: \"Day\", week: \"Week\", month: \"Month\" };\n\nexport interface CalendarToolbarProps {\n  /** Controlled month (any day in it). */\n  month?: CalendarDate;\n  defaultMonth?: CalendarDate;\n  onMonthChange?: (month: CalendarDate) => void;\n  /** The date the Today button jumps to. Defaults to today in the local zone. */\n  today?: CalendarDate;\n  /** Called after the Today button moved the month. */\n  onToday?: (today: CalendarDate) => void;\n  view?: CalendarView;\n  defaultView?: CalendarView;\n  onViewChange?: (view: CalendarView) => void;\n  /** Which segments to show, in order. */\n  views?: CalendarView[];\n  searchValue?: string;\n  defaultSearchValue?: string;\n  onSearchChange?: (value: string) => void;\n  /** Hide the search field. */\n  showSearch?: boolean;\n  searchPlaceholder?: string;\n  onNewEvent?: () => void;\n  newEventLabel?: string;\n  /** Heading on the left. Defaults to the formatted month; `null` hides it. */\n  title?: ReactNode;\n  /** Extra controls placed before the New event button (icon buttons…). */\n  actions?: ReactNode;\n  locale?: string;\n  className?: string;\n  ref?: Ref<HTMLDivElement>;\n}\n\n// #region critical\nexport function CalendarToolbar({\n  month: controlledMonth,\n  defaultMonth,\n  onMonthChange,\n  today,\n  onToday,\n  view: controlledView,\n  defaultView = \"month\",\n  onViewChange,\n  views = [\"day\", \"week\", \"month\"],\n  searchValue,\n  defaultSearchValue = \"\",\n  onSearchChange,\n  showSearch = true,\n  searchPlaceholder = \"Search events\",\n  onNewEvent,\n  newEventLabel = \"New event\",\n  title,\n  actions,\n  locale = \"en-US\",\n  className,\n  ref,\n}: CalendarToolbarProps) {\n  const [uncontrolledMonth, setUncontrolledMonth] = useState<CalendarDate>(() =>\n    startOfMonth(defaultMonth ?? today ?? todayIn(getLocalTimeZone())),\n  );\n  const month = startOfMonth(controlledMonth ?? uncontrolledMonth);\n  const setMonth = (next: CalendarDate) => {\n    setUncontrolledMonth(next);\n    onMonthChange?.(next);\n  };\n\n  const [uncontrolledView, setUncontrolledView] = useState<CalendarView>(defaultView);\n  const view = controlledView ?? uncontrolledView;\n\n  const titleFormatter = useMemo(\n    () => new DateFormatter(locale, { month: \"long\", year: \"numeric\", timeZone: \"UTC\" }),\n    [locale],\n  );\n  const heading = title === undefined ? titleFormatter.format(month.toDate(\"UTC\")) : title;\n\n  const goToday = () => {\n    const target = today ?? todayIn(getLocalTimeZone());\n    setMonth(startOfMonth(target));\n    onToday?.(target);\n  };\n\n  return (\n    <div ref={ref} className={cx(\"flex w-full flex-wrap items-center gap-x-3 gap-y-3\", className)}>\n      <div className=\"flex w-full min-w-0 items-center justify-between gap-3 sm:w-auto sm:justify-start\">\n        {heading !== null ? (\n          <h2 aria-live=\"polite\" className=\"truncate text-title-3-medium text-text-primary\">\n            {heading}\n          </h2>\n        ) : null}\n        <Button variant=\"secondary\" onClick={goToday}>\n          Today\n        </Button>\n      </div>\n\n      <div className=\"flex w-full min-w-0 flex-wrap items-center gap-2 sm:w-auto sm:flex-1 sm:justify-end\">\n        <MonthStepper value={month} onChange={setMonth} locale={locale} className=\"w-full sm:w-60\" />\n        <SegmentedControl\n          aria-label=\"Calendar view\"\n          selectedKeys={[view]}\n          onSelectionChange={(keys) => {\n            const [next] = [...keys];\n            if (typeof next !== \"string\" || !(next in VIEW_LABELS)) return;\n            setUncontrolledView(next as CalendarView);\n            onViewChange?.(next as CalendarView);\n          }}\n        >\n          {views.map((v) => (\n            <SegmentedControlItem key={v} id={v}>\n              {VIEW_LABELS[v]}\n            </SegmentedControlItem>\n          ))}\n        </SegmentedControl>\n        {showSearch ? (\n          <SearchField\n            aria-label={searchPlaceholder}\n            placeholder={searchPlaceholder}\n            value={searchValue}\n            defaultValue={defaultSearchValue}\n            onChange={onSearchChange}\n            className=\"w-full min-w-0 sm:w-52\"\n          />\n        ) : null}\n        {actions}\n        <Button leadingIcon={RiAddLine} onClick={onNewEvent}>\n          {newEventLabel}\n        </Button>\n      </div>\n    </div>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "calendar",
+      "toolbar",
+      "header",
+      "segmented-control",
+      "boardui"
+    ]
+  }
+}

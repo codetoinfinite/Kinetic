@@ -18,15 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [
-    'use-gsap',
-    'use-in-view',
-    'use-reduced-motion',
-    'use-resize-observer',
-    'damp',
-    'prng',
-    'wrap',
-  ],
 
   summary:
     'One unwrapped accumulator carries the idle drift, the drag and the throw; the wrap happens once, in the follow tween\'s `modifiers`, as `mod(x, period) - period`. Because that is a true modulo it is total — a delta of four periods in one frame lands correctly — and because it is the identity for `x` already inside `[-period, 0)` it never shows a seam. Pressing scatters the cards on a single paused timeline that is played forwards and reversed, and releasing hands the row over to a plugin-free inertial throw.',

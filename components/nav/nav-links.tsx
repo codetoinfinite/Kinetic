@@ -10,6 +10,7 @@ export const NAV_LINKS = [
   { href: '/docs/installation', label: 'Install' },
   { href: '/docs/prompts', label: 'Prompts' },
   { href: '/docs/licensing', label: 'Licensing' },
+  { href: '/templates/chat-starter/dashboard', label: 'Starter' },
 ] as const;
 
 /**

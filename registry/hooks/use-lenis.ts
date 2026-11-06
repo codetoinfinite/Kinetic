@@ -111,6 +111,17 @@ export function useLenis(options: UseLenisOptions = {}): { current: Lenis | null
       instance.current = null;
       refCount -= 1;
       if (refCount === 0) {
+        // Put lag smoothing back. `lagSmoothing(0)` above is process-wide state
+        // on GSAP's ticker, not something scoped to this hook, so leaving it off
+        // means every tween anywhere on the page — long after the last Lenis
+        // consumer has gone — replays the whole stall after a tab switch or a
+        // long task, which is the jump lag smoothing exists to absorb. 500/33
+        // are GSAP's own defaults (gsap-core.js:1270-1271).
+        //
+        // Only at refcount zero: restoring while another consumer is still
+        // driving Lenis from this ticker would reintroduce the desync the
+        // disable is there to fix.
+        ticker?.lagSmoothing?.(500, 33);
         lenis.destroy();
         shared = null;
       }

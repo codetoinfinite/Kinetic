@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table",
+  "type": "registry:ui",
+  "title": "Table",
+  "description": "Semantic table on React Aria with a scroll container, an md/sm density flag and dashboard styling from one scoped stylesheet.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/table.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/table.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/table/table.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { Ref } from \"react\";\nimport {\n  Cell,\n  Column,\n  Row,\n  Table as AriaTable,\n  TableBody,\n  TableHeader,\n} from \"react-aria-components\";\nimport type { TableProps as AriaTableProps } from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Table primitive — built on react-aria-components `Table` for semantic markup,\n * keyboard navigation, row selection and sortable columns.\n *\n * React Aria's `Column`, `Row`, `Cell`, `TableHeader` and `TableBody` are\n * *collection* components: React Aria introspects them at build time, so they\n * can't be wrapped in custom components without losing that behaviour. We\n * therefore re-export them as-is and apply BoardUI styling through scoped CSS\n * keyed on `.bui-table` (see styles/globals.css). Only the root `<Table>` is\n * wrapped — to add the scroll container and the size flag.\n *\n * Sizes: `md` (h-16 rows) and `sm` (h-12 rows), set once via `data-size`.\n *\n * Pair with @tanstack/react-table when you need sorting / filtering /\n * pagination logic (see the advanced Data Table example).\n */\n\nexport type TableSize = \"sm\" | \"md\";\n\nexport interface TableProps extends Omit<AriaTableProps, \"className\"> {\n  size?: TableSize;\n  className?: string;\n  /** Class for the scroll container that wraps the table. */\n  containerClassName?: string;\n  ref?: Ref<HTMLTableElement>;\n}\n\n// #region critical\nexport function Table({ size = \"md\", className, containerClassName, ref, ...props }: TableProps) {\n  return (\n    <div className={cx(\"w-full overflow-x-auto\", containerClassName)}>\n      <AriaTable\n        ref={ref}\n        {...props}\n        className={cx(\"bui-table\", size === \"sm\" && \"bui-table-sm\", className)}\n      />\n    </div>\n  );\n}\n\nexport {\n  TableHeader,\n  Column as TableColumn,\n  TableBody,\n  Row as TableRow,\n  Cell as TableCell,\n};\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "table",
+      "data",
+      "rows",
+      "react-aria",
+      "boardui"
+    ]
+  }
+}

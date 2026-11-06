@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "menu-styles",
+  "type": "registry:lib",
+  "title": "menu-styles",
+  "description": "Shared utility used by Kinetic components.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/menu-styles.ts",
+      "type": "registry:lib",
+      "target": "lib/menu-styles.ts",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/dropdown/menu-styles.ts)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n/**\n * Shared visual recipe for BoardUI menu surfaces.\n *\n * Select and Dropdown intentionally keep their distinct React Aria semantics\n * (single-value listbox vs. action menu), while consuming the same panel,\n * motion, and row treatments from here.\n */\nexport const MENU_POPOVER_SURFACE = [\n  // z-110 sits above the modal layer (z-100), so menus opened inside a\n  // Modal or Drawer render over it rather than behind its backdrop.\n  \"z-110 max-w-[calc(100vw-32px)] overflow-y-auto\",\n  \"rounded-2xl border border-border-button-default bg-background-primary-default p-2.5 shadow-dropdown\",\n  \"transition duration-150 ease-out\",\n  \"data-[entering]:opacity-0 data-[entering]:scale-95 data-[entering]:blur-[2px]\",\n  \"data-[exiting]:opacity-0 data-[exiting]:scale-95 data-[exiting]:blur-[2px]\",\n  \"data-[placement=bottom]:origin-top-left rtl:data-[placement=bottom]:origin-top-right data-[placement=top]:origin-bottom-left rtl:data-[placement=top]:origin-bottom-right\",\n  \"data-[placement=left]:origin-right data-[placement=right]:origin-left\",\n].join(\" \");\n\nexport const MENU_POPOVER_WIDTH = \"w-[266px]\";\n\nexport const MENU_ITEMS_CONTAINER = \"flex w-full flex-col gap-1 outline-none\";\n\nexport const MENU_ITEM = [\n  \"flex w-full cursor-pointer items-center gap-2 rounded-2lg p-2 text-start\",\n  \"text-text-primary outline-none transition-colors\",\n].join(\" \");\n\nexport const MENU_ITEM_ACTIVE = \"bg-dropdown-item-hover-background\";\n\nexport const MENU_ITEM_INTERACTIVE =\n  \"hover:bg-dropdown-item-hover-background focus-visible:bg-dropdown-item-hover-background\";\n"
+    }
+  ]
+}

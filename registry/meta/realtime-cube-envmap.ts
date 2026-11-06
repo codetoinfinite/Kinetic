@@ -17,14 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [
-    'webgl',
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-  ],
 
   summary:
     'A `CubeCamera` sits inside the reflector and renders the six directions around it every other frame; that cube texture is assigned straight onto the material as its `envMap`. Because the panels supplying the reflection are orbiting, the highlights crawl across the surface instead of being painted on. No HDRI, no loader, no asset — the environment is scene geometry.',

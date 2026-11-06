@@ -37,7 +37,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A ring of plates spins entirely on the compositor, so the main thread has no idea where anything is. Instead of measuring the DOM, the component recomputes the same transform in JavaScript — rotate, tilt, perspective divide — and hit-tests the resulting screen points against the pointer. A crosshair marks the computed position so you can see the mirror agreeing with the pixels.',

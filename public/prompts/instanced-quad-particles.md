@@ -262,8 +262,18 @@ export function InstancedQuadParticles({
     stage.current = { renderer, geometry, program, mesh, uniforms, resize, draw };
     draw(STATIC_ELAPSED);
 
+    // An unheard context loss is a field that goes blank and never returns —
+    // no error, no fallback — so it is routed into the same no-WebGL path. The
+    // `preventDefault` is mandatory: without it a restore can never be offered.
+    const onLost = (event: Event): void => {
+      event.preventDefault();
+      setUnsupported(true);
+    };
+    canvas.addEventListener('webglcontextlost', onLost);
+
     return () => {
       stage.current = null;
+      canvas.removeEventListener('webglcontextlost', onLost);
       // ogl has no `dispose()`: `remove()` on the geometry deletes its VAOs and
       // every buffer, `remove()` on the program deletes the shaders and the
       // program, and only then is the context worth handing back.

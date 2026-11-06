@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cx",
+  "type": "registry:lib",
+  "title": "cx",
+  "description": "Shared utility used by Kinetic components.",
+  "dependencies": [
+    "tailwind-merge@^3.7.0"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/cx.ts",
+      "type": "registry:lib",
+      "target": "lib/cx.ts",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (utils/cx.ts)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport { extendTailwindMerge } from \"tailwind-merge\";\n\n/**\n * Text-style classes from styles/typography.css.\n *\n * IMPORTANT: every text-* utility we define via @theme (e.g. `text-body-medium`,\n * `text-title-1-semibold`) must be listed here. Otherwise tailwind-merge — which\n * has no view of our Tailwind theme — treats them as text-color utilities and\n * silently drops them when they appear in the same className as a real color\n * (`text-foreground-full`, `text-text-primary`, etc).\n *\n * If you add or rename a text style in typography.css, mirror the change here.\n */\nconst TEXT_FAMILIES = [\n  \"large-title\",\n  \"display-1\",\n  \"display-2\",\n  \"display-3\",\n  \"display-4\",\n  \"title-1\",\n  \"title-2\",\n  \"title-3\",\n  \"headline\",\n  \"body\",\n  \"body-2\",\n  \"caption-1\",\n  \"caption-2\",\n] as const;\n\nconst TEXT_WEIGHTS = [\"regular\", \"medium\", \"semibold\", \"bold\"] as const;\n\nconst TEXT_STYLE_SUFFIXES = TEXT_FAMILIES.flatMap((family) =>\n  TEXT_WEIGHTS.map((weight) => `${family}-${weight}`),\n);\n\nconst twMerge = extendTailwindMerge({\n  extend: {\n    classGroups: {\n      \"font-size\": [{ text: TEXT_STYLE_SUFFIXES }],\n    },\n  },\n});\n\n/**\n * Merge Tailwind classes safely. Last-write-wins on conflicting utilities.\n */\nexport const cx = twMerge;\n\n/**\n * Identity helper that gives the Tailwind IntelliSense extension a hook for\n * sorting classes inside style objects (the extension doesn't sort inside\n * plain object literals otherwise).\n */\nexport function sortCx<\n  T extends Record<\n    string,\n    string | number | Record<string, string | number | Record<string, string | number>>\n  >,\n>(classes: T): T {\n  return classes;\n}\n"
+    }
+  ]
+}

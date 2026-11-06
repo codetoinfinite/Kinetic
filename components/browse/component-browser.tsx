@@ -32,8 +32,12 @@ type CategoryKey = ManifestEntry['category'];
 
 const CATEGORIES = Object.keys(CATEGORY_LABEL) as CategoryKey[];
 
-/** Height of the sticky site header; the toolbar hangs off the bottom of it. */
-const HEADER_HEIGHT = 56;
+/**
+ * Height of the sticky site header; the toolbar hangs off the bottom of it.
+ * `h-16` in `components/nav/header-bar.tsx`, so 64 — at 56 every realign
+ * scrolled the results 8px under the header.
+ */
+const HEADER_HEIGHT = 64;
 
 export interface ComponentBrowserProps {
   manifest: ManifestEntry[];
@@ -54,6 +58,24 @@ export function ComponentBrowser({
   const inputRef = useRef<HTMLInputElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  // Navigating to /components?category=text from somewhere already on this page
+  // re-renders this component with new props rather than remounting it, so the
+  // initialisers above never run a second time. The footer's category links —
+  // which are on every page, this one included — changed the URL and left the
+  // grid untouched, and the sync effect below then wrote the stale state back
+  // into the query string. Re-deriving during render is React's own answer to
+  // props that have to reset state; an effect would render one frame of the
+  // wrong grid first.
+  const [lastInitial, setLastInitial] = useState({
+    category: initialCategory,
+    runtime: initialRuntime,
+  });
+  if (lastInitial.category !== initialCategory || lastInitial.runtime !== initialRuntime) {
+    setLastInitial({ category: initialCategory, runtime: initialRuntime });
+    setCategory(toCategory(initialCategory));
+    setRuntime(isRuntimeTier(initialRuntime) ? initialRuntime : null);
+  }
 
   // Typing stays responsive even when the result set is large: the input is
   // controlled by `query`, the (expensive) grid renders from the deferred copy.

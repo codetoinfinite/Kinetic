@@ -36,7 +36,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1', 'gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'Choosing a destination does not navigate. It plays an exit: the DOM chrome lifts and fades, the ring of cards is shoved thirty slots forward while its vertical spacing explodes and its radius collapses, the planes dissolve in index order, and only after one settle frame does the router move. The ease is expo.in, so almost nothing happens for the first half-second and then everything happens at once.',

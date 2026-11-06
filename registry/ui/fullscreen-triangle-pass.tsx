@@ -218,12 +218,22 @@ export function FullscreenTrianglePass({
   };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const el = host.current;
+    if (!el) return;
     if (!hasWebGL()) {
       setSupported(false);
       return;
     }
+
+    // The canvas is built here rather than rendered by React. Cleanup releases
+    // the context through `WEBGL_lose_context`, and a canvas that has been
+    // through that never yields another one — `getContext` hands back the same
+    // lost object. So the element must not be one React keeps and re-gives to
+    // the next effect run: a changed `fragment`, or StrictMode's double invoke,
+    // did exactly that and every shader compiled against a dead context, which
+    // left the component permanently on its fallback.
+    const canvas = document.createElement('canvas');
+    canvas.className = 'block h-full w-full';
 
     // `antialias: false` — a fullscreen pass has no polygon edges to smooth,
     // so MSAA buys nothing and costs a multisample resolve every frame.
@@ -245,12 +255,30 @@ export function FullscreenTrianglePass({
       setSupported(false);
       return;
     }
+
+    el.append(canvas);
+    canvasRef.current = canvas;
     passRef.current = pass;
     setSupported(true);
 
+    // A dropped context with nobody listening is a pass that never draws again:
+    // a blank rectangle, no error, no fallback. Better to concede to the
+    // fallback. `preventDefault` is required or the loss is final by spec.
+    const onLost = (event: Event): void => {
+      event.preventDefault();
+      // Detached as well as conceded: the fallback renders as a sibling in
+      // normal flow, and a canvas left in place sits on top of it.
+      canvas.remove();
+      setSupported(false);
+    };
+    canvas.addEventListener('webglcontextlost', onLost);
+
     return () => {
+      canvas.removeEventListener('webglcontextlost', onLost);
       passRef.current = null;
+      canvasRef.current = null;
       disposePass(pass);
+      canvas.remove();
     };
   }, [fragment]);
 
@@ -279,9 +307,8 @@ export function FullscreenTrianglePass({
 
   return (
     <div ref={host} className={cn('relative h-full w-full overflow-hidden', className)}>
-      {supported ? (
-        <canvas ref={canvasRef} className="block h-full w-full" />
-      ) : (
+      {/* The canvas is appended by the effect above, not rendered here. */}
+      {!supported && (
         <div
           aria-hidden
           className="h-full w-full bg-bg"

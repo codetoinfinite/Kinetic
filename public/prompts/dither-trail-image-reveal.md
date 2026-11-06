@@ -246,6 +246,15 @@ export function DitherTrailImageReveal({
 
   const ready = supported && width > 1 && height > 1;
 
+  /* The measured size, readable from an async callback. The image loader below
+     runs on `[src, ready]`, so its success handler closes over whichever size
+     was current when the fetch STARTED — and a decode routinely lands a few
+     hundred milliseconds later, after the observer has reported the real box.
+     Fitting against the stale numbers left the picture visibly mis-cropped
+     until something else happened to resize the element. */
+  const size = useRef({ width, height });
+  size.current = { width, height };
+
   /** object-fit: cover, replicated in uv space so the shader matches the CSS. */
   const applyCover = (w: number, h: number) => {
     const s = stage.current;
@@ -278,11 +287,21 @@ export function DitherTrailImageReveal({
        and `getContext` on that same element afterwards returns the DEAD context
        instead of a fresh one — blank in development, fine in production, which
        is the worst way for a bug to behave. */
-    const renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      alpha: false,
-      powerPreference: 'low-power',
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        alpha: false,
+        powerPreference: 'low-power',
+      });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setSupported(false);
+      return;
+    }
     // Two caps, and the lower wins: a ratio cap for sane machines and an
     // absolute width cap so a 4K hero cannot ask for a 7680px buffer.
     const ratio = Math.min(pixelRatio(maxDpr), MAX_BUFFER_WIDTH / Math.max(width, 1));
@@ -427,7 +446,8 @@ export function DitherTrailImageReveal({
         if (!s) return;
         s.uniforms.uImage.value = texture;
         s.uniforms.uHasImage.value = 1;
-        applyCover(width, height);
+        // From the ref, not the closure: see the note on `size` above.
+        applyCover(size.current.width, size.current.height);
         s.render();
       },
       undefined,

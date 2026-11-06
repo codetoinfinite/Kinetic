@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/lib/damp.ts', type: 'registry:lib', role: 'frame-rate-independent interpolation, clamp, per-frame conversion' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'The hard part of a scroll-scrubbed hero is never the playback — it is the mapping and the throttle. Scroll becomes a smoothed progress value that snaps when it arrives; progress becomes a quantised frame index; the frame is only ever requested when that index changes; and the loop unsubscribes once the two agree. This component ships all four and draws its frames procedurally onto a canvas, so the technique can be read without a video file in the way.',

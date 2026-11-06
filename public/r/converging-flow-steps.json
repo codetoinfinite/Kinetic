@@ -11,9 +11,9 @@
     "gsap@^3.15.0"
   ],
   "registryDependencies": [
-    "http://localhost:8927/r/use-gsap.json",
-    "http://localhost:8927/r/use-reduced-motion.json",
-    "http://localhost:8927/r/use-resize-observer.json"
+    "https://kinetic.example.com/r/use-gsap.json",
+    "https://kinetic.example.com/r/use-reduced-motion.json",
+    "https://kinetic.example.com/r/use-resize-observer.json"
   ],
   "files": [
     {
@@ -25,6 +25,7 @@
   ],
   "meta": {
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "gsap",

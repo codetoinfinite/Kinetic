@@ -115,16 +115,26 @@ export function SteppedFilmGrain({
       return;
     }
 
-    const renderer = new THREE.WebGLRenderer({
-      // Nothing here has a geometric edge, so MSAA would allocate a
-      // multisample buffer the size of the canvas and resolve it every draw
-      // for no visible difference.
-      antialias: false,
-      alpha: true,
-      depth: false,
-      stencil: false,
-      powerPreference: 'low-power',
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        // Nothing here has a geometric edge, so MSAA would allocate a
+        // multisample buffer the size of the canvas and resolve it every draw
+        // for no visible difference.
+        antialias: false,
+        alpha: true,
+        depth: false,
+        stencil: false,
+        powerPreference: 'low-power',
+      });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setUnsupported(true);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio(maxDpr));
     renderer.setClearAlpha(0);
 

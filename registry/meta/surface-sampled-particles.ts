@@ -23,16 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [
-    'webgl',
-    'prng',
-    'damp',
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-  ],
 
   summary:
     'Turns any object — one primitive or a whole loaded model — into a particle shell whose density is uniform over the surface rather than over the mesh list. One cumulative distribution is built over the world-space area of every triangle in the object and sampled by binary search, so a face a thousand times larger than its neighbour is picked a thousand times more often. The shell then assembles bottom-up on a per-particle window, breathes along its own sampled normals, and is ringed by orbit lines whose radii are measured from the cloud instead of hard-coded.',

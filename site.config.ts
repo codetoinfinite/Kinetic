@@ -113,8 +113,22 @@ function resolveOrigin(): string {
 export const SITE_ORIGIN: string = resolveOrigin().replace(/\/+$/, '');
 
 /**
- * True while the origin is still the placeholder nobody has replaced.
+ * True while the origin is not one a stranger could fetch from.
+ *
  * `scripts/build-registry.ts` turns this into a hard failure on CI, where a
  * build that bakes `example.com` into 119 install commands is not a warning.
+ * The check used to look for `example.com` alone, which let a local build pass
+ * and committed 801 `http://localhost:8927` URLs into `public/r` — install
+ * commands that resolve to nothing on any machine but the one that built them.
  */
-export const SITE_ORIGIN_IS_PLACEHOLDER: boolean = SITE_ORIGIN.includes('example.com');
+const UNREACHABLE_HOST = /^(localhost|127(\.\d+){3}|0\.0\.0\.0|\[::1?\]|.*\.local)$/i;
+
+export const SITE_ORIGIN_IS_PLACEHOLDER: boolean = ((): boolean => {
+  if (SITE_ORIGIN.includes('example.com')) return true;
+  try {
+    return UNREACHABLE_HOST.test(new URL(SITE_ORIGIN).hostname);
+  } catch {
+    // Not a parseable absolute URL, which is its own kind of unusable.
+    return true;
+  }
+})();

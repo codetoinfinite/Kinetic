@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A number tweens from one value to another on `power2.inOut` rather than linearly, so it reads as loading rather than as a progress meter — slow to commit, quick through the middle, easing onto the final figure. The thing being tweened is a plain numeric object; the string on screen is formatted from it on every update and written with `textContent`, so React never re-renders while the count runs. A transparent sizer reserves the width of the wider endpoint, so nothing after the counter moves as digits are added.',

@@ -114,7 +114,17 @@ export function OrbitRingPoints({
     // `antialias: false` is deliberate: the fragment shader anti-aliases each
     // disc itself with a smoothstep, so MSAA would pay for a whole extra
     // sample buffer to solve a problem that is already solved.
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setUnsupported(true);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio());
     renderer.setClearAlpha(0);
 

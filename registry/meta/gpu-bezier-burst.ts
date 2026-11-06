@@ -19,7 +19,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: ['webgl', 'prng', 'use-raf', 'use-resize-observer', 'use-reduced-motion'],
 
   summary:
     'Concentric rings of dots turning slowly. Fire a sector — by clicking it, or by waiting for the automatic cycle — and its particles burst outward and fade, each one following its own cubic-bezier curve. The curve is the same four numbers CSS takes, but solved per vertex per frame by Newton\'s method, which is what lets two hundred particles carry two hundred different easings while the CPU only advances a clock.',

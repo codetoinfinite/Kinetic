@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "feature-card-grid",
+  "type": "registry:ui",
+  "title": "Feature Card Grid",
+  "description": "Landing grid of feature cards, each topped by a small illustration built from kit parts that plays a state change on hover or focus.",
+  "categories": [
+    "block"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/feature-card-grid.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/feature-card-grid.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Feature Card Grid\" (boardui.com/).\n * No BoardUI source was used.\n */\n\"use client\";\n\nimport { useState } from \"react\";\nimport type { FocusEvent, MouseEventHandler, ReactNode } from \"react\";\nimport { cx } from \"@/lib/cx\";\n\nexport interface FeatureCardState {\n  /** True while the card is hovered or holds keyboard focus. */\n  active: boolean;\n}\n\nexport interface FeatureCardProps {\n  title: ReactNode;\n  description?: ReactNode;\n  /** Artwork in the top area; a function receives `{ active }` so it can react to hover. */\n  illustration?: ReactNode | ((state: FeatureCardState) => ReactNode);\n  /** Turns the whole card into a link. */\n  href?: string;\n  onClick?: MouseEventHandler<HTMLElement>;\n  /** Columns spanned from the two-column breakpoint up. */\n  span?: 1 | 2;\n  className?: string;\n}\n\n// #region critical\n/**\n * One tile of the grid. Hover and focus-within raise an `active` flag that is\n * handed to the illustration, so artwork built from kit parts can play a\n * small state change (a bar fills, a switch flips, a step completes) instead\n * of the whole card merely brightening. The artwork is `inert` and hidden from\n * assistive tech: it is a picture of a component, not a working one.\n */\nexport function FeatureCard({ title, description, illustration, href, onClick, span = 1, className }: FeatureCardProps) {\n  const [hovered, setHovered] = useState(false);\n  const [focused, setFocused] = useState(false);\n  const active = hovered || focused;\n  const art = typeof illustration === \"function\" ? illustration({ active }) : illustration;\n\n  const onBlur = (event: FocusEvent<HTMLElement>) => {\n    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false);\n  };\n\n  const body = (\n    <>\n      <div\n        aria-hidden=\"true\"\n        inert\n        className=\"relative h-[196px] overflow-hidden mask-b-from-75% mask-b-to-100%\"\n      >\n        <div\n          className={cx(\n            \"h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none\",\n            active && \"-translate-y-1 motion-reduce:translate-y-0\",\n          )}\n        >\n          {art}\n        </div>\n      </div>\n      <div className=\"flex flex-col gap-1 px-5 pt-3 pb-5\">\n        <h3 className=\"text-headline-medium text-text-primary\">{title}</h3>\n        {description ? (\n          <p className=\"line-clamp-2 text-body-regular text-text-tertiary\">{description}</p>\n        ) : null}\n      </div>\n    </>\n  );\n\n  const shared = {\n    \"data-active\": active ? \"true\" : \"false\",\n    onPointerEnter: () => setHovered(true),\n    onPointerLeave: () => setHovered(false),\n    onFocus: () => setFocused(true),\n    onBlur,\n    onClick,\n    className: cx(\n      \"group/feature relative flex flex-col overflow-hidden rounded-3xl border bg-background-primary-default text-start\",\n      \"border-border-button-default shadow-xs transition-[border-color,box-shadow] duration-200 ease-out\",\n      \"hover:border-border-button-hover hover:shadow-md\",\n      \"outline-none focus-visible:ring-2 focus-visible:ring-border-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background-full\",\n      span === 2 && \"@xl/features:col-span-2\",\n      className,\n    ),\n  };\n\n  return href ? (\n    <a href={href} {...shared}>\n      {body}\n    </a>\n  ) : (\n    <article {...shared}>{body}</article>\n  );\n}\n// #endregion\n\nexport interface FeatureCardGridProps {\n  /** Small line above the title, e.g. an install command. */\n  eyebrow?: ReactNode;\n  title?: ReactNode;\n  description?: ReactNode;\n  actions?: ReactNode;\n  /** `FeatureCard` elements. */\n  children: ReactNode;\n  className?: string;\n}\n\nexport function FeatureCardGrid({ eyebrow, title, description, actions, children, className }: FeatureCardGridProps) {\n  const hasHeader = Boolean(eyebrow || title || description || actions);\n  return (\n    <section className={cx(\"@container/features w-full\", className)}>\n      <div className=\"mx-auto flex w-full max-w-[1280px] flex-col px-4 @3xl/features:px-8\">\n        {hasHeader ? (\n          <header className=\"mx-auto mb-12 flex max-w-[640px] flex-col items-center text-center\">\n            {eyebrow ? <div className=\"mb-5\">{eyebrow}</div> : null}\n            {title ? (\n              <h2 className=\"text-display-4-semibold tracking-[-0.03em] text-balance text-text-primary @3xl/features:text-display-2-semibold\">\n                {title}\n              </h2>\n            ) : null}\n            {description ? (\n              <p className=\"mt-4 max-w-[460px] text-headline-regular text-pretty text-text-secondary\">{description}</p>\n            ) : null}\n            {actions ? <div className=\"mt-7 flex flex-wrap items-center justify-center gap-2\">{actions}</div> : null}\n          </header>\n        ) : null}\n        <div className=\"grid grid-cols-1 gap-4 @xl/features:grid-cols-2 @4xl/features:grid-cols-3 @6xl/features:grid-cols-4 @6xl/features:gap-6\">\n          {children}\n        </div>\n      </div>\n    </section>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "features",
+      "grid",
+      "landing",
+      "marketing",
+      "cards",
+      "boardui"
+    ]
+  }
+}

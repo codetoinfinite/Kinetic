@@ -19,7 +19,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion', 'use-resize-observer', 'damp'],
 
   summary:
     'A horizontal `overflow-x-auto` container with `scroll-snap-type: x proximity`. Each panel\'s distance from the centre of the viewport is normalised to roughly ±1 and mapped onto a per-element `perspective() translateZ() rotateY() scale()`, so panels turn their inside edge toward you as they leave the middle. The scroll position itself is never animated by JavaScript — momentum, rubber-banding and keyboard paging are the browser\'s.',

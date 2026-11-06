@@ -3,7 +3,7 @@
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
-import { useEffect, useRef, type ReactNode } from 'react';
+import { isValidElement, useEffect, useRef, type ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 import { useReducedMotion } from '@/registry/hooks/use-reduced-motion';
 
@@ -66,6 +66,56 @@ const STAGGER = 0.09;
 const START = 'top 88%';
 const DEBOUNCE_MS = 200;
 
+/**
+ * A stable string identity for `children`: the text that will be measured and
+ * split, plus the element tags inside it.
+ *
+ * React builds a fresh node object on every parent render for anything that is
+ * not a bare string, so naming `children` in a dependency array actually says
+ * "tear the whole lifecycle down and rebuild it whenever the parent renders,
+ * for any reason at all". That costs more than a wasted split here. `revealed`
+ * is a local of the effect, so a rebuild resets it to false; the `once: true`
+ * ScrollTrigger is then recreated on an element already past its start and
+ * fires `onEnter` straight away. A paragraph the reader is half way through
+ * drops back below the mask and plays its entrance a second time, and the
+ * tween that was running is discarded with the context that owned it. A
+ * sibling toggling a menu is enough to trigger it.
+ *
+ * Dropping the dependency outright is not the fix either — the line wrappers
+ * would go on describing text that is no longer there. So the node is
+ * flattened to the only things a line measurement depends on, and that string
+ * is the dependency. Same content, same string, no re-split.
+ */
+function childrenSignature(node: ReactNode): string {
+  if (node === null || node === undefined || typeof node === 'boolean') return '';
+  if (typeof node === 'string' || typeof node === 'number' || typeof node === 'bigint') {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    // A separator that cannot occur in text, so ['ab', 'c'] and ['a', 'bc'] do
+    // not collapse onto the same key.
+    return (node as ReactNode[]).map(childrenSignature).join('\u0001');
+  }
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    // The tag belongs in the signature. SplitText walks the markup it is given,
+    // and an <em>, a <strong> or a <br> moves the line boxes even when the text
+    // reads exactly the same.
+    const { type } = node;
+    const tag =
+      typeof type === 'string'
+        ? type
+        : (type as { displayName?: string; name?: string }).displayName ||
+          (type as { name?: string }).name ||
+          'component';
+    return `<${tag}>${childrenSignature(node.props.children)}`;
+  }
+  // Iterables, portals and promises have no cheap textual identity. A constant
+  // under-reports a change, which is the safe direction: the alternative is a
+  // fresh value every render, i.e. exactly the bug this function exists to
+  // remove.
+  return '';
+}
+
 export function FontSafeTextSplit({
   children,
   type = 'lines',
@@ -80,6 +130,11 @@ export function FontSafeTextSplit({
 }: FontSafeTextSplitProps) {
   const root = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+  // Compared by value, not by identity. The node itself still goes into the
+  // tree below — only the effect's notion of "the content changed" is derived
+  // from this string. See `childrenSignature` for what listing `children` here
+  // costs.
+  const contentKey = childrenSignature(children);
 
   useEffect(() => {
     const el = root.current;
@@ -182,7 +237,7 @@ export function FontSafeTextSplit({
       teardown();
     };
   }, [
-    children,
+    contentKey,
     type,
     mask,
     y,

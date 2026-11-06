@@ -30,7 +30,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A page-enter that tips its container up from below the fold like a lid rather than sliding it in. The panel starts at 120% of its own height, rotated -45deg in X about its bottom edge, and lands over 1.4s on expo.out; captions inside it stagger in starting 0.6s before it arrives. A cue fires at 0.8s so an expensive scene can start while the panel is still in flight.',

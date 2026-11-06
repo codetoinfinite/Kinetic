@@ -24,7 +24,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: ['webgl', 'prng', 'use-raf', 'use-resize-observer', 'use-reduced-motion'],
 
   summary:
     'Five concentric orbits of static path dots, each carrying one brighter dot that travels it. Every dot in the system is a vertex of one `THREE.Points` object, so ring count and dot count cost buffer memory but never a second draw call. The outer rings are dimmer than the inner ones, which reads as depth even though the camera is orthographic and nothing is actually further away.',

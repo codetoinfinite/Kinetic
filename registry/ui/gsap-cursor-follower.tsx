@@ -158,9 +158,17 @@ export function CursorFollower({
     <div ref={root} className={cn('relative isolate overflow-hidden', className)}>
       {children}
 
+      {/* Hidden in the markup, not only by the effect. `autoAlpha: 0` is set
+          from JS, and there are two windows where that never happens: the frame
+          between paint and hydration, and a coarse pointer — where the effect
+          bails before it reaches the `gsap.set`. Both left a `targetSize` accent
+          disc and the caption sitting in the panel's top-left corner. GSAP's
+          `autoAlpha` writes exactly these two properties, so it takes over
+          cleanly from here. */}
       <div
         ref={wrap}
         aria-hidden
+        style={{ visibility: 'hidden', opacity: 0 }}
         className="pointer-events-none absolute left-0 top-0 z-30 h-0 w-0"
       >
         <div

@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A bar caret that blinks the way a terminal cursor does: fully on, then fully off, with nothing in between. The switch is `animation-timing-function: step-end`, which holds each keyframe value until the next one rather than interpolating toward it. The keyframe distribution is deliberately uneven so the rhythm reads as alive rather than as a metronome, and the whole thing is CSS — no JavaScript runs after mount.',

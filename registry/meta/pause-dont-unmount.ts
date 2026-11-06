@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: ['webgl', 'prng', 'use-raf', 'use-reduced-motion', 'use-resize-observer'],
 
   summary:
     'A rotating stack of slabs mounted twice over: once behind `<Activity mode="hidden">` and once behind a plain conditional, switchable live. Hiding tears the Effects down either way — the WebGL context is released, which is what you want, since contexts are a scarce per-process resource. What Activity keeps is everything React owns: the fiber, the DOM, and every `useState` and `useRef` value inside. So the stack resumes at the angle it left, and the build counter on its fiber survives to be incremented again. Requires React 19.2 or newer.',

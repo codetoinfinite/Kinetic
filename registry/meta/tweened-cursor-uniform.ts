@@ -22,7 +22,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1', 'gsap@^3.15.0'],
-  registryDependencies: ['use-raf', 'use-in-view', 'use-visibility', 'use-resize-observer', 'use-reduced-motion', 'webgl'],
 
   summary:
     'A full-quad fragment shader draws a procedural grid and pulls its UVs toward a lens centred on the pointer. The lens position is not assigned into the uniform — GSAP tweens it onto a plain object, and the render loop copies that object across each frame, so the distortion trails the cursor and then comes fully to rest under it. Presence is a second, independent tween, so leaving the container dims the lens where it stands rather than dragging it away.',

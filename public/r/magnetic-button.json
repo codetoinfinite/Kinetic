@@ -21,6 +21,7 @@
   ],
   "meta": {
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "gsap",

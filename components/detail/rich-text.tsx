@@ -30,7 +30,12 @@ export function Rich({ children }: { children: string }) {
         index % 2 === 1 ? (
           <code
             key={index}
-            className="rounded-sm border border-line bg-bg-subtle px-1 py-px font-mono text-[0.85em] text-fg"
+            // A code span is routinely one unbreakable token — a call
+            // expression, a path, a package spec. `wrap-anywhere` rather than
+            // `wrap-break-word` because only `anywhere` also lowers the
+            // min-content size, which is what keeps a long token from widening
+            // the layout track it sits in on a narrow screen.
+            className="rounded-sm border border-line bg-bg-subtle px-1 py-px font-mono text-[0.85em] wrap-anywhere text-fg"
           >
             {part}
           </code>

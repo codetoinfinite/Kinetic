@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/magnetic-button.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'The element translates toward the pointer by a fraction of its offset from centre, and the label translates further still, so the text appears to lead the box it sits in. Release is an elastic overshoot rather than a linear return, which is the difference between "springy" and "sliding back".',

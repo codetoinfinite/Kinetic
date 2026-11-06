@@ -91,6 +91,15 @@ export function SectionNav({
     setActive(id);
     target.scrollIntoView({ behavior: behaviour(), block: 'start' });
     window.history.replaceState(null, '', `#${id}`);
+
+    // `preventDefault` cancels the browser's fragment navigation, and with it
+    // the move of the sequential-focus starting point. Left alone, the page
+    // scrolls to the section but the next Tab resumes from the nav link, so a
+    // keyboard user is put in front of content they cannot then read forwards
+    // from. Sections are not focusable in their own right, hence `-1`; the
+    // scroll has already happened, hence `preventScroll`.
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
   }
 
   return (

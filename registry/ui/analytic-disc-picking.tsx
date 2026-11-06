@@ -175,7 +175,17 @@ export function AnalyticDiscPicking({
     // finish. A React-rendered `<canvas ref>` cannot be used: StrictMode
     // double-invokes the effect, the first cleanup calls `forceContextLoss()`,
     // and the second run is handed the same, now permanently dead, element.
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setUnsupported(true);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio());
     renderer.setClearAlpha(0);
 
@@ -277,13 +287,29 @@ export function AnalyticDiscPicking({
       disposeRenderer(renderer);
       renderer.domElement.remove();
     };
-  }, [ready, count, discRadius, ringRadius, color, accent, seed]);
+    // `ringRadius` is deliberately absent: the build above never reads it. It
+    // is applied per frame in the rAF below, so listing it here bought nothing
+    // and cost a full teardown — thirteen materials, the geometry, and the
+    // WebGL context itself — on every change. Bound to a slider that is one
+    // context per input event, and browsers cap live contexts at around
+    // sixteen before they start killing the oldest.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, count, discRadius, color, accent, seed]);
 
   // Resize is its own effect: a container reflow costs a `setSize` call rather
   // than a teardown and rebuild of thirteen materials.
   useEffect(() => {
     stage.current?.resize(width, height);
   }, [width, height]);
+
+  // The rAF repositions the discs from `ringRadius` every frame but only
+  // *paints* when something marked the frame dirty, and under reduced motion
+  // nothing does — the spin that would normally set it is frozen. Marking it
+  // here is what makes a radius change visible without waiting for a pointer
+  // move. The rebuild used to cover this by accident.
+  useEffect(() => {
+    dirty.current = true;
+  }, [ringRadius]);
 
   const readPointer = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
     const el = host.current;

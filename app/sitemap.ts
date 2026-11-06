@@ -10,6 +10,15 @@ import { SITE_ORIGIN } from '@/site.config';
    change constantly, are the ones that must be derived. */
 const DOCS = ['/docs/installation', '/docs/theming', '/docs/prompts', '/docs/licensing'] as const;
 
+/* The BoardUI-kit chat starter: a whole app under one prefix. `/components`
+   inside it only redirects to the catalogue, so it is not listed. */
+const TEMPLATES = [
+  '/templates/chat-starter',
+  '/templates/chat-starter/dashboard',
+  '/templates/chat-starter/login',
+  '/templates/chat-starter/signup',
+] as const;
+
 /* ==========================================================================
    /sitemap.xml
    --------------------------------------------------------------------------
@@ -35,6 +44,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_ORIGIN}${href}`,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
+    })),
+    ...TEMPLATES.map((href) => ({
+      url: `${SITE_ORIGIN}${href}`,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     })),
     ...MANIFEST.map((entry) => ({
       url: `${SITE_ORIGIN}/c/${entry.slug}`,

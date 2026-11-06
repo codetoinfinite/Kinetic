@@ -25,7 +25,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A full-screen fragment shader on a single triangle. Two octaves of value-noise fbm are sampled twice to build a 2D offset, and that offset is fed back into a third sample — the result flows instead of cross-fading. The pointer enters the warp three times with different weights and a sign flip, so the fog leans toward the cursor without following it.',

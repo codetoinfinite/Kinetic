@@ -22,15 +22,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [
-    'webgl',
-    'damp',
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-  ],
 
   summary:
     'A hero field built the way a compositor builds one: a background ramp and three additive gradient fills are accumulated into an offscreen target, a bright-pass and blur run into a second target at half size, and a final pass adds them together with a vignette and a dither. The canvas is written exactly once, by the last pass. It is a small piece of art in its own right and a complete, disposable template for any offscreen chain.',

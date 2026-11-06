@@ -22,16 +22,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [
-    'webgl',
-    'prng',
-    'damp',
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-  ],
 
   summary:
     'Several thousand dots in one draw call, with a wave travelling outward from a point left of centre. The displacement is a sine in radius minus a phase in time, attenuated exponentially, so the field is violent near the source and nearly still at the rim — which is what gives the motion an origin rather than making it a screensaver. Dot density along the radius is a hand-placed cubic B-spline, so the rings and gaps in the layout are drawn rather than derived from a formula.',

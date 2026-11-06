@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "patient-info-card",
+  "type": "registry:ui",
+  "title": "Patient Info Card",
+  "description": "A medical-dashboard profile card: a 66px avatar with an add-photo button, the patient's name and four icon label/value rows.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/avatar.json",
+    "https://kinetic.example.com/r/button.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/template-copy.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/patient-info-card.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/patient-info-card.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/application/medical/patient-info-card.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport { useTemplateCopy } from \"@/lib/template-copy\";\n\nimport { RiAddLine, RiAsterisk, RiDropLine, RiMenLine, RiStethoscopeLine } from \"@remixicon/react\";\nimport type { ComponentType } from \"react\";\nimport { Avatar } from \"@/components/motion/avatar\";\nimport { Button } from \"@/components/motion/button\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Figma source: Board UI → medical profile dashboard → Frame 125 (node\n * 3950:5657). Patient photo, name, and a stack of label/value rows.\n *\n * Vertical rhythm from Figma's absolute positions: avatar top 24, name top\n * 105 (avatar bottom 90 → 15px gap), details top 146 (name bottom 131 →\n * 15px gap again) — hence the odd-looking `gap-[15px]`, replicated rather\n * than rounded to a spacing step.\n */\n\ntype IconComponent = ComponentType<{ className?: string; \"aria-hidden\"?: boolean | \"true\" | \"false\" }>;\n\ntype Detail = { icon: IconComponent; label: string; value: string };\n\nconst DETAILS: Detail[] = [\n  { icon: RiAsterisk, label: \"Date of Birth\", value: \"28 July, 1997\" },\n  { icon: RiMenLine, label: \"Gender\", value: \"Male\" },\n  { icon: RiDropLine, label: \"Blood Type\", value: \"A rh+\" },\n  { icon: RiStethoscopeLine, label: \"GP Doctor\", value: \"Mattheus Clarkson\" },\n];\n\n// #region critical\nexport function PatientInfoCard({ className }: { className?: string } = {}) {\n  const localize = useTemplateCopy();\n  return localize((\n    <section\n      className={cx(\n        \"flex h-[330px] w-full min-w-0 flex-col items-center gap-[15px] rounded-[20px] bg-background-secondary-default px-2.5 pt-6 pb-2.5\",\n        className,\n      )}\n    >\n      <div className=\"relative\">\n        <Avatar size=\"lg\" initials=\"JL\" className=\"size-[66px] text-[24.75px]\" />\n        <Button\n          variant=\"secondary\"\n          size=\"xs\"\n          iconOnly\n          leadingIcon={RiAddLine}\n          aria-label=\"Add profile photo\"\n          className=\"absolute -top-0.5 -end-0.5 rounded-full\"\n        />\n      </div>\n      <p className=\"text-title-2-medium whitespace-nowrap text-text-primary\">Jordan Lee</p>\n      <div className=\"flex w-full flex-1 flex-col gap-2.5\">\n        {DETAILS.map((detail) => (\n          <div\n            key={detail.label}\n            className=\"flex w-full items-center justify-between rounded-2lg bg-background-inner-default px-2.5 py-2\"\n          >\n            <div className=\"flex items-center gap-1.5\">\n              <detail.icon className=\"size-4 shrink-0 text-text-secondary\" aria-hidden />\n              <span className=\"text-body-regular whitespace-nowrap text-text-secondary\">\n                {detail.label}\n              </span>\n            </div>\n            <span className=\"text-body-medium whitespace-nowrap text-text-primary\">{detail.value}</span>\n          </div>\n        ))}\n      </div>\n    </section>\n  ));\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "profile",
+      "card",
+      "medical",
+      "dashboard",
+      "avatar",
+      "boardui"
+    ]
+  }
+}

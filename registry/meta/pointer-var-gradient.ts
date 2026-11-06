@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/pointer-var-gradient.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A radial gradient declared once in CSS reads its centre from `--pointer-x` and `--pointer-y`. The pointer handler does nothing but write those two properties as percentages. There is no animation frame, no tween library and no `background` string assembled in JavaScript.',

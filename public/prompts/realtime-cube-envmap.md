@@ -116,7 +116,17 @@ export function RealtimeCubeEnvmap({
     const el = host.current;
     if (!el || !ready) return;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setSupported(false);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(el.clientWidth, el.clientHeight, false);
     renderer.domElement.style.display = 'block';

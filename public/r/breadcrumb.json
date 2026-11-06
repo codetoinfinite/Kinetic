@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "breadcrumb",
+  "type": "registry:ui",
+  "title": "Breadcrumb",
+  "description": "Ancestor-page trail with auto-inserted chevrons; each item is a link, a button or the current page, with optional 16px icons.",
+  "categories": [
+    "navigation"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/chevrons.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/breadcrumb.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/breadcrumb.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/breadcrumb/breadcrumb.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport Link from \"next/link\";\nimport { Children, Fragment, isValidElement } from \"react\";\nimport type { ComponentType, ReactNode, Ref } from \"react\";\nimport { ChevronRightSmall } from \"@/lib/chevrons\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Figma source: Board UI → dashboard 1 breadcrumb (node 3731:3011).\n *\n * Trail of ancestor pages separated by chevrons.\n *   item      Caption 1/Medium, text/tertiary, gap 6 (icon/avatar ↔ label)\n *   hover     interactive items darken to text/secondary with a soft\n *             background/primary/hover pill\n *   current   aria-current=\"page\", neutral/700, not interactive\n *   separator ChevronRightSmall, text/tertiary, gap 10 between items\n *\n * Compose <BreadcrumbItem>s inside <Breadcrumb>; separators are inserted\n * automatically. An item becomes a link when given `href`, a button when given\n * `onClick`, otherwise a plain label (use `current` for the active page).\n */\n\ntype IconComponent = ComponentType<{\n  className?: string;\n  \"aria-hidden\"?: boolean | \"true\" | \"false\";\n}>;\n\nexport interface BreadcrumbProps {\n  children: ReactNode;\n  \"aria-label\"?: string;\n  className?: string;\n  ref?: Ref<HTMLElement>;\n}\n\n// #region critical\nexport function Breadcrumb({\n  children,\n  \"aria-label\": ariaLabel = \"Breadcrumb\",\n  className,\n  ref,\n}: BreadcrumbProps) {\n  const items = Children.toArray(children).filter(isValidElement);\n\n  return (\n    <nav\n      ref={ref}\n      aria-label={ariaLabel}\n      className={cx(\n        \"flex w-full items-center overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden\",\n        className,\n      )}\n    >\n      <ol className=\"flex items-center gap-2.5 px-1\">\n        {items.map((item, index) => (\n          <Fragment key={item.key ?? index}>\n            {/* An <ol> may only hold <li>s; aria-hidden keeps the separator out of\n                the item count screen readers announce. */}\n            {index > 0 && (\n              <li aria-hidden className=\"flex shrink-0\">\n                <ChevronRightSmall className=\"size-3 text-text-tertiary\" />\n              </li>\n            )}\n            {item}\n          </Fragment>\n        ))}\n      </ol>\n    </nav>\n  );\n}\n\n// #endregion\n\nexport interface BreadcrumbItemProps {\n  children?: ReactNode;\n  /** Optional leading icon (16px), inherits the item color. */\n  icon?: IconComponent;\n  href?: string;\n  onClick?: () => void;\n  /** Marks the active page: not interactive, darker text. */\n  current?: boolean;\n  className?: string;\n}\n\nexport function BreadcrumbItem({\n  children,\n  icon: Icon,\n  href,\n  onClick,\n  current = false,\n  className,\n}: BreadcrumbItemProps) {\n  const content = (\n    <>\n      {Icon && <Icon className=\"size-4 shrink-0\" aria-hidden />}\n      {children}\n    </>\n  );\n\n  if (current) {\n    return (\n      <li\n        aria-current=\"page\"\n        className={cx(\n          \"flex items-center gap-1.5 text-caption-1-medium whitespace-nowrap text-text-secondary\",\n          className,\n        )}\n      >\n        {content}\n      </li>\n    );\n  }\n\n  const interactiveClass = cx(\n    \"-mx-1 flex items-center gap-1.5 rounded-md px-1 py-0.5 text-caption-1-medium whitespace-nowrap text-text-tertiary\",\n    \"transition-colors duration-150 ease-in-out outline-none\",\n    \"hover:bg-background-primary-hover hover:text-text-secondary\",\n    \"focus-visible:ring-2 focus-visible:ring-border-focus-ring\",\n    className,\n  );\n\n  return (\n    <li className=\"flex items-center\">\n      {href ? (\n        <Link href={href} className={interactiveClass}>\n          {content}\n        </Link>\n      ) : (\n        <button type=\"button\" onClick={onClick} className={cx(\"cursor-pointer\", interactiveClass)}>\n          {content}\n        </button>\n      )}\n    </li>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "breadcrumb",
+      "trail",
+      "navigation",
+      "icon",
+      "boardui"
+    ]
+  }
+}

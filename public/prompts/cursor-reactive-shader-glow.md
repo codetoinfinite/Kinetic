@@ -210,11 +210,21 @@ export function CursorReactiveShaderGlow({
        afterwards hands back the DEAD one rather than a fresh context, leaving
        the preview permanently blank. A canvas created and removed per effect
        run has no such history. */
-    const renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      alpha: false,
-      powerPreference: 'low-power',
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        alpha: false,
+        powerPreference: 'low-power',
+      });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setSupported(false);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio(maxDpr));
     renderer.setSize(width, height, false);
     const canvas = renderer.domElement;
@@ -296,10 +306,34 @@ export function CursorReactiveShaderGlow({
       material.dispose();
       canvas.remove();
     };
-    // Colours and gains are pushed through `live`/`uniforms` from the loop, so
-    // they must not appear here — a rebuild per prop change leaks contexts.
+    // Gains are pushed through `live` from the loop and the colours through the
+    // effect below, so none of them may appear here — a rebuild per prop change
+    // leaks contexts.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, maxDpr]);
+
+  /* Colours, written onto the live uniforms. The build effect above reads them
+     exactly once, when it constructs the `THREE.Color` objects, and it is
+     deliberately not keyed on them — so without this every colour prop was
+     frozen at first render. A theme flip or any parent state driving the
+     palette left the canvas on its original colours while every other prop
+     kept responding, which reads as a broken theme switch rather than an
+     unsupported one. Depended on component-wise: the props are tuples, and a
+     caller writing one inline would otherwise re-run this on every render. */
+  const [baseR, baseG, baseB] = base;
+  const [tintR, tintG, tintB] = tint;
+  const [glowR, glowG, glowB] = glowTint;
+  useEffect(() => {
+    const s = stage.current;
+    if (!s) return;
+    s.uniforms.uBase.value.setRGB(baseR, baseG, baseB);
+    s.uniforms.uTint.value.setRGB(tintR, tintG, tintB);
+    s.uniforms.uGlowTint.value.setRGB(glowR, glowG, glowB);
+    // Render once: the loop is not running under reduced motion or while the
+    // component is off screen, and a recolour that waits for the next pointer
+    // move is indistinguishable from one that never arrived.
+    s.renderer.render(s.scene, s.camera);
+  }, [baseR, baseG, baseB, tintR, tintG, tintB, glowR, glowG, glowB]);
 
   // Resize is its own effect, so a reflow never touches the renderer's lifetime.
   useEffect(() => {

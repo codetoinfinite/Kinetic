@@ -84,14 +84,19 @@ export function DatasetParallax({
       const scroller = scrollerRef?.current ?? undefined;
 
       for (const layer of Array.from(el.querySelectorAll<HTMLElement>(`[${attribute}]`))) {
-        // Double fallback, and both halves are load-bearing. `?? ''` handles a
-        // bare `data-parallax` with no value; `|| fallback` handles
-        // `parseFloat` returning NaN on anything non-numeric. A NaN reaching
-        // `yPercent` does not throw — it silently pins the layer at its
-        // untransformed position, which looks like the effect simply not
-        // working on that one element.
+        // `?? ''` handles a bare `data-parallax` with no value, and the finite
+        // check handles `parseFloat` returning NaN on anything non-numeric. A
+        // NaN reaching `yPercent` does not throw — it silently pins the layer
+        // at its untransformed position, which looks like the effect simply
+        // not working on that one element.
+        //
+        // Tested with `Number.isFinite`, not `||`. `data-parallax="0"` is the
+        // documented way to hold a layer still against the scroll, and zero is
+        // falsy: `|| fallback` read that as "no value given" and moved the one
+        // layer the author had explicitly asked not to move.
         const raw = layer.getAttribute(attribute) ?? '';
-        const depth = parseFloat(raw) || fallback;
+        const parsed = parseFloat(raw);
+        const depth = Number.isFinite(parsed) ? parsed : fallback;
 
         gsap.to(layer, {
           yPercent: -(100 * depth),

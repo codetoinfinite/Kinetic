@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
       role: 'reservation, in-view fetch, ratio correction and poster crossfade',
     },
   ],
-  registryDependencies: ['use-in-view', 'use-reduced-motion', 'use-resize-observer'],
 
   summary:
     'A slot for a Lottie that costs nothing until the slot is nearly on screen. The box is reserved at a provisional ratio and filled with a poster drawn in CSS; an IntersectionObserver on the already-sized box starts the fetch; the resolved JSON reports its own composition size in its `w` and `h` fields, the box takes that exact ratio, the player mounts underneath and the poster crossfades away. The readout prices the provisional guess in pixels of layout shift. No Lottie runtime is imported — loading and playback go through a render prop, so the packaged part is the reservation, not the player.',

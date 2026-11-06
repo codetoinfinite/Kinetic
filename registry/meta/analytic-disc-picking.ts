@@ -23,7 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: ['webgl', 'damp', 'prng', 'use-raf', 'use-reduced-motion', 'use-resize-observer'],
 
   summary:
     'A slow ring of camera-facing discs that answers "what is under the pointer" without a raycaster. Because every disc is parallel to the image plane, the pick reduces to intersecting the pointer ray with one plane per disc and comparing the hit against the radius — four arithmetic operations, no traversal, no allocation, and exact rather than approximate. It is also the only correct answer here: the billboard happens in the vertex shader, so `Raycaster` intersects a square that is not on screen.',

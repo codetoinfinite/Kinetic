@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-fade",
+  "type": "registry:lib",
+  "title": "scroll-fade",
+  "description": "Shared utility used by Kinetic components.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/lib/scroll-fade.tsx",
+      "type": "registry:lib",
+      "target": "lib/scroll-fade.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/foundations/scroll-fade/scroll-fade.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport { useCallback, useState } from \"react\";\nimport type { UIEvent } from \"react\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * The soft top edge of an internal scroll region: a 24px masked 1px backdrop\n * blur, a 16px masked 4px blur closer to the edge, and a wash of the\n * enclosing surface colour. Each layer fades in over the first 24px\n * scrolled, so the resting state keeps a plain top edge.\n *\n *   const fade = useScrollFade();\n *   <div className=\"relative min-h-0 flex-1\">\n *     <div onScroll={fade.onScroll} className=\"h-full overflow-y-auto\">…</div>\n *     <ScrollFade progress={fade.progress} surfaceClassName=\"from-background-primary-default\" />\n *   </div>\n *\n * Keep the header outside the scroll region, and the overlay outside the\n * scroller (it must stay put while the content moves under it). Opacity goes\n * on each layer, never on the wrapper: a translucent parent becomes the\n * backdrop root, and the blur layers would sample nothing.\n */\n\n/** Scroll distance, in px, over which the fade ramps from 0 to 1. */\nexport const SCROLL_FADE_DISTANCE = 24;\n\nexport function useScrollFade(distance = SCROLL_FADE_DISTANCE) {\n  const [progress, setProgress] = useState(0);\n  const onScroll = useCallback(\n    (event: UIEvent<HTMLElement>) => setProgress(Math.min(1, Math.max(0, event.currentTarget.scrollTop) / distance)),\n    [distance],\n  );\n  const reset = useCallback(() => setProgress(0), []);\n  return { progress, onScroll, reset };\n}\n\nexport interface ScrollFadeProps {\n  /** 0 at rest, 1 once the region has scrolled `SCROLL_FADE_DISTANCE`. */\n  progress: number;\n  /**\n   * The `from-*` class of the surface the region sits on, written out in\n   * full so Tailwind can see it. Defaults to the primary surface.\n   */\n  surfaceClassName?: string;\n  className?: string;\n}\n\nexport function ScrollFade({ progress, surfaceClassName = \"from-background-primary-default\", className }: ScrollFadeProps) {\n  return (\n    <div aria-hidden className={cx(\"pointer-events-none absolute inset-x-0 top-0 z-10 h-6\", className)}>\n      <div\n        className=\"absolute inset-0 backdrop-blur-[1px] [mask-image:linear-gradient(to_bottom,black,transparent)]\"\n        style={{ opacity: progress }}\n      />\n      <div\n        className=\"absolute inset-x-0 top-0 h-4 backdrop-blur-[4px] [mask-image:linear-gradient(to_bottom,black,transparent)]\"\n        style={{ opacity: progress }}\n      />\n      <div className={cx(\"absolute inset-0 bg-linear-to-b to-transparent\", surfaceClassName)} style={{ opacity: progress }} />\n    </div>\n  );\n}\n"
+    }
+  ]
+}

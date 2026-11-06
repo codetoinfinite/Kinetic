@@ -30,7 +30,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'Depth is declared in the markup: any descendant carrying `data-parallax="0.3"` drifts at that rate. One effect walks the container, parses the attribute and builds a scrubbed tween per layer, so adding a new plane to a hero is an attribute rather than a code change. Travel is expressed as a percentage of the element\'s own height, which keeps the effect proportional at every breakpoint.',

@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'Splitting text destroys the markup inside it: a paragraph containing an `<em>` and an `<a>` goes into SplitText as semantic HTML and comes out as a flat pile of divs. This component splits into masked lines that rise into view, preserves each child element\'s own tag through the split, and on teardown restores the container\'s `innerHTML` byte-identically to what it was before anything touched it.',

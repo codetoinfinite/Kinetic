@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "type": "registry:ui",
+  "title": "Checkbox",
+  "description": "React Aria checkbox in two sizes: a gradient box whose white tick draws itself on, plus an indeterminate dash for partial selections.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/checkbox.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/checkbox.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/checkbox/checkbox.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ReactNode, Ref } from \"react\";\nimport { Checkbox as AriaCheckbox } from \"react-aria-components\";\nimport type { CheckboxProps as AriaCheckboxProps } from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\nimport { CheckboxGlyph, checkboxSizes } from \"@/components/motion/checkbox-glyph\";\nimport type { CheckboxSize } from \"@/components/motion/checkbox-glyph\";\n\n/**\n * Figma source: Board UI → Checkbox (node 3699:2557 family; used in\n * dashboard 1 table, nodes 3731:3258 etc.).\n *\n * radius/sm (4px). Two sizes:\n *   md  16×16, label Body 1/Medium (14)\n *   sm  14×14, label Body 2/Medium (13)\n *\n * States (per Figma):\n *   default        bg background/primary/default, 1px border/checkbox/default,\n *                  shadow/xs\n *   hover          border darkens to neutral/400\n *   checked /      Button/Primary gradient (blue/500 → blue/600) with the\n *   indeterminate  checkbox inner highlight (see --shadow-checkbox-selected),\n *                  white 2px rounded stroke glyph; on hover the gradient\n *                  lightens to blue/400 → blue/500\n *\n * Built on react-aria Checkbox: keyboard toggling, aria-checked=\"mixed\" for\n * indeterminate, label association when `children` is passed.\n */\n\nexport interface CheckboxProps extends Omit<AriaCheckboxProps, \"children\"> {\n  children?: ReactNode;\n  size?: CheckboxSize;\n  ref?: Ref<HTMLLabelElement>;\n}\n\n// #region critical\nexport function Checkbox({ className, children, size = \"md\", ref, ...props }: CheckboxProps) {\n  const s = checkboxSizes[size];\n\n  return (\n    <AriaCheckbox\n      ref={ref}\n      {...props}\n      className={(state) =>\n        cx(\n          \"group inline-flex items-center select-none\",\n          s.gap,\n          state.isDisabled ? \"cursor-not-allowed\" : \"cursor-pointer\",\n          typeof className === \"function\" ? className(state) : className,\n        )\n      }\n    >\n      {(state) => (\n        <>\n          <CheckboxGlyph state={state} size={size} />\n          {children !== undefined && children !== null && (\n            <span className={cx(s.label, \"text-text-primary\")}>{children}</span>\n          )}\n        </>\n      )}\n    </AriaCheckbox>\n  );\n}\n// #endregion\n"
+    },
+    {
+      "path": "registry/ui/checkbox-glyph.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/checkbox-glyph.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/checkbox/checkbox-glyph.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport { cx } from \"@/lib/cx\";\n\nexport type CheckboxSize = \"sm\" | \"md\";\n\nexport const checkboxSizes: Record<\n  CheckboxSize,\n  { box: string; glyph: string; label: string; gap: string }\n> = {\n  md: { box: \"size-4\", glyph: \"size-4\", label: \"text-body-medium\", gap: \"gap-2\" },\n  sm: { box: \"size-3.5\", glyph: \"size-3.5\", label: \"text-body-2-medium\", gap: \"gap-1.5\" },\n};\n\nexport interface CheckboxGlyphState {\n  isSelected: boolean;\n  isIndeterminate: boolean;\n  isFocusVisible: boolean;\n  isDisabled: boolean;\n  isHovered: boolean;\n}\n\n/**\n * The 16px (or 14px) checkbox box + tick/indeterminate glyph. Shared by the\n * standalone Checkbox and the CheckboxCard so their visuals stay identical.\n */\nexport function CheckboxGlyph({\n  state,\n  size = \"md\",\n}: {\n  state: CheckboxGlyphState;\n  size?: CheckboxSize;\n}) {\n  const { isSelected, isIndeterminate, isFocusVisible, isDisabled, isHovered } = state;\n  const s = checkboxSizes[size];\n  const isMarked = isSelected || isIndeterminate;\n  const hover = isHovered && !isDisabled;\n\n  return (\n    <span\n      aria-hidden\n      className={cx(\n        \"flex shrink-0 items-center justify-center rounded-sm\",\n        \"transition-[background-color,border-color,box-shadow] duration-150 ease\",\n        s.box,\n        isMarked\n          ? cx(\n              \"bg-linear-to-b shadow-checkbox-selected\",\n              hover ? \"from-accent-400 to-accent-500\" : \"from-accent-500 to-accent-600\",\n            )\n          : cx(\n              \"border bg-background-primary-default shadow-xs\",\n              hover ? \"border-border-checkbox-hover\" : \"border-border-checkbox-default\",\n            ),\n        isDisabled && \"opacity-50\",\n        isFocusVisible && \"ring-2 ring-border-focus-ring ring-offset-2\",\n      )}\n    >\n      <svg viewBox=\"0 0 16 16\" fill=\"none\" className={s.glyph}>\n        {isIndeterminate ? (\n          <path d=\"M4.5 8H8H11.5\" stroke=\"white\" strokeWidth=\"2\" strokeLinecap=\"round\" />\n        ) : isSelected ? (\n          <path\n            d=\"M4 7.7002L6.64645 10.3466C6.84171 10.5419 7.15829 10.5419 7.35355 10.3466L12 5.7002\"\n            stroke=\"white\"\n            strokeWidth=\"2\"\n            strokeLinecap=\"round\"\n            strokeLinejoin=\"round\"\n            pathLength={1}\n            className=\"animate-check-draw\"\n          />\n        ) : null}\n      </svg>\n    </span>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "checkbox",
+      "indeterminate",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

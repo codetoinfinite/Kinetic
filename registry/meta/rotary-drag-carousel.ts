@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['use-reduced-motion', 'use-resize-observer', 'damp', 'wrap'],
 
   summary:
     'Items sit at fixed stations around a circle whose hub is below the frame, so only the top arc is ever visible. The gesture is measured in angle rather than pixels: `atan2(y - cy, x - cx)`, differenced through a shortest-signed wrap, so a hand sweeping the top of the wheel turns it by the amount it actually travelled around the hub. Release and it keeps going at the speed it left at, then stops with a station facing up — one motion, no corrective hop.',

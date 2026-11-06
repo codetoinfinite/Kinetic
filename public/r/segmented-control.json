@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "segmented-control",
+  "type": "registry:ui",
+  "title": "Segmented Control",
+  "description": "A pill switcher for Weekly / Monthly / Yearly choices: one white thumb, measured from the DOM, slides under the selected segment.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/direction.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/segmented-control.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/segmented-control.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/segmented-control/segmented-control.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport { useDirection } from \"@/lib/direction\";\nimport { createContext, useContext, useEffect, useLayoutEffect, useRef, useState } from \"react\";\nimport type { ReactNode, Ref } from \"react\";\nimport {\n  ToggleButton as AriaToggleButton,\n  ToggleButtonGroup as AriaToggleButtonGroup,\n} from \"react-aria-components\";\nimport type {\n  ToggleButtonGroupProps as AriaToggleButtonGroupProps,\n  ToggleButtonProps as AriaToggleButtonProps,\n} from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\n\nconst useIsomorphicLayoutEffect = typeof window !== \"undefined\" ? useLayoutEffect : useEffect;\n\n/**\n * Figma source: Board UI → dashboard 1 Weekly/Monthly/Yearly switch\n * (node 3731:3096).\n *\n * Single-select segmented control.\n *   track    bg background/tertiary/default, p 4, radius 10 (radius/2lg), gap 2\n *   segment  px 10, py 4, radius/md (6px)\n *     selected    bg segmented-control/selected (white in light), shadow/2xs, Body 1/Medium,\n *                 text/primary\n *     unselected  transparent, Body 1/Regular, text/secondary\n *\n * Built on react-aria ToggleButtonGroup with single selection that can't be\n * emptied — arrow keys move focus, Space/Enter selects.\n */\n\n/**\n * `solid` (default) is the Figma design — tertiary track, white thumb behind\n * the selected segment. `plain` drops the track background and the thumb; the\n * selected segment reads only through its text weight/color.\n */\nexport type SegmentedControlVariant = \"solid\" | \"plain\";\n\nexport interface SegmentedControlProps\n  extends Omit<AriaToggleButtonGroupProps, \"selectionMode\" | \"disallowEmptySelection\"> {\n  children?: ReactNode;\n  variant?: SegmentedControlVariant;\n  ref?: Ref<HTMLDivElement>;\n}\n\ntype Thumb = { left: number; top: number; width: number; height: number };\n\n// True until the sliding thumb has been measured (the server render, and a\n// control that is hidden or not laid out yet). The selected segment then\n// paints the thumb's fill itself, so first paint is never missing it.\nconst SelectedFillContext = createContext(false);\n\n// #region critical\nexport function SegmentedControl({ className, children, variant = \"solid\", ref, ...props }: SegmentedControlProps) {\n  const direction = useDirection();\n  const innerRef = useRef<HTMLDivElement>(null);\n  const [thumb, setThumb] = useState<Thumb | null>(null);\n\n  useIsomorphicLayoutEffect(() => {\n    const el = innerRef.current;\n    if (!el) return;\n    const measure = () => {\n      const selected = el.querySelector<HTMLElement>(\"[data-selected]\");\n      // Nothing selected, or a 0px box (display: none, not laid out yet):\n      // drop the thumb so the segment's own fill shows. The ResizeObserver\n      // measures again once the segment has a size.\n      const next =\n        selected && selected.offsetWidth > 0\n          ? {\n              left: selected.offsetLeft,\n              top: selected.offsetTop,\n              width: selected.offsetWidth,\n              height: selected.offsetHeight,\n            }\n          : null;\n      // Skip equal values so observer callbacks never re-render in a loop.\n      setThumb((prev) =>\n        prev && next && prev.left === next.left && prev.top === next.top && prev.width === next.width && prev.height === next.height\n          ? prev\n          : next,\n      );\n    };\n    measure();\n    const ro = new ResizeObserver(measure);\n    ro.observe(el);\n    const observeItems = () => el.querySelectorAll(\"button\").forEach(item => ro.observe(item));\n    observeItems();\n    const mo = new MutationObserver(() => { observeItems(); measure(); });\n    mo.observe(el, { attributes: true, childList: true, characterData: true, subtree: true, attributeFilter: [\"data-selected\"] });\n    return () => {\n      mo.disconnect();\n      ro.disconnect();\n    };\n  }, [direction]);\n\n  const setRefs = (node: HTMLDivElement | null) => {\n    innerRef.current = node;\n    if (typeof ref === \"function\") ref(node);\n    else if (ref) (ref as { current: HTMLDivElement | null }).current = node;\n  };\n\n  return (\n    <AriaToggleButtonGroup\n      ref={setRefs}\n      selectionMode=\"single\"\n      disallowEmptySelection\n      {...props}\n      className={(state) =>\n        cx(\n          \"relative inline-flex items-start gap-0.5 rounded-2lg\",\n          variant === \"solid\" && \"bg-segmented-control-background p-1\",\n          typeof className === \"function\" ? className(state) : className,\n        )\n      }\n    >\n      {variant === \"solid\" && thumb && (\n        <span\n          aria-hidden\n          className=\"pointer-events-none absolute left-0 top-0 rounded-md bg-segmented-control-selected-background shadow-2xs transition-[transform,width,height] duration-200 ease\"\n          style={{\n            transform: `translate(${thumb.left}px, ${thumb.top}px)`,\n            width: thumb.width,\n            height: thumb.height,\n          }}\n        />\n      )}\n      <SelectedFillContext.Provider value={variant === \"solid\" && !thumb}>{children}</SelectedFillContext.Provider>\n    </AriaToggleButtonGroup>\n  );\n}\n// #endregion\n\nexport interface SegmentedControlItemProps extends Omit<AriaToggleButtonProps, \"children\"> {\n  children?: ReactNode;\n  ref?: Ref<HTMLButtonElement>;\n}\n\nexport function SegmentedControlItem({\n  className,\n  children,\n  ref,\n  ...props\n}: SegmentedControlItemProps) {\n  const selectedFill = useContext(SelectedFillContext);\n  return (\n    <AriaToggleButton\n      ref={ref}\n      {...props}\n      className={(state) =>\n        cx(\n          \"relative z-10 inline-flex cursor-pointer items-center justify-center rounded-md px-2.5 py-1 text-center whitespace-nowrap\",\n          \"transition-colors duration-200 ease\",\n          \"outline-none focus-visible:ring-2 focus-visible:ring-border-focus-ring\",\n          state.isSelected\n            ? \"text-body-medium text-text-primary\"\n            : \"text-body-regular text-text-secondary hover:text-text-primary\",\n          state.isSelected && selectedFill && \"bg-segmented-control-selected-background shadow-2xs\",\n          state.isDisabled && \"cursor-not-allowed opacity-50\",\n          typeof className === \"function\" ? className(state) : className,\n        )\n      }\n    >\n      {children}\n    </AriaToggleButton>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "tags": [
+      "segmented",
+      "toggle-group",
+      "tabs",
+      "switcher",
+      "react-aria",
+      "boardui"
+    ]
+  }
+}

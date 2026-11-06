@@ -117,7 +117,11 @@ void main() {
   float lum = plasma(p + m * 0.12, u_time * 0.35) * 0.5 + 0.5;
 
   lum = clamp((lum - 0.5) * u_contrast + 0.5, 0.0, 1.0);
-  lum *= heroVignette(v_uv, aspect);
+  /* Clamped again after the vignette: heroVignette returns
+     1.0 - u_vignette * smoothstep(...), which goes negative for any u_vignette
+     above 1. pow() is undefined for a negative base, so the encode below
+     produced NaN and the whole frame came out as garbage. */
+  lum = clamp(lum * heroVignette(v_uv, aspect), 0.0, 1.0);
 
   /* Quantise on a gamma-spaced ramp. The reference implementation carried an
      11-entry grey table and found the nearest entry with a branchless ladder

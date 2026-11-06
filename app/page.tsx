@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { CATEGORY_BLURB, CATEGORY_COUNTS, CATEGORY_LABEL } from '@/__generated__/manifest';
@@ -24,14 +25,21 @@ import { CATEGORIES } from '@/scripts/schema';
 
      Hero        340vh pinned stage, a split-flap board, four lines of copy
      Specs       one hairline row — closes the hero, no dead gap under it
-     Spreads     seven full-width bands, alternating, one component each
+     Spreads     seven full-width bands, alternating, one motion component each
      Workflow    a sticky heading beside three stacked steps
-     Index       seven tall rules handing off to the footer
+     Index       one tall rule per category, handing off to the footer
 
    There is no eighth band pitching the agent endpoints — the footer already
    lists all three, and saying it twice on one page is how a home page grows to
    six screens of copy.
    ========================================================================== */
+
+/* Title and description come from the root layout's defaults; only the
+   canonical is stated here, because the root no longer declares one — a
+   canonical written there is inherited by every route that stays silent. */
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 /* One line each. These were three paragraphs, and a paragraph is the wrong
    length for a step: the reader is scanning for what the site is, and the
@@ -109,7 +117,7 @@ export default function HomePage() {
 
       {/* -- index ------------------------------------------------------------
           The last band, and deliberately unclosed: the footer's own top hairline
-          is the rule that ends it. Seven rules rather than seven cards, each
+          is the rule that ends it. Rules rather than cards, one per category, each
           tall enough to be a target on a phone, each growing an accent brace at
           its left edge on hover — the same accent the category carries
           everywhere else on the site. */}
@@ -120,7 +128,7 @@ export default function HomePage() {
             <h2 className="mt-5 text-display-1 text-fg">By category</h2>
           </div>
           <p className="max-w-[32ch] text-[0.9375rem] leading-relaxed text-muted">
-            Seven families. Each count is what exists today, not a roadmap.
+            {CATEGORIES.length} families. Each count is what exists today, not a roadmap.
           </p>
         </div>
 

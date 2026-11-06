@@ -23,16 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1', 'gsap@^3.15.0'],
-  registryDependencies: [
-    'use-in-view',
-    'use-raf',
-    'use-reduced-motion',
-    'use-resize-observer',
-    'use-visibility',
-    'damp',
-    'wrap',
-    'webgl',
-  ],
 
   summary:
     'One function places every card from seven scalars — radius, spacing, rowSpread, turns, depth, focus, scale — and each named layout is only a set of values for them. Morphing is therefore `gsap.to(params, preset)`: a tween over an object literal, with no per-item choreography anywhere. Crucially it interpolates the *inputs*, `f(lerp(a, b, s))`, not the outputs, so every intermediate frame is a valid member of the same family instead of a set of cards sliding along straight lines through each other.',

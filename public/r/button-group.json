@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group",
+  "type": "registry:ui",
+  "title": "Button Group",
+  "description": "Secondary buttons fused into one bordered strip with hairline dividers, for toolbars, range pickers and pressed toggles.",
+  "categories": [
+    "action"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/directional-icon.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/button-group.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/button-group.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/buttons/button-group.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport type {\n  ButtonHTMLAttributes,\n  ComponentType,\n  ReactNode,\n  Ref,\n} from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\nimport { directionalIconClass } from \"@/lib/directional-icon\";\n\n/**\n * Button group — a row of secondary-style buttons fused into one control:\n * shared 1px border/button/default container with radius/2lg and shadow/xs,\n * items divided by 1px hairlines, only the outer corners rounded. The classic\n * toolbar / filter pattern (\"Left | Center | Right\").\n *\n * Sizing follows Button's secondary sizes:\n *   medium  h=36, px=12, Body 1/Medium, 20px icons\n *   small   h=32, px=10, Body 1/Medium, 18px icons\n *\n * Items can be text, icon + text, or icon-only (pass `iconOnly` +\n * `aria-label`). A pressed/selected item (`selected`) keeps the hover fill —\n * drive it from state for single or multi select toolbars, or leave every\n * item unselected for pure action rows. For a full segmented switcher with\n * animated thumb, see SegmentedControl instead.\n */\n\ntype ButtonGroupSize = \"medium\" | \"small\";\n\ntype IconComponent = ComponentType<{\n  className?: string;\n  \"aria-hidden\"?: boolean | \"true\" | \"false\";\n}>;\n\n// #region critical\nconst styles = sortCx({\n  group: [\n    \"inline-flex items-stretch isolate\",\n    \"rounded-2lg border border-border-button-group bg-background-primary-default shadow-xs\",\n    // Hairlines between items, outer corners rounded on the first/last item\n    \"divide-x divide-border-button-default overflow-hidden\",\n  ].join(\" \"),\n\n  item: [\n    \"inline-flex items-center justify-center gap-1 whitespace-nowrap\",\n    \"bg-background-primary-default text-text-primary font-sans select-none cursor-pointer\",\n    \"transition-[background-color,color] duration-150 ease\",\n    \"outline-none focus-visible:relative focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-focus-ring\",\n    \"hover:bg-background-primary-hover active:bg-background-primary-active\",\n    \"disabled:cursor-not-allowed disabled:bg-background-primary-disabled disabled:text-text-tertiary\",\n  ].join(\" \"),\n\n  size: {\n    medium: \"h-[34px] px-3 text-body-medium\",\n    small: \"h-[30px] px-2.5 text-body-medium\",\n  },\n\n  iconOnlySize: {\n    medium: \"w-[34px] px-0\",\n    small: \"w-[30px] px-0\",\n  },\n\n  icon: {\n    medium: \"size-5 shrink-0\",\n    small: \"size-[18px] shrink-0\",\n  },\n\n  selected: \"bg-background-primary-hover\",\n});\n// #endregion\n\n/* ------------------------------------------------------------------- group */\n\nexport interface ButtonGroupProps {\n  size?: ButtonGroupSize;\n  /** ButtonGroupItem children. */\n  children: ReactNode;\n  className?: string;\n  \"aria-label\"?: string;\n  ref?: Ref<HTMLDivElement>;\n}\n\nexport function ButtonGroup({ size = \"medium\", children, className, ref, ...props }: ButtonGroupProps) {\n  return (\n    <div ref={ref} role=\"group\" data-size={size} className={cx(styles.group, className)} {...props}>\n      {children}\n    </div>\n  );\n}\n\n/* -------------------------------------------------------------------- item */\n\nexport interface ButtonGroupItemProps\n  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"children\"> {\n  size?: ButtonGroupSize;\n  /** Highlights the item like its hover state; sets aria-pressed. */\n  selected?: boolean;\n  iconOnly?: boolean;\n  leadingIcon?: IconComponent;\n  trailingIcon?: IconComponent;\n  children?: ReactNode;\n  ref?: Ref<HTMLButtonElement>;\n}\n\nexport function ButtonGroupItem({\n  size = \"medium\",\n  selected = false,\n  iconOnly = false,\n  leadingIcon: Leading,\n  trailingIcon: Trailing,\n  children,\n  className,\n  type = \"button\",\n  ref,\n  ...props\n}: ButtonGroupItemProps) {\n  return (\n    <button\n      ref={ref}\n      type={type}\n      aria-pressed={selected || undefined}\n      className={cx(\n        styles.item,\n        styles.size[size],\n        iconOnly && styles.iconOnlySize[size],\n        selected && styles.selected,\n        className,\n      )}\n      {...props}\n    >\n      {Leading ? <Leading className={cx(styles.icon[size], directionalIconClass(Leading))} aria-hidden /> : null}\n      {!iconOnly && children !== undefined && children !== null && <span>{children}</span>}\n      {!iconOnly && Trailing ? <Trailing className={cx(styles.icon[size], directionalIconClass(Trailing))} aria-hidden /> : null}\n    </button>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "button",
+      "toolbar",
+      "segmented",
+      "toggle",
+      "boardui"
+    ]
+  }
+}

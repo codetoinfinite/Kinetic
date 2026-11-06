@@ -15,16 +15,12 @@ export default function Demo() {
             <br />
             collaborate.
           </h2>
+          {/* Plain labels, not links: the gallery wraps every preview in a
+              link to its page, and an <a> inside an <a> is invalid HTML. */}
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
-            <a href="#" className="hover:text-fg">
-              Studio
-            </a>
-            <a href="#" className="hover:text-fg">
-              Index
-            </a>
-            <a href="#" className="hover:text-fg">
-              Contact
-            </a>
+            <span>Studio</span>
+            <span>Index</span>
+            <span>Contact</span>
           </div>
         </div>
       </div>

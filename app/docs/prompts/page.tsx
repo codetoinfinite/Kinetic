@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Prompts',
   description:
     'Every component ships a written brief you can paste into Claude Code, Codex or Gemini.',
+  alternates: { canonical: '/docs/prompts' },
 };
 
 const SECTIONS = [

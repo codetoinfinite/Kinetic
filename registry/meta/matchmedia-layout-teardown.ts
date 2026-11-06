@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/matchmedia-layout-teardown.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A fanned card layout on desktop and a plain column on mobile, with the entire desktop branch registered inside `gsap.matchMedia()`. GSAP records every `set`, tween and returned cleanup made inside the callback and reverts them the moment the query stops matching, so crossing the breakpoint leaves no inline transforms, no live listeners and no half-applied layout behind.',

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "time-field",
+  "type": "registry:ui",
+  "title": "Time Field",
+  "description": "A time of day typed segment by segment in the kit's input shell, with 12 or 24 hour cycles, seconds, limits and an accent focus.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1",
+    "@remixicon/react@^4.9.0"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/input.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/time-field.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/time-field.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/time-field/time-field.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ComponentType, ReactNode } from \"react\";\nimport {\n  DateInput as AriaDateInput,\n  DateSegment as AriaDateSegment,\n  TimeField as AriaTimeField,\n} from \"react-aria-components\";\nimport type { TimeFieldProps as AriaTimeFieldProps, TimeValue } from \"react-aria-components\";\nimport { RiTimeLine } from \"@remixicon/react\";\nimport { HintText } from \"@/components/motion/hint-text\";\nimport { inputFieldClassName } from \"@/components/motion/input\";\nimport type { InputSize } from \"@/components/motion/input\";\nimport { Label } from \"@/components/motion/label\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Time field — a time of day typed segment by segment: a meeting start, an\n * opening hour, a reminder.\n *\n *   <TimeField label=\"Starts at\" defaultValue={new Time(9, 30)} />\n *   <TimeField label=\"Alarm\" hourCycle={24} granularity=\"second\" />\n *\n * Input's field (surface, hover and focus rings, invalid and disabled\n * states, two sizes) with a clock icon. Built on React Aria's TimeField:\n * the hour, minute and AM/PM segments follow the locale's format and hour\n * cycle, typing fills a segment and moves on, Up and Down change the focused\n * segment, and a value outside `minValue` and `maxValue` marks the field\n * invalid. The focused segment fills with the accent colour.\n *\n * Values are `Time` objects from @internationalized/date.\n */\n\ntype IconComponent = ComponentType<{ className?: string; \"aria-hidden\"?: boolean | \"true\" | \"false\" }>;\n\nexport interface TimeFieldProps<T extends TimeValue> extends Omit<AriaTimeFieldProps<T>, \"className\" | \"children\"> {\n  label?: ReactNode;\n  hint?: ReactNode;\n  /** Show an info icon next to the label. */\n  tooltip?: boolean | string;\n  /** 36px (default) or 32px. */\n  size?: InputSize;\n  /** The clock by default; `null` hides it. */\n  icon?: IconComponent | null;\n  className?: string;\n  fieldClassName?: string;\n}\n\nconst SEGMENT = [\n  \"rounded-md px-0.5 text-body-regular text-text-primary tabular-nums caret-transparent outline-none\",\n  \"transition-colors duration-100 ease-out\",\n  \"data-[placeholder]:text-text-tertiary\",\n  \"data-[type=literal]:px-0 data-[type=literal]:text-text-tertiary\",\n  \"data-[focused]:bg-accent-500 data-[focused]:text-white\",\n  \"data-[disabled]:text-input-disabled-text\",\n].join(\" \");\n\n// #region critical\nexport function TimeField<T extends TimeValue>({\n  label,\n  hint,\n  tooltip,\n  size = \"medium\",\n  icon: Icon = RiTimeLine,\n  className,\n  fieldClassName,\n  ...props\n}: TimeFieldProps<T>) {\n  return (\n    <AriaTimeField {...props} className={cx(\"group flex w-full flex-col items-start gap-1\", className)}>\n      {({ isInvalid }) => (\n        <>\n          {label ? (\n            <Label isRequired={props.isRequired} isInvalid={isInvalid} tooltip={tooltip}>\n              {label}\n            </Label>\n          ) : null}\n          <div className=\"relative w-full\">\n            <AriaDateInput\n              className={(state) =>\n                cx(\n                  inputFieldClassName(state, size),\n                  // Inline, not flex: React Aria wraps the digits in bidi\n                  // isolates, which only order inline content, so RTL times\n                  // keep reading 9:00 rather than 00:9.\n                  // The shell's own line height sets the line box, so it\n                  // takes the segments' text style to stay 36px tall.\n                  \"peer block cursor-text whitespace-nowrap text-body-regular\",\n                  // Line the first segment up with Input's text: after the\n                  // icon at 34px, or at 12px without one.\n                  Icon ? \"ps-[34px]\" : \"ps-3\",\n                  fieldClassName,\n                )\n              }\n            >\n              {(segment) => <AriaDateSegment segment={segment} className={SEGMENT} />}\n            </AriaDateInput>\n            {Icon ? (\n              <Icon\n                aria-hidden\n                className={cx(\n                  \"pointer-events-none absolute start-2 top-1/2 size-5 -translate-y-1/2 text-foreground-icon-tertiary\",\n                  \"peer-data-[invalid]:text-foreground-icon-error peer-data-[disabled]:text-input-disabled-foreground\",\n                )}\n              />\n            ) : null}\n          </div>\n          {hint ? <HintText isInvalid={isInvalid}>{hint}</HintText> : null}\n        </>\n      )}\n    </AriaTimeField>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "time",
+      "input",
+      "segments",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

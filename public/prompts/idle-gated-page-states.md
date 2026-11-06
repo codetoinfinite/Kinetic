@@ -304,12 +304,23 @@ export function useIdlePageStates(
       // A second click during an exit would queue a second commit and land the
       // visitor one page past where they aimed.
       if (commit.current !== null) return;
+
+      // Only these three phases have an entrance on screen to reverse. Clicking
+      // during 'preload' left the state unchanged — the updater below returned
+      // `s` — but the commit had already been latched, and the only thing that
+      // clears it is `left()`, which runs off a reverse that was never started.
+      // One early click therefore killed every link on the page for the rest of
+      // the session. Nothing to reverse means go straight there, as in the
+      // reduced-motion branch above.
+      if (state !== 'entering' && state !== 'settled' && state !== 'gating') {
+        next();
+        return;
+      }
+
       commit.current = next;
-      setState((s) =>
-        s === 'entering' || s === 'settled' || s === 'gating' ? 'leaving' : s,
-      );
+      setState('leaving');
     },
-    [reduced],
+    [reduced, state],
   );
 
   const left = useCallback(() => {
@@ -393,15 +404,8 @@ export function IdleGatedPageStates({
       const targets = Array.from(
         el.querySelectorAll<HTMLElement>('[data-page-enter]'),
       );
-      if (targets.length === 0) return;
 
       const from = { opacity: 0, y: distance };
-
-      // Applied immediately, in the same commit React swapped the page in, so
-      // the destination is never painted composed and then hidden. The CSS rule
-      // covers the frames before this file has run at all; this covers every
-      // frame after.
-      gsap.set(targets, from);
 
       const tl = gsap.timeline({
         paused: true,
@@ -409,18 +413,34 @@ export function IdleGatedPageStates({
         onReverseComplete: () => onLeft.current(),
       });
 
-      tl.fromTo(
-        targets,
-        from,
-        {
-          opacity: 1,
-          y: 0,
-          duration: enterDuration,
-          ease: ENTER_EASE,
-          stagger,
-        },
-        0,
-      );
+      if (targets.length === 0) {
+        // A page that marked nothing still has to run the state machine. This
+        // used to bail before the timeline existed, which left the phase effect
+        // with nothing to play: `entered()` never fired, the page sat in
+        // 'entering' forever, and the first click latched a commit that no
+        // reverse would ever release. An empty tween of the same length carries
+        // the callbacks instead.
+        tl.to({}, { duration: enterDuration });
+      } else {
+        // Applied immediately, in the same commit React swapped the page in, so
+        // the destination is never painted composed and then hidden. The CSS
+        // rule covers the frames before this file has run at all; this covers
+        // every frame after.
+        gsap.set(targets, from);
+
+        tl.fromTo(
+          targets,
+          from,
+          {
+            opacity: 1,
+            y: 0,
+            duration: enterDuration,
+            ease: ENTER_EASE,
+            stagger,
+          },
+          0,
+        );
+      }
 
       timeline.current = tl;
       return () => {

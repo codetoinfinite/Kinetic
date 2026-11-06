@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['lenis@^1.3.11'],
-  registryDependencies: ['use-lenis', 'use-raf', 'use-reduced-motion', 'damp'],
 
   summary:
     'A third input modality bolted onto a scroll position that already has two. Wheel, pointer drag and arrow keys all write to one place, so they cannot disagree — press stops whatever was coasting exactly where it looks, the drag maps 1:1 from the press point, and release converts the last 100 ms of hand movement into a decaying throw. Pointed at the document it drives the shared Lenis instance; pointed at a box it drives `scrollTop` through the same physics.',

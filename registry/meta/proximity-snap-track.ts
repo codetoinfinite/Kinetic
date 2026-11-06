@@ -19,7 +19,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion'],
 
   summary:
     'A scrollable rail whose items may be any width. `scroll-snap-type: x proximity` snaps to an item only when the scroll comes to rest near one, so free scanning stays free. `scroll-snap-stop: always` caps a single fling at one item, so a hard swipe cannot launch the user past six cards. No JavaScript runs during the scroll.',

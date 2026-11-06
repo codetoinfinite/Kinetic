@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion'],
 
   summary:
     'A short line that falls repeatedly through a clipping tube, the way a hero says "keep going" without saying it. It is pure CSS — one keyframe pair on one transform — so it costs nothing after mount and a dozen of them still emit a single rule. The character is entirely in the easing: the line hangs, dives, and hangs again, and the pause between dives is what reads as an instruction.',

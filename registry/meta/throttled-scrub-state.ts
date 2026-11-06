@@ -27,7 +27,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'The bridge between a continuous scroll signal and discrete React state. A scrubbed ScrollTrigger calls back on every frame the scroll position moves; this component gates those ticks on elapsed time, on distance travelled, and on the animation frame, so the tree below it renders a few times per scroll instead of a hundred. The boundary frames always get through, which is what stops a fast flick from leaving the state stranded at 0.93.',

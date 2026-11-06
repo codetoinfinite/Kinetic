@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd",
+  "type": "registry:ui",
+  "title": "Kbd",
+  "description": "A fully rounded keyboard-shortcut pill on a semantic <kbd>, 20px tall, for search triggers, menus and command rows.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/kbd.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/kbd.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/kbd/kbd.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport type { HTMLAttributes, Ref } from \"react\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Figma source: Board UI → dashboard 1 quick-search shortcut (node 3731:2955).\n *\n * Keyboard shortcut hint: 12/16 semibold on a fully-rounded neutral pill.\n *   - semantic neutral background and foreground for theme-safe contrast\n *   - px 4, py 2, radius full\n */\n\nexport interface KbdProps extends HTMLAttributes<HTMLElement> {\n  ref?: Ref<HTMLElement>;\n}\n\n// #region critical\nexport function Kbd({ className, ref, ...props }: KbdProps) {\n  return (\n    <kbd\n      ref={ref}\n      className={cx(\n        \"inline-flex items-center justify-center rounded-full bg-kbd-background px-1 py-0.5 font-sans text-caption-1-semibold tracking-normal whitespace-nowrap text-kbd-foreground\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "kbd",
+      "keyboard",
+      "shortcut",
+      "hint",
+      "boardui"
+    ]
+  }
+}

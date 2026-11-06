@@ -22,14 +22,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [
-    'webgl',
-    'prng',
-    'use-raf',
-    'use-resize-observer',
-    'use-reduced-motion',
-    'use-visibility',
-  ],
 
   summary:
     'A full-screen transparent grain layer for stacking over hero art, video, or flat colour. The pixels are an ordinary hash, and everything that makes it look like film rather than television snow is in the clock: the noise offset is quantised to twelve changes per second, and the frames in between are not drawn at all. Grain cells are sized in CSS pixels, so the overlay weighs the same on a laptop and on a 3x phone.',

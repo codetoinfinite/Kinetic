@@ -97,6 +97,12 @@ const MAX_VELOCITY = 4000;
 /** Hard cap on how far one throw may carry, in pixels. */
 const MAX_THROW = 1200;
 /**
+ * How long the post-throw click gate stays armed, in ms. The click a release
+ * produces arrives in the same task or the next; anything beyond this is a new
+ * intent rather than the tail of the gesture.
+ */
+const SWALLOW_TIMEOUT_MS = 300;
+/**
  * Two copies is the minimum that can hide a seam; eight is a guard against a
  * one-word tile in a wide hero producing hundreds of nodes.
  */
@@ -216,6 +222,18 @@ export function DragMarquee({
     let pressY = 0;
     let moved = false;
     let swallowClick = false;
+    let swallowTimer: number | null = null;
+
+    // The gate expires. A throw released over a gap in the row, or one the
+    // browser cancels, produces no click at all — and a gate left standing
+    // eats the visitor's next real click, however long afterwards it lands.
+    const disarmSwallow = () => {
+      swallowClick = false;
+      if (swallowTimer !== null) {
+        window.clearTimeout(swallowTimer);
+        swallowTimer = null;
+      }
+    };
     /** Rolling window: the accumulator and clock at the start of the window. */
     let sampleRaw = 0;
     let sampleTime = 0;
@@ -228,6 +246,9 @@ export function DragMarquee({
       if (pointerId !== null || !e.isPrimary) return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
 
+      // A new press means the last gesture is finished and whatever click it
+      // was owed never arrived.
+      disarmSwallow();
       pointerId = e.pointerId;
       lastX = e.clientX;
       pressX = e.clientX;
@@ -292,7 +313,11 @@ export function DragMarquee({
           ? clamp((rawRef.current - sampleRaw) / elapsed, -MAX_VELOCITY, MAX_VELOCITY)
           : 0;
 
-      swallowClick = moved;
+      disarmSwallow();
+      if (moved) {
+        swallowClick = true;
+        swallowTimer = window.setTimeout(disarmSwallow, SWALLOW_TIMEOUT_MS);
+      }
       moved = false;
 
       if (host.hasPointerCapture(id)) host.releasePointerCapture(id);
@@ -314,7 +339,13 @@ export function DragMarquee({
     // gesture that scrolls the row also activates a card.
     const onClick = (e: MouseEvent) => {
       if (!swallowClick) return;
-      swallowClick = false;
+
+      // Enter or Space on a focused card dispatches a click with `detail === 0`
+      // and no pointer sequence behind it. That is not the tail of a throw, and
+      // swallowing it is what makes the row keyboard-inoperable.
+      if (e.detail === 0) return;
+
+      disarmSwallow();
       e.preventDefault();
       e.stopPropagation();
     };
@@ -343,6 +374,8 @@ export function DragMarquee({
       host.removeEventListener('lostpointercapture', finish);
       host.removeEventListener('click', onClick, true);
       host.removeEventListener('keydown', onKeyDown);
+      // Or the timer outlives the effect and a remount starts life armed.
+      disarmSwallow();
       if (pointerId !== null && host.hasPointerCapture(pointerId)) {
         host.releasePointerCapture(pointerId);
       }

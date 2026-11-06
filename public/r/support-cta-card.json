@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "support-cta-card",
+  "type": "registry:ui",
+  "title": "Support CTA Card",
+  "description": "A \"Still have a question?\" card: stacked initials avatars, a line of copy, one contact action and an accent beam on the top border.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/avatar.json",
+    "https://kinetic.example.com/r/button.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/support-cta-card.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/support-cta-card.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Support CTA Card\" (boardui.com/).\n * No BoardUI source was used.\n */\n\"use client\";\n\nimport type { ComponentProps, ReactNode } from \"react\";\nimport { Avatar } from \"@/components/motion/avatar\";\nimport type { AvatarProps } from \"@/components/motion/avatar\";\nimport { Button, ButtonLink } from \"@/components/motion/button\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Support CTA Card: the \"Still have a question?\" strip that closes a FAQ.\n * Stacked initials avatars for the people who answer, a title and a line of\n * copy, and one contact action. A thin accent beam drifts along the top\n * border.\n *\n *   <SupportCtaCard\n *     people={[{ name: \"Ada Park\", initials: \"AP\", color: \"blue\" }]}\n *     actionLabel=\"Ask on Discord\"\n *     actionIcon={RiDiscordFill}\n *     href=\"https://discord.gg/…\"\n *   />\n *\n * Pass `href` to render the action as a link (new tab by default), or\n * `onAction` to render it as a button. The row stacks below 36rem of\n * container width.\n */\n\nexport interface SupportPerson {\n  name: string;\n  initials: string;\n  color?: AvatarProps[\"color\"];\n}\n\ntype ActionIcon = ComponentProps<typeof Button>[\"leadingIcon\"];\n\nexport interface SupportCtaCardProps {\n  title?: ReactNode;\n  description?: ReactNode;\n  /** People who answer. The first `maxAvatars` show; the rest collapse into \"+N\". */\n  people?: SupportPerson[];\n  /** Default 3. */\n  maxAvatars?: number;\n  actionLabel?: ReactNode;\n  actionIcon?: ActionIcon;\n  /** Renders the action as a link. */\n  href?: string;\n  /** Default \"_blank\" when `href` is set. */\n  target?: string;\n  /** Renders the action as a button when there is no `href`. */\n  onAction?: () => void;\n  /** Show the drifting beam on the top border. Default true. */\n  beam?: boolean;\n  /** Level of the title heading. Default 3. */\n  headingLevel?: 2 | 3 | 4;\n  className?: string;\n}\n\nconst BEAM_CSS = `\n@keyframes kx-support-beam {\n  from { transform: translateX(-100%); }\n  to { transform: translateX(400%); }\n}\n.kx-support-beam {\n  animation: kx-support-beam 7s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;\n}\n@media (prefers-reduced-motion: reduce) {\n  .kx-support-beam { animation: none; transform: translateX(150%); }\n}\n`;\n\nconst styles = sortCx({\n  card: \"@container relative w-full rounded-3xl border border-separator-border-strong bg-background-primary-default shadow-2xs\",\n  row: \"relative flex flex-col items-start gap-4 px-6 py-5 @xl:flex-row @xl:items-center @xl:gap-5\",\n  avatars: \"flex shrink-0 items-center -space-x-1.5\",\n  avatar: \"text-caption-1-semibold ring-2 ring-background-primary-default\",\n  // The kit's dark neutral avatar equals the card surface; quaternary stays visible on it.\n  neutral: \"bg-background-quaternary-default\",\n  copy: \"flex min-w-0 flex-1 flex-col gap-0.5\",\n  title: \"text-headline-medium text-text-primary\",\n  description: \"text-body-regular text-text-secondary\",\n  beamLayer: \"pointer-events-none absolute -inset-px overflow-hidden rounded-[inherit]\",\n  beamTrack: \"kx-support-beam absolute top-0 left-0 h-6 w-1/4\",\n  beamLine: \"absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent-500 to-transparent\",\n  beamGlow:\n    \"absolute inset-x-3 top-0 h-4 bg-linear-to-r from-transparent via-accent-400/25 to-transparent blur-md\",\n});\n\nconst HEADINGS = { 2: \"h2\", 3: \"h3\", 4: \"h4\" } as const;\n\nfunction listNames(names: string[], extra: number) {\n  if (names.length === 0) return \"\";\n  const tail = extra > 0 ? `${names.join(\", \")} and ${extra} more` : names.join(\", \").replace(/, ([^,]*)$/, \" and $1\");\n  return `Answered by ${tail}`;\n}\n\n// #region critical\nexport function SupportCtaCard({\n  title = \"Still have a question?\",\n  description = \"We answer in the open, usually the same day.\",\n  people = [],\n  maxAvatars = 3,\n  actionLabel = \"Get in touch\",\n  actionIcon,\n  href,\n  target,\n  onAction,\n  beam = true,\n  headingLevel = 3,\n  className,\n}: SupportCtaCardProps) {\n  const shown = people.slice(0, Math.max(0, maxAvatars));\n  const extra = people.length - shown.length;\n  const Heading = HEADINGS[headingLevel];\n  const linkTarget = target ?? \"_blank\";\n\n  return (\n    <div className={cx(styles.card, className)}>\n      {beam ? (\n        <>\n          <style href=\"kinetic-support-cta-card\" precedence=\"medium\">\n            {BEAM_CSS}\n          </style>\n          <div aria-hidden className={styles.beamLayer}>\n            <div className={styles.beamTrack}>\n              <span className={styles.beamGlow} />\n              <span className={styles.beamLine} />\n            </div>\n          </div>\n        </>\n      ) : null}\n\n      <div className={styles.row}>\n        {shown.length > 0 ? (\n          <div role=\"img\" aria-label={listNames(shown.map((p) => p.name), extra)} className={styles.avatars}>\n            {shown.map((person) => (\n              <Avatar\n                key={person.name}\n                size=\"md\"\n                color={person.color ?? \"neutral\"}\n                initials={person.initials}\n                aria-hidden\n                className={cx(styles.avatar, (person.color ?? \"neutral\") === \"neutral\" && styles.neutral)}\n              />\n            ))}\n            {extra > 0 ? <Avatar size=\"md\" initials={`+${extra}`} aria-hidden className={cx(styles.avatar, styles.neutral)} /> : null}\n          </div>\n        ) : null}\n\n        <div className={styles.copy}>\n          <Heading className={styles.title}>{title}</Heading>\n          {description ? <p className={styles.description}>{description}</p> : null}\n        </div>\n\n        {href ? (\n          <ButtonLink\n            href={href}\n            target={linkTarget}\n            rel={linkTarget === \"_blank\" ? \"noopener noreferrer\" : undefined}\n            variant=\"secondary\"\n            leadingIcon={actionIcon}\n            className=\"shrink-0\"\n          >\n            {actionLabel}\n          </ButtonLink>\n        ) : (\n          <Button variant=\"secondary\" leadingIcon={actionIcon} onClick={onAction} className=\"shrink-0\">\n            {actionLabel}\n          </Button>\n        )}\n      </div>\n    </div>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "cta",
+      "support",
+      "avatars",
+      "card",
+      "boardui"
+    ]
+  }
+}

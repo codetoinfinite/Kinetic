@@ -11,7 +11,6 @@ const meta: ComponentMetaInput = {
 
   files: [{ path: 'registry/ui/spring-to-linear-easing.tsx', type: 'registry:ui', role: 'hook' }],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A spring is a differential equation, and the usual way to run one on the web is a JavaScript loop that integrates it every frame — on the main thread, where a long task or a garbage collection makes it visibly hitch. `linear()` takes a list of output values and interpolates between them, and those values are not clamped to [0, 1], so a dense enough sample of a spring *is* the spring, overshoot included. Solve it once at author time, emit the samples, and the animation runs on the compositor where nothing on the main thread can reach it.',

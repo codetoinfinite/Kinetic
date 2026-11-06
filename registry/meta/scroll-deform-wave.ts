@@ -15,7 +15,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/shaders/scroll-deform-wave.ts', type: 'registry:lib', role: 'shader' },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [],
 
   summary:
     'Signed, smoothed scroll velocity drives a single scalar, and that scalar scales two sine displacements in the vertex shader. Because the velocity keeps its sign, scrolling up bends the surface the opposite way from scrolling down, which is the direction cue that makes the effect read as momentum rather than as noise. Everything else — the wave shape, the shading, the crop — is a pure function of that one number.',

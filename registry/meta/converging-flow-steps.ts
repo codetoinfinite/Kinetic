@@ -36,7 +36,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A process diagram that assembles itself as you scroll. The two outer cards converge toward the middle from opposite ends while the connectors between them pop in at 35% through the timeline — after the cards are already moving. That ordering is the entire effect: connectors that arrive first read as "boxes with arrows", connectors that arrive during the movement read as "these things connect".',

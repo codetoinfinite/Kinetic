@@ -103,11 +103,62 @@ export function VelocityAfterimagePass({
 
   const ready = width > 1 && height > 1 && supported;
 
+  /* Sizing is a callback rather than effect-body code because it has to be
+     reachable from BOTH effects, which fire on independent triggers. The build
+     effect sizes the render targets itself, but it constructs `contentCamera`
+     at +/-1 and nothing else ever widened it — that lived only in the effect
+     keyed on the observed width and height. So any rebuild without an
+     accompanying size change left the camera square inside a non-square
+     canvas: the marks render as ellipses, and because the raf loop reads the
+     aspect back off `contentCamera.right` the lead mark also tracks the
+     pointer at the wrong horizontal scale, drifting further from the cursor
+     the further it travels. The build effect re-runs on `satellites`, `hue`
+     and `resolutionScale`, so that state persisted until the user happened to
+     resize the window. Everything below is derived purely from w and h, and
+     `WebGLRenderTarget.setSize` no-ops on unchanged dimensions, so calling it
+     from both paths is idempotent. */
+  const fitStage = useCallback(
+    (w: number, h: number) => {
+      const current = stage.current;
+      if (!current || w < 1 || h < 1) return;
+      const dpr = pixelRatio();
+      const aspect = w / h;
+      current.renderer.setPixelRatio(dpr);
+      current.renderer.setSize(w, h, false);
+      current.contentCamera.left = -aspect;
+      current.contentCamera.right = aspect;
+      current.contentCamera.updateProjectionMatrix();
+
+      const bufferW = Math.max(2, Math.round(w * dpr * resolutionScale));
+      const bufferH = Math.max(2, Math.round(h * dpr * resolutionScale));
+      for (const target of [current.frame, current.ping, current.pong]) {
+        target.setSize(bufferW, bufferH);
+        // setSize reallocates the texture, so whatever the history held is now
+        // undefined memory. Without an explicit clear, the first frame after a
+        // resize can composite garbage that then decays for a second.
+        current.renderer.setRenderTarget(target);
+        current.renderer.clear();
+      }
+      current.renderer.setRenderTarget(null);
+    },
+    [resolutionScale],
+  );
+
   useEffect(() => {
     const el = host.current;
     if (!el || !ready) return;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setSupported(false);
+      return;
+    }
     const dpr = pixelRatio();
     renderer.setPixelRatio(dpr);
     renderer.setSize(el.clientWidth, el.clientHeight, false);
@@ -212,6 +263,14 @@ export function VelocityAfterimagePass({
     };
     stage.current = stageValue;
 
+    // Fit before the first frame. `ready` guarantees the observed box is real,
+    // and waiting for the resize effect to widen the camera is a bet that the
+    // box will change size again — on a stage that is built once and never
+    // reflowed, that bet never pays out. The clear this performs is wanted
+    // here too: the three targets are freshly allocated and their contents are
+    // undefined until something writes them.
+    fitStage(width, height);
+
     return () => {
       stage.current = null;
       disposeObject(content);
@@ -234,29 +293,11 @@ export function VelocityAfterimagePass({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, satellites, hue, resolutionScale]);
 
+  // Reflow costs a re-fit, never a rebuild. `resolutionScale` stays covered
+  // because `fitStage` closes over it, so a new scale gives a new identity.
   useEffect(() => {
-    const current = stage.current;
-    if (!current || width < 1 || height < 1) return;
-    const dpr = pixelRatio();
-    const aspect = width / height;
-    current.renderer.setPixelRatio(dpr);
-    current.renderer.setSize(width, height, false);
-    current.contentCamera.left = -aspect;
-    current.contentCamera.right = aspect;
-    current.contentCamera.updateProjectionMatrix();
-
-    const bufferW = Math.max(2, Math.round(width * dpr * resolutionScale));
-    const bufferH = Math.max(2, Math.round(height * dpr * resolutionScale));
-    for (const target of [current.frame, current.ping, current.pong]) {
-      target.setSize(bufferW, bufferH);
-      // setSize reallocates the texture, so whatever the history held is now
-      // undefined memory. Without an explicit clear, the first frame after a
-      // resize can composite garbage that then decays for a second.
-      current.renderer.setRenderTarget(target);
-      current.renderer.clear();
-    }
-    current.renderer.setRenderTarget(null);
-  }, [width, height, resolutionScale]);
+    fitStage(width, height);
+  }, [fitStage, width, height]);
 
   useRaf(
     (dt) => {

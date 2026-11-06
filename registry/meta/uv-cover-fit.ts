@@ -15,7 +15,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/shaders/uv-cover-fit.ts', type: 'registry:lib', role: 'shader' },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [],
 
   summary:
     'A shader has no box to crop, so `object-fit: cover` has to happen on the texture coordinates before the sample. The fit is a pure function of two numbers — the texture aspect and the quad aspect — which means the quad can be reshaped on every frame and the crop simply follows, with no re-upload and no CPU work. The frame here cycles from tall to wide continuously, because a cover fit only ever tested at one aspect ratio has not been tested.',

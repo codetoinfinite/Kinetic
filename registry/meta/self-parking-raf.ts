@@ -11,7 +11,6 @@ const meta: ComponentMetaInput = {
 
   files: [{ path: 'registry/ui/self-parking-raf.tsx', type: 'registry:ui', role: 'hook' }],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'An eased value never arrives. Closing 12% of the remaining gap each frame closes it 100% never — the distance decays asymptotically and `current !== target` stays true for the life of the page, so a loop conditioned on that comparison never stops. One line fixes it: below a threshold, assign the target outright. The equality test can now succeed, the loop reaches its own stopping condition, and it unsubscribes itself. The frame callback exists only while something is genuinely moving.',

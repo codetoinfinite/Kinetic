@@ -107,11 +107,51 @@ export function VertexCylinderBend({
 
   const ready = width > 1 && height > 1 && supported;
 
+  /* Fitting the camera is a callback rather than effect-body code because it
+     has to be reachable from BOTH effects, which fire on independent triggers.
+     The camera is constructed with a placeholder aspect of 1 and the default
+     position z of 0 — inside the plane — and everything that corrects that
+     lived only in the effect keyed on the observed width and height. So any
+     rebuild without an accompanying size change left a camera sitting in the
+     middle of its own geometry: the build effect re-runs on `segments` and
+     `paint`, and a caller passing an inline `paint` arrow rebuilds the stage
+     on every parent render, at which point the banner stayed broken until the
+     user happened to resize the window. Everything below is derived purely
+     from w and h, so calling it from both paths is idempotent. */
+  const fitCamera = useCallback((w: number, h: number) => {
+    const current = stage.current;
+    if (!current || w < 1 || h < 1) return;
+    const aspect = w / h;
+    current.renderer.setPixelRatio(pixelRatio());
+    current.renderer.setSize(w, h, false);
+    current.camera.aspect = aspect;
+
+    // Contain-fit by moving the camera, not by resizing the plane: the plane's
+    // world width is what `curl` is measured against, so it has to stay fixed.
+    // Take the larger of the two required distances or the banner is cropped
+    // on whichever axis is tighter.
+    const tanHalf = Math.tan((CAMERA_FOV * Math.PI) / 360);
+    const forWidth = PLANE_WIDTH / FIT / (2 * tanHalf * aspect);
+    const forHeight = PLANE_HEIGHT / FIT / (2 * tanHalf);
+    current.camera.position.z = Math.max(forWidth, forHeight);
+    current.camera.updateProjectionMatrix();
+  }, []);
+
   useEffect(() => {
     const el = host.current;
     if (!el || !ready) return;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setSupported(false);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(el.clientWidth, el.clientHeight, false);
     renderer.setClearColor(0x000000, 0);
@@ -163,6 +203,12 @@ export function VertexCylinderBend({
 
     stage.current = { renderer, scene, camera, geometry, material, texture, uniforms };
 
+    // Fit before the first frame. `ready` guarantees the observed box is real,
+    // and waiting for the resize effect to do it is a bet that the box will
+    // change size again — on a stage that is built once and never reflowed,
+    // that bet never pays out and the first frame is also the last wrong one.
+    fitCamera(width, height);
+
     return () => {
       stage.current = null;
       scene.remove(mesh);
@@ -177,24 +223,11 @@ export function VertexCylinderBend({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, segments, paint]);
 
+  // Reflow costs a re-fit, never a rebuild. The guard against a stage that
+  // does not exist yet now lives inside `fitCamera`.
   useEffect(() => {
-    const current = stage.current;
-    if (!current || width < 1 || height < 1) return;
-    const aspect = width / height;
-    current.renderer.setPixelRatio(pixelRatio());
-    current.renderer.setSize(width, height, false);
-    current.camera.aspect = aspect;
-
-    // Contain-fit by moving the camera, not by resizing the plane: the plane's
-    // world width is what `curl` is measured against, so it has to stay fixed.
-    // Take the larger of the two required distances or the banner is cropped
-    // on whichever axis is tighter.
-    const tanHalf = Math.tan((CAMERA_FOV * Math.PI) / 360);
-    const forWidth = PLANE_WIDTH / FIT / (2 * tanHalf * aspect);
-    const forHeight = PLANE_HEIGHT / FIT / (2 * tanHalf);
-    current.camera.position.z = Math.max(forWidth, forHeight);
-    current.camera.updateProjectionMatrix();
-  }, [width, height]);
+    fitCamera(width, height);
+  }, [fitCamera, width, height]);
 
   useRaf(
     (dt) => {

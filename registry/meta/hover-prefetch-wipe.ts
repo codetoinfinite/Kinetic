@@ -15,7 +15,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/hooks/use-reduced-motion.ts', type: 'registry:hook', role: 'motion preference' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'Two halves of one idea: spend the gap between "the visitor has decided" and "the visitor has clicked" making the next page free. `pointerenter` on any link inside the container prefetches it — 200 to 800 ms of warm-up nobody paid for — and the click covers the screen with a wipe, navigating only once the wipe has genuinely finished covering. Both halves are delegated from a single container, and the same predicate that decides what to intercept decides what to prefetch, so a download link or a cross-origin link is left entirely alone by both.',

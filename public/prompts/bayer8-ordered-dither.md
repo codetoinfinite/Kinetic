@@ -179,12 +179,23 @@ export function Bayer8OrderedDither({
   };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const el = host.current;
+    if (!el) return;
     if (!hasWebGL()) {
       setSupported(false);
       return;
     }
+
+    /* The canvas is created here, not rendered by React, because the cleanup
+       below hands the context back through `WEBGL_lose_context` — and
+       `getContext` on an element that has been through that returns the SAME
+       dead context, not a new one. Keeping React's element across the cycle
+       therefore made the loss permanent. This is not a dev-only StrictMode
+       concern: the preview host hides components with `<Activity mode="hidden">`,
+       which unmounts effects while keeping the DOM, so scrolling a preview out
+       of view and back is exactly that cycle. */
+    const canvas = document.createElement('canvas');
+    canvas.className = 'block h-full w-full';
 
     const gl = canvas.getContext('webgl2', {
       antialias: false,
@@ -204,15 +215,32 @@ export function Bayer8OrderedDither({
       setSupported(false);
       return;
     }
+    el.append(canvas);
+    canvasRef.current = canvas;
     gpuRef.current = gpu;
     setSupported(true);
 
+    // Unhandled, a lost context is a canvas that stays blank for the rest of
+    // the page's life with nothing rendered in its place, so swap in the CSS
+    // fallback. `preventDefault` is what keeps the loss recoverable at all.
+    const onLost = (event: Event): void => {
+      event.preventDefault();
+      // Detached as well: the fallback renders as a sibling in normal flow,
+      // so a canvas left in place would cover it.
+      canvas.remove();
+      setSupported(false);
+    };
+    canvas.addEventListener('webglcontextlost', onLost);
+
     return () => {
+      canvas.removeEventListener('webglcontextlost', onLost);
       gpuRef.current = null;
+      canvasRef.current = null;
       gl.deleteVertexArray(gpu.vao);
       gl.deleteBuffer(gpu.buffer);
       gl.deleteProgram(gpu.program);
       loseContext(gl);
+      canvas.remove();
     };
   }, []);
 

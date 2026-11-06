@@ -9,11 +9,11 @@
   ],
   "dependencies": [],
   "registryDependencies": [
-    "http://localhost:8927/r/damp.json",
-    "http://localhost:8927/r/use-in-view.json",
-    "http://localhost:8927/r/use-raf.json",
-    "http://localhost:8927/r/use-reduced-motion.json",
-    "http://localhost:8927/r/use-resize-observer.json"
+    "https://kinetic.example.com/r/damp.json",
+    "https://kinetic.example.com/r/use-in-view.json",
+    "https://kinetic.example.com/r/use-raf.json",
+    "https://kinetic.example.com/r/use-reduced-motion.json",
+    "https://kinetic.example.com/r/use-resize-observer.json"
   ],
   "files": [
     {
@@ -25,6 +25,7 @@
   ],
   "meta": {
     "category": "layout",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "perspective",

@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A paragraph sits at 16% strength and resolves character by character as it crosses the viewport, with the reveal position pinned to the scrollbar rather than to a clock. Scroll back up and the characters ghost out again in reverse, because a scrubbed timeline is a function of position, not a playback. The stagger and durations are ratios of the scroll range rather than seconds, so the pacing per character is unchanged whether the paragraph is thirty words or three hundred.',

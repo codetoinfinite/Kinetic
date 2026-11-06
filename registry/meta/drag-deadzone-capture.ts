@@ -11,7 +11,6 @@ const meta: ComponentMetaInput = {
 
   files: [{ path: 'registry/ui/drag-deadzone-capture.tsx', type: 'registry:ui', role: 'hook' }],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A deliberate click moves the pointer one to three pixels; a tap on a phone moves five or more. A drag handler with no dead zone calls all of them drags, so the track lurches on every click and the code that suppresses the post-drag click starts suppressing clicks the user meant. This hook captures the pointer on `pointerdown` — so a fast throw that leaves the element keeps delivering moves — and only commits to a drag once the pointer is further than the threshold from the press point. Every one of the four ways a gesture can end funnels through a single exit, because the path you forget is the one that leaves the track welded to a pointer that is no longer there.',

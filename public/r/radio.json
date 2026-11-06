@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio",
+  "type": "registry:ui",
+  "title": "Radio",
+  "description": "React Aria radio group with a gradient selected dot that cross-fades in while the white centre scales up, in two sizes.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/radio.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/radio.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/radio/radio.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ReactNode, Ref } from \"react\";\nimport {\n  Radio as AriaRadio,\n  RadioGroup as AriaRadioGroup,\n} from \"react-aria-components\";\nimport type {\n  RadioGroupProps as AriaRadioGroupProps,\n  RadioProps as AriaRadioProps,\n} from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Figma source: Board UI → radio_default_sm / radio_selected_sm (used in the\n * AI chat model picker, node 4035:6925) and the checkbox family tokens.\n *\n * Two sizes:\n *   md  16×16 dot, 6px inner, label Body 1/Medium (14)\n *   sm  14×14 dot, 5px inner, label Body 2/Medium (13)\n *\n * States:\n *   default   bg background/primary/default, 1px border/checkbox/default,\n *             shadow/xs\n *   selected  Button/Primary gradient (blue/500 → blue/600) with an inset\n *             blue ring + top highlight, white inner dot\n *   disabled  50% opacity, not-allowed cursor\n *\n * `RadioGroup` + `Radio` are built on React Aria (keyboard arrows, form\n * semantics, label association). The bare `RadioDot` glyph is also exported\n * for menu rows that manage selection themselves (e.g. Dropdown items acting\n * as a radio group), where a nested focusable radio would be invalid.\n */\n\nexport type RadioSize = \"sm\" | \"md\";\n\nconst dotStyles = {\n  sm: {\n    dot: \"size-3.5\",\n    inner: \"size-[5px]\",\n    selected:\n      \"bg-gradient-to-b from-accent-500 to-accent-600 shadow-[inset_0px_0px_0px_0.875px_var(--color-accent-500),inset_0px_1.75px_0px_0px_rgba(255,255,255,0.25)]\",\n    border: \"border-[0.875px]\",\n    gap: \"gap-2\",\n    label: \"text-body-2-medium\",\n  },\n  md: {\n    dot: \"size-4\",\n    inner: \"size-1.5\",\n    selected:\n      \"bg-gradient-to-b from-accent-500 to-accent-600 shadow-[inset_0px_0px_0px_1px_var(--color-accent-500),inset_0px_2px_0px_0px_rgba(255,255,255,0.25)]\",\n    border: \"border\",\n    gap: \"gap-2\",\n    label: \"text-body-medium\",\n  },\n};\n\nexport interface RadioDotProps {\n  selected?: boolean;\n  size?: RadioSize;\n  /** Draws the keyboard focus ring around the glyph. */\n  focusVisible?: boolean;\n  className?: string;\n}\n\n/**\n * The bare radio glyph — presentation only, no interaction or semantics.\n *\n * Select/deselect animates: the default bordered surface and the selected\n * gradient are stacked layers cross-fading over 200ms (a gradient background\n * can't transition directly), while the white inner dot scales in and out.\n */\n// #region critical\nexport function RadioDot({ selected = false, size = \"sm\", focusVisible = false, className }: RadioDotProps) {\n  const s = dotStyles[size];\n  return (\n    <span\n      aria-hidden\n      className={cx(\n        \"relative flex shrink-0 items-center justify-center rounded-full\",\n        s.dot,\n        focusVisible && \"ring-2 ring-border-focus-ring ring-offset-2\",\n        className,\n      )}\n    >\n      {/* Default surface */}\n      <span\n        className={cx(\n          \"absolute inset-0 rounded-full border-border-checkbox-default bg-background-primary-default shadow-xs\",\n          \"transition-opacity duration-200 ease\",\n          s.border,\n          selected && \"opacity-0\",\n        )}\n      />\n      {/* Selected gradient surface */}\n      <span\n        className={cx(\n          \"absolute inset-0 rounded-full\",\n          \"transition-opacity duration-200 ease\",\n          s.selected,\n          !selected && \"opacity-0\",\n        )}\n      />\n      {/* Inner dot: absolutely centered (flex centering of fractional sizes can\n          land on subpixels) and no drop shadow — a downward shadow makes the\n          dot read as sitting below center. */}\n      <span\n        className={cx(\n          \"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-control-indicator-background\",\n          \"transition-[scale,opacity] duration-200 ease\",\n          s.inner,\n          selected ? \"scale-100 opacity-100\" : \"scale-0 opacity-0\",\n        )}\n      />\n    </span>\n  );\n}\n// #endregion\n\n/* ------------------------------------------------------------------- group */\n\nexport interface RadioGroupProps extends Omit<AriaRadioGroupProps, \"children\"> {\n  children?: ReactNode;\n  ref?: Ref<HTMLDivElement>;\n}\n\n/** Wraps a set of Radios: arrow-key navigation, single selection, form value. */\nexport function RadioGroup({ className, children, ref, ...props }: RadioGroupProps) {\n  return (\n    <AriaRadioGroup\n      ref={ref}\n      {...props}\n      className={(state) =>\n        cx(\n          \"flex flex-col gap-2\",\n          typeof className === \"function\" ? className(state) : className,\n        )\n      }\n    >\n      {children}\n    </AriaRadioGroup>\n  );\n}\n\n/* ------------------------------------------------------------------- radio */\n\nexport interface RadioProps extends Omit<AriaRadioProps, \"children\"> {\n  children?: ReactNode;\n  size?: RadioSize;\n  ref?: Ref<HTMLLabelElement>;\n}\n\nexport function Radio({ className, children, size = \"md\", ref, ...props }: RadioProps) {\n  const s = dotStyles[size];\n\n  return (\n    <AriaRadio\n      ref={ref}\n      {...props}\n      className={(state) =>\n        cx(\n          \"group inline-flex items-center select-none\",\n          s.gap,\n          state.isDisabled ? \"cursor-not-allowed opacity-50\" : \"cursor-pointer\",\n          typeof className === \"function\" ? className(state) : className,\n        )\n      }\n    >\n      {(state) => (\n        <>\n          <RadioDot selected={state.isSelected} size={size} focusVisible={state.isFocusVisible} />\n          {children !== undefined && children !== null && (\n            <span className={cx(s.label, \"text-text-primary\")}>{children}</span>\n          )}\n        </>\n      )}\n    </AriaRadio>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "radio",
+      "radio-group",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

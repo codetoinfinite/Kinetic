@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "trend-badge",
+  "type": "registry:ui",
+  "title": "Trend Badge",
+  "description": "Up, down or flat change pill for dashboard KPIs: one rotating arrow, a signed percent, lime, rose or grey, in three sizes.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/chip.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/trend-badge.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/trend-badge.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Trend Badge\" (boardui.com/templates/dashboard).\n * No BoardUI source was used.\n */\n\nimport { RiArrowUpLine } from '@remixicon/react';\nimport { CHIP_COLORS } from '@/components/motion/chip';\nimport { cx } from '@/lib/cx';\n\n/**\n * TrendBadge: the small change pill next to a dashboard KPI (\"+5.3%\",\n * \"-2.1%\", \"0.00%\"). The sign of the rounded value picks the direction:\n * lime for up, rose for down, grey for flat. One arrow glyph rotates\n * between the three states, so a live value turns the arrow instead of\n * swapping icons. Screen readers hear \"Up 5.3%\" plus an optional context\n * (\"vs last month\") rather than a bare \"+5.3\".\n */\n\nexport type TrendDirection = 'up' | 'down' | 'flat';\nexport type TrendBadgeSize = 'sm' | 'md' | 'lg';\n\nexport interface TrendBadgeProps {\n  /** Change in percent, e.g. 5.3 or -2.1. */\n  value: number;\n  /** Override the direction taken from the rounded value's sign. */\n  direction?: TrendDirection;\n  /** For metrics where going down is good (churn, cost): down turns lime, up rose. */\n  invert?: boolean;\n  /** Fraction digits shown. Default 1. */\n  decimals?: number;\n  size?: TrendBadgeSize;\n  /** Show the arrow. Default true. */\n  icon?: boolean;\n  /** Appended to the screen-reader text, e.g. \"vs last month\". */\n  context?: string;\n  /** Number locale; fixed by default so server and client render the same text. */\n  locale?: string;\n  className?: string;\n}\n\nconst SIZE: Record<TrendBadgeSize, { pill: string; icon: string }> = {\n  sm: { pill: 'h-5 gap-0.5 rounded-md px-1 text-caption-2-medium', icon: 'size-3' },\n  md: { pill: 'h-6 gap-0.5 rounded-md px-1.5 text-caption-1-medium', icon: 'size-3.5' },\n  lg: { pill: 'h-7 gap-1 rounded-lg px-2 text-body-medium', icon: 'size-4' },\n};\n\nconst TONE = {\n  good: CHIP_COLORS.lime,\n  bad: CHIP_COLORS.rose,\n  flat: CHIP_COLORS.neutral,\n} as const;\n\n/** One up-arrow, turned: 0deg up, 90deg flat (pointing along the reading direction), 180deg down. */\nconst ROTATE: Record<TrendDirection, string> = {\n  up: 'rotate-0',\n  flat: 'rotate-90 rtl:-rotate-90',\n  down: 'rotate-180',\n};\n\nconst WORD: Record<TrendDirection, string> = { up: 'Up', down: 'Down', flat: 'No change,' };\n\n// #region critical\nexport function TrendBadge({\n  value,\n  direction,\n  invert = false,\n  decimals = 1,\n  size = 'md',\n  icon = true,\n  context,\n  locale = 'en-US',\n  className,\n}: TrendBadgeProps) {\n  // Round first, so -0.04 at one decimal reads \"0.0%\" and counts as flat\n  // instead of showing a red \"-0.0%\".\n  const factor = 10 ** decimals;\n  const rounded = Math.round(value * factor) / factor || 0;\n  const dir: TrendDirection = direction ?? (rounded > 0 ? 'up' : rounded < 0 ? 'down' : 'flat');\n  const tone = dir === 'flat' ? TONE.flat : (dir === 'up') !== invert ? TONE.good : TONE.bad;\n\n  const format = (n: number, signDisplay: 'exceptZero' | 'never') =>\n    new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals, signDisplay }).format(n);\n  const s = SIZE[size];\n\n  return (\n    <span\n      data-direction={dir}\n      className={cx(\n        'inline-flex shrink-0 items-center whitespace-nowrap tabular-nums',\n        'transition-colors duration-200 ease-out motion-reduce:transition-none',\n        s.pill,\n        tone,\n        className,\n      )}\n    >\n      {icon ? (\n        <RiArrowUpLine\n          aria-hidden\n          className={cx(\n            'shrink-0 transition-[rotate] duration-300 ease-out motion-reduce:transition-none',\n            s.icon,\n            ROTATE[dir],\n          )}\n        />\n      ) : null}\n      <span aria-hidden>{format(rounded, 'exceptZero')}%</span>\n      <span className=\"sr-only\">\n        {`${WORD[dir]} ${format(Math.abs(rounded), 'never')}%${context ? ` ${context}` : ''}`}\n      </span>\n    </span>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "boardui",
+      "kpi",
+      "trend",
+      "percent",
+      "badge",
+      "dashboard"
+    ]
+  }
+}

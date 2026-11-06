@@ -408,8 +408,18 @@ export function CursorRepulsionBurst({
     stage.current = { renderer, geometry, program, mesh, uniforms, resize, draw };
     draw(0);
 
+    // A context we are never told about losing leaves a permanently blank panel
+    // and no fallback beneath it, so treat the loss as a machine that never had
+    // WebGL. `preventDefault` is what buys the chance of a restore at all.
+    const onLost = (event: Event): void => {
+      event.preventDefault();
+      setUnsupported(true);
+    };
+    canvas.addEventListener('webglcontextlost', onLost);
+
     return () => {
       stage.current = null;
+      canvas.removeEventListener('webglcontextlost', onLost);
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerdown', onDown);
       canvas.removeEventListener('pointerleave', onLeave);

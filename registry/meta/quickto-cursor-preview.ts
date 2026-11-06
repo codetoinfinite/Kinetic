@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['use-resize-observer'],
 
   summary:
     'Hovering a row fades in a preview panel that then trails the pointer with a full second of catch-up, so it reads as a heavy object being dragged rather than a tooltip pinned to the cursor. Position comes from exactly two `gsap.quickTo` setters created once at mount; the hovered row is the only thing that ever enters React state.',

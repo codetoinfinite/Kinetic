@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-direction",
+  "type": "registry:lib",
+  "title": "scroll-direction",
+  "description": "Shared utility used by Kinetic components.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/scroll-direction.ts",
+      "type": "registry:lib",
+      "target": "lib/scroll-direction.ts",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (utils/scroll-direction.ts)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n/** Native horizontal scrolling starts at 0 in both directions. RTL offsets\n * become negative in modern browsers; return distance from inline-start.\n */\nexport function inlineScrollOffset(scrollLeft: number, direction: \"ltr\" | \"rtl\"): number {\n  return Math.max(0, direction === \"rtl\" ? -scrollLeft : scrollLeft);\n}\n\n/** Convert physical viewport geometry to the scroll offset that aligns a card.\n * Geometry stays physical, so variable widths and RTL need no offsetLeft math.\n */\nexport function scrollOffsetForItem(\n  track: { left: number; right: number; width: number },\n  item: { left: number; right: number; width: number },\n  scrollLeft: number,\n  direction: \"ltr\" | \"rtl\",\n  align: \"start\" | \"center\" = \"start\",\n): number {\n  if (align === \"center\") return scrollLeft + (item.left + item.right - track.left - track.right) / 2;\n  return scrollLeft + (direction === \"rtl\" ? item.right - track.right : item.left - track.left);\n}\n"
+    }
+  ]
+}

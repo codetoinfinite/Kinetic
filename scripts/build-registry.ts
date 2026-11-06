@@ -12,6 +12,7 @@ const META_DIR = path.join(ROOT, 'registry', 'meta');
 const DEMO_DIR = path.join(ROOT, 'registry', 'demos');
 const HOOKS_DIR = path.join(ROOT, 'registry', 'hooks');
 const LIB_DIR = path.join(ROOT, 'registry', 'lib');
+const STYLES_DIR = path.join(ROOT, 'registry', 'styles');
 const OUT_DIR = path.join(ROOT, '__generated__');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 
@@ -33,9 +34,9 @@ const SITE_URL = SITE_ORIGIN;
    Vercel, GitHub Actions and every other runner, and by nothing on a laptop. */
 if (SITE_ORIGIN_IS_PLACEHOLDER) {
   const message =
-    `SITE_URL is unset, so every install command and registryDependency will be ` +
-    `built against the placeholder origin ${SITE_ORIGIN}. Set SITE_URL in the ` +
-    `build environment, or edit \`url\` in site.config.ts.`;
+    `Every install command and registryDependency will be built against ` +
+    `${SITE_ORIGIN}, which nothing outside this machine can fetch. Set SITE_URL ` +
+    `in the build environment, or edit \`url\` in site.config.ts.`;
   if (process.env['CI'] !== undefined) throw new Error(message);
   console.warn(`\n⚠️  ${message}\n`);
 }
@@ -75,12 +76,26 @@ function targetFor(filePath: string): string {
   if (filePath.includes('registry/hooks/')) return `hooks/${name}`;
   if (filePath.includes('registry/lib/')) return `lib/${name}`;
   if (filePath.includes('registry/shaders/')) return `components/motion/shaders/${name}`;
+  if (filePath.includes('registry/styles/')) return `styles/${name}`;
   return `components/motion/${name}`;
 }
 
 function langFor(filePath: string): string {
+  if (filePath.endsWith('.css')) return 'css';
   return filePath.endsWith('.tsx') ? 'tsx' : 'ts';
 }
+
+/** Basename without its source extension: `registry/ui/label.tsx` → `label`. */
+function stem(filePath: string): string {
+  return path.basename(filePath).replace(/\.(tsx?|css)$/, '');
+}
+
+/**
+ * The stylesheet every `kit: 'boardui'` item reads its tokens, type ramp and
+ * utilities from. Added to those items' dependencies by the build rather than
+ * by hand, because nothing imports a stylesheet the way `collectRefs` can see.
+ */
+const BOARDUI_THEME = 'boardui-theme';
 
 /**
  * A shared hook or lib file. These are published as their own registry items
@@ -89,7 +104,11 @@ function langFor(filePath: string): string {
  * time either is edited.
  */
 function isSupportPath(filePath: string): boolean {
-  return filePath.includes('registry/hooks/') || filePath.includes('registry/lib/');
+  return (
+    filePath.includes('registry/hooks/') ||
+    filePath.includes('registry/lib/') ||
+    filePath.includes('registry/styles/')
+  );
 }
 
 /**
@@ -126,6 +145,43 @@ function typeDependencies(dependencies: string[], devDeps: Record<string, string
     out.push(`${types}@${range}`);
   }
   return out;
+}
+
+/**
+ * React is the one package a consumer of a React registry provably already has,
+ * which is why no item in the catalogue declares it. Everything else a file
+ * imports has to be installed for that file to compile.
+ */
+const AMBIENT_PACKAGES = new Set(['react', 'react-dom']);
+
+const NPM_IMPORT_RE = /\bfrom\s*['"]([^'"]+)['"]|\bimport\s*['"]([^'"]+)['"]/g;
+
+/**
+ * The npm packages a support file imports, as versioned specs.
+ *
+ * A component declares its own packages in `meta.dependencies`; a hook or lib
+ * file has no metadata to declare them in, so they are read from its imports
+ * and versioned from this repo's own package.json. Without this, installing
+ * `webgl` (which imports `three`) or `use-lenis` (which imports `lenis`) on its
+ * own lands a file in a consumer's project that cannot resolve its first line.
+ */
+function npmDependencies(code: string, deps: Record<string, string>): string[] {
+  const out = new Set<string>();
+  for (const match of code.matchAll(NPM_IMPORT_RE)) {
+    const spec = match[1] ?? match[2];
+    if (spec === undefined || spec.startsWith('.') || spec.startsWith('@/')) continue;
+    if (spec.startsWith('node:')) continue;
+    // A deep import ships the whole package: "three/examples/jsm/x" → "three".
+    const parts = spec.split('/');
+    const name = spec.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0];
+    if (name === undefined || AMBIENT_PACKAGES.has(name)) continue;
+    const range = deps[name];
+    if (range === undefined) {
+      throw new Error(`support file imports "${name}", which is not in package.json dependencies`);
+    }
+    out.add(`${name}@${range}`);
+  }
+  return [...out].sort();
 }
 
 /** A same-registry dependency has to be addressed by URL, not by bare name. */
@@ -173,7 +229,7 @@ function collectRefs(code: string, into: Refs = emptyRefs()): Refs {
 interface Support {
   slug: string;
   path: string;
-  type: 'registry:hook' | 'registry:lib';
+  type: 'registry:hook' | 'registry:lib' | 'registry:file';
   /** Other support slugs this one imports. */
   deps: string[];
   code: string;
@@ -182,14 +238,21 @@ interface Support {
 async function loadSupport(): Promise<Map<string, Support>> {
   const support = new Map<string, Support>();
 
-  for (const [dir, prefix, type] of [
-    [HOOKS_DIR, 'registry/hooks', 'registry:hook'],
-    [LIB_DIR, 'registry/lib', 'registry:lib'],
+  for (const [dir, prefix, type, pattern] of [
+    [HOOKS_DIR, 'registry/hooks', 'registry:hook', /\.tsx?$/],
+    [LIB_DIR, 'registry/lib', 'registry:lib', /\.tsx?$/],
+    // Installed as a plain file the consumer `@import`s from their own
+    // Tailwind entry; shadcn's `css` field cannot carry `@theme` blocks,
+    // custom variants and `@utility` rules at this size.
+    [STYLES_DIR, 'registry/styles', 'registry:file', /\.css$/],
   ] as const) {
     if (!existsSync(dir)) continue;
-    for (const file of (await readdir(dir)).filter((f) => f.endsWith('.ts')).sort()) {
-      const slug = file.replace(/\.ts$/, '');
+    for (const file of (await readdir(dir)).filter((f) => pattern.test(f)).sort()) {
+      const slug = stem(file);
       const relative = `${prefix}/${file}`;
+      if (support.has(slug)) {
+        throw new Error(`support slug "${slug}" is defined twice (${support.get(slug)?.path}, ${relative})`);
+      }
       const code = await readFile(path.join(dir, file), 'utf8');
       const refs = collectRefs(code);
       support.set(slug, {
@@ -213,6 +276,12 @@ interface Loaded {
   deps: { support: string[]; ui: string[] };
   prompt: string;
 }
+
+/** A validated meta whose imports are read but not yet resolved to owners. */
+type Pending = Omit<Loaded, 'deps' | 'meta'> & {
+  meta: Omit<ComponentMeta, 'registryDependencies'>;
+  refs: Refs;
+};
 
 class BuildErrors {
   private readonly messages: string[] = [];
@@ -242,7 +311,7 @@ async function load(support: Map<string, Support>): Promise<Loaded[]> {
 
   const files = (await readdir(META_DIR)).filter((f) => f.endsWith('.ts')).sort();
   const errors = new BuildErrors();
-  const loaded: Loaded[] = [];
+  const pending: Pending[] = [];
   const seen = new Map<string, string>();
   /** Support files a meta listed in `files[]`; stripped, then reported. */
   const inlinedSupport: string[] = [];
@@ -308,6 +377,17 @@ async function load(support: Map<string, Support>): Promise<Loaded[]> {
       // collected, but it is not shipped inside this item — the import that
       // put it in `refs` already routes it through `registryDependencies`.
       if (isSupportPath(file_.path)) {
+        // The item that ships this file is the support item, so its target is
+        // the one that decides where the file lands. A different target written
+        // here is silently discarded, and the meta then documents an install
+        // path the consumer will never see.
+        if (file_.target !== undefined && file_.target !== targetFor(file_.path)) {
+          errors.add(
+            scope,
+            `files[] target "${file_.target}" for ${file_.path} is discarded — ` +
+              `support files install to "${targetFor(file_.path)}"`,
+          );
+        }
         inlinedSupport.push(`${meta.slug} → ${file_.path}`);
         continue;
       }
@@ -368,22 +448,65 @@ async function load(support: Map<string, Support>): Promise<Loaded[]> {
       continue;
     }
 
-    // A component made of several files imports its own siblings; those are
-    // already shipped in files[] and must not become registry dependencies.
-    const own = new Set(sources.map((s) => path.basename(s.path).replace(/\.tsx?$/, '')));
+    if (support.has(meta.slug)) {
+      errors.add(scope, `slug "${meta.slug}" collides with support item ${support.get(meta.slug)?.path}`);
+      continue;
+    }
 
-    loaded.push({
+    pending.push({
       meta,
       sources,
-      deps: {
-        support: [...refs.hooks, ...refs.lib].sort(),
-        ui: [...refs.ui].filter((name) => !own.has(name)).sort(),
-      },
+      refs,
       prompt: buildPrompt({ meta, excerpt: rewritePaths(excerpt), lang: primary.lang }),
     });
   }
 
   errors.throwIfAny('Validation');
+
+  /* A `@/registry/ui/<name>` import names a FILE, and a component can ship
+     several (`input` ships `label` and `hint-text`). Map every shipped file to
+     the one item that ships it, so importing a companion file depends on its
+     owner rather than on an item that does not exist. Two items shipping the
+     same file would install it twice and drift; that is an error. */
+  const owner = new Map<string, string>();
+  const ownerErrors = new BuildErrors();
+  for (const { meta, sources } of pending) {
+    for (const source of sources) {
+      if (!source.path.startsWith('registry/ui/')) continue;
+      const name = stem(source.path);
+      const previous = owner.get(name);
+      if (previous !== undefined && previous !== meta.slug) {
+        ownerErrors.add(
+          `registry/meta/${meta.slug}.ts`,
+          `${source.path} is already shipped by "${previous}" — depend on it instead`,
+        );
+      }
+      owner.set(name, meta.slug);
+    }
+  }
+  ownerErrors.throwIfAny('Ownership');
+
+  const loaded: Loaded[] = pending.map(({ meta, sources, refs, prompt }) => {
+    const support_ = new Set([...refs.hooks, ...refs.lib]);
+    if (meta.kit === 'boardui') support_.add(BOARDUI_THEME);
+    const deps = {
+      support: [...support_].sort(),
+      // A file with no owner keeps its own name, so the cross-reference check
+      // below reports it rather than this map hiding it.
+      ui: [...new Set([...refs.ui].map((name) => owner.get(name) ?? name))]
+        .filter((slug) => slug !== meta.slug)
+        .sort(),
+    };
+    // Derived here, once. Everything downstream — registry.json, the generated
+    // modules, the detail page's "Also installs" line — reads this rather than
+    // deriving its own answer or trusting a hand-written one.
+    return {
+      meta: { ...meta, registryDependencies: [...deps.ui, ...deps.support] },
+      sources,
+      deps,
+      prompt,
+    };
+  });
 
   if (inlinedSupport.length > 0) {
     process.stdout.write(
@@ -405,17 +528,7 @@ async function load(support: Map<string, Support>): Promise<Loaded[]> {
     }
     for (const dep of deps.support) {
       if (!support.has(dep)) {
-        linkErrors.add(scope, `imports @/registry/{hooks,lib}/${dep}, which does not exist`);
-      }
-    }
-
-    // A declared dependency that nothing imports is stale metadata, not a
-    // build failure — but a declared name that resolves to neither a component
-    // nor a support file is a typo that would ship.
-    for (const dep of meta.registryDependencies) {
-      if (dep.startsWith('http') || dep.startsWith('@') || dep.includes('/')) continue;
-      if (!slugs.has(dep) && !support.has(dep)) {
-        linkErrors.add(scope, `registryDependencies "${dep}" matches no component or support file`);
+        linkErrors.add(scope, `depends on support item "${dep}", which does not exist in registry/{hooks,lib,styles}`);
       }
     }
   }
@@ -455,8 +568,10 @@ async function writeRegistryJson(items: Loaded[], support: Map<string, Support>)
   );
 
   const pkg = JSON.parse(await readFile(path.join(ROOT, 'package.json'), 'utf8')) as {
+    dependencies?: Record<string, string>;
     devDependencies?: Record<string, string>;
   };
+  const deps = pkg.dependencies ?? {};
   const devDeps = pkg.devDependencies ?? {};
 
   const componentItems = items.map(({ meta, sources, deps }) => ({
@@ -472,29 +587,51 @@ async function writeRegistryJson(items: Loaded[], support: Map<string, Support>)
       const types = typeDependencies(meta.dependencies, devDeps);
       return types.length > 0 ? { devDependencies: types } : {};
     })(),
-    // Derived from the imports, not from the declaration — see collectRefs.
-    registryDependencies: [...deps.ui, ...deps.support].map(itemUrl),
+    // Derived from the imports, not from a declaration — see collectRefs.
+    registryDependencies: meta.registryDependencies.map(itemUrl),
     files: sources.map((s) => ({ path: s.path, type: s.type, target: s.target })),
     ...(meta.cssVars ? { cssVars: meta.cssVars } : {}),
     // `meta` is copied verbatim into every public/r/<name>.json, which is
     // what `npx shadcn add` downloads. Prose belongs in the docs, not in a
     // payload every consumer pays for — keep this to filter facets.
-    meta: { category: meta.category, cost: meta.cost, tags: meta.tags },
+    meta: { category: meta.category, kit: meta.kit, cost: meta.cost, tags: meta.tags },
   }));
 
   const supportItems = usedSupport.map((slug) => {
     const entry = support.get(slug);
     if (entry === undefined) throw new Error(`unreachable: support "${slug}"`);
+    const packages = entry.type === 'registry:file' ? [] : npmDependencies(entry.code, deps);
+    const types = typeDependencies(packages, devDeps);
     return {
       name: entry.slug,
       type: entry.type,
       title: entry.slug,
-      description: `Shared ${entry.type === 'registry:hook' ? 'hook' : 'utility'} used by ${site.name} components.`,
-      dependencies: [] as string[],
+      description:
+        entry.slug === BOARDUI_THEME
+          ? `BoardUI design tokens, type ramp and utilities. @import it from your Tailwind CSS entry, after "tailwindcss".`
+          : `Shared ${entry.type === 'registry:hook' ? 'hook' : 'utility'} used by ${site.name} components.`,
+      dependencies: packages,
+      ...(types.length > 0 ? { devDependencies: types } : {}),
       registryDependencies: entry.deps.map(itemUrl),
       files: [{ path: entry.path, type: entry.type, target: targetFor(entry.path) }],
     };
   });
+
+  // `targetFor` keys off the basename, so two files from different directories
+  // can land on the same path and silently overwrite each other in a consumer's
+  // project. Nothing here would have reported that.
+  const byTarget = new Map<string, string>();
+  for (const item of [...componentItems, ...supportItems]) {
+    for (const file of item.files) {
+      const previous = byTarget.get(file.target);
+      if (previous !== undefined && previous !== file.path) {
+        throw new Error(
+          `target collision: "${previous}" and "${file.path}" both install to "${file.target}"`,
+        );
+      }
+      byTarget.set(file.target, file.path);
+    }
+  }
 
   const registry = {
     $schema: 'https://ui.shadcn.com/schema/registry.json',
@@ -538,6 +675,7 @@ export const BY_SLUG: Record<string, ComponentMeta> = Object.fromEntries(
   slug: string;
   title: string;
   category: ${CATEGORIES.map((c) => `'${c}'`).join(' | ')};
+  kit: 'kinetic' | 'boardui';
   cost: 'css' | 'dom' | 'canvas2d' | 'webgl';
   motif: string;
   blurb: string;
@@ -550,11 +688,12 @@ export const MANIFEST: ManifestEntry[] = ${JSON.stringify(
         slug: meta.slug,
         title: meta.title,
         category: meta.category,
+        kit: meta.kit,
         cost: meta.cost,
         motif: meta.motif,
         blurb: meta.blurb,
         tags: meta.tags,
-        deps: meta.dependencies.map((d) => d.split('@')[0] ?? d),
+        deps: meta.dependencies.map(packageName),
       })),
       null,
       2,
@@ -631,7 +770,7 @@ ${items
         path: entry.path,
         target,
         type: entry.type,
-        lang: 'ts',
+        lang: langFor(entry.path),
         code: entry.code,
       });
     }
@@ -649,11 +788,23 @@ ${items
   code: string;
 }
 
-export const SOURCES: Record<string, SourceFile[]> = ${JSON.stringify(
-      Object.fromEntries(withSupport),
+// Each file once, referenced by every component that shows it. The BoardUI
+// token sheet alone is ~95 KB and is a tab on every BoardUI-kit page; inlined
+// per component it would make this module tens of megabytes.
+const FILES: Record<string, SourceFile> = ${JSON.stringify(
+      Object.fromEntries(withSupport.flatMap(([, files]) => files.map((f) => [f.path, f]))),
       null,
       2,
     )};
+
+export const SOURCES: Record<string, SourceFile[]> = {
+${withSupport
+  .map(
+    ([slug, files]) =>
+      `  ${JSON.stringify(slug)}: [${files.map((f) => `FILES[${JSON.stringify(f.path)}]!`).join(', ')}],`,
+  )
+  .join('\n')}
+};
 
 export const PROMPTS: Record<string, string> = ${JSON.stringify(
       Object.fromEntries(items.map((i) => [i.meta.slug, i.prompt])),

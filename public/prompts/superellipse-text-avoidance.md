@@ -410,9 +410,19 @@ export function SuperellipseTextAvoidance({
       });
     }
 
+    // Nothing repaints a lost context of its own accord: unhandled, the panel
+    // sits blank behind the text indefinitely with no fallback, so the loss is
+    // folded into the unsupported path. `preventDefault` keeps a restore legal.
+    const onLost = (event: Event): void => {
+      event.preventDefault();
+      setUnsupported(true);
+    };
+    canvas.addEventListener('webglcontextlost', onLost);
+
     return () => {
       cancelled = true;
       stage.current = null;
+      canvas.removeEventListener('webglcontextlost', onLost);
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('pointercancel', onLeave);

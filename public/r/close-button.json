@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "close-button",
+  "type": "registry:ui",
+  "title": "Close Button",
+  "description": "Circular dismiss button in four sizes whose X is redrawn per size, so the stroke is a true 1.6 to 2.5px at every scale.",
+  "categories": [
+    "action"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/close-button.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/close-button.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/buttons/close-button.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport type { ButtonHTMLAttributes, Ref } from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Compact circular dismiss control — the \"X\" used to close announcements,\n * toasts, modals, and drawers. Companion to `IconButton`, but ships its own\n * glyph (rather than taking an `icon` prop) so every consumer gets an\n * identical X with a stroke that's a true CSS pixel value per size, not a\n * scaled approximation.\n *\n * The glyph is a hand-drawn SVG per size (not a shared icon scaled up/down)\n * because scaling a single glyph across sizes scales its stroke too — a 2px\n * line at 20px becomes ~3.2px at 32px. Each size below renders its own X in a\n * viewBox equal to its own pixel dimensions, so `strokeWidth` is always a\n * literal CSS pixel value, at every size (not a scaled approximation).\n *\n * Sizes (px):\n *   2xs = 16 container, 6.8px glyph, 1.6px stroke   (compact floating surfaces)\n *   xs = 20 container, 10.8px glyph, 2px stroke     (Announcement dismiss corner)\n *   sm = 24 container, 12.6px glyph, 2px stroke\n *   md = 32 container, 16.2px glyph, 2.5px stroke   (modal header close — a touch\n *                                                     bolder to hold its own at\n *                                                     the larger size)\n *\n * Glyph sizes are 90% of the container's natural proportion (12/14/18 → the\n * above), tuned down 10% across the board so the X reads a touch smaller\n * inside its circle.\n */\n\ntype CloseButtonSize = \"2xs\" | \"xs\" | \"sm\" | \"md\";\n\nexport interface CloseButtonProps\n  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"children\"> {\n  size?: CloseButtonSize;\n  /** Accessible name — required since there is no visible label. */\n  \"aria-label\": string;\n  ref?: Ref<HTMLButtonElement>;\n}\n\nconst GLYPH_SIZE: Record<CloseButtonSize, number> = {\n  \"2xs\": 6.8,\n  xs: 10.8,\n  sm: 12.6,\n  md: 16.2,\n};\n\nconst STROKE_WIDTH: Record<CloseButtonSize, number> = {\n  \"2xs\": 1.6,\n  xs: 2,\n  sm: 2,\n  md: 2.5,\n};\n\nconst GLYPH_INSET: Record<CloseButtonSize, number> = {\n  // Figma's 8px bars rotate inside a 6.8px square, leaving ~0.57px at\n  // each corner once projected onto the diagonal.\n  \"2xs\": 0.57,\n  xs: 2,\n  sm: 2,\n  md: 2,\n};\n\nconst styles = sortCx({\n  base: [\n    \"inline-flex shrink-0 items-center justify-center rounded-full\",\n    \"bg-background-tertiary-default text-foreground-icon-secondary\",\n    \"select-none cursor-pointer\",\n    \"transition-colors duration-150 ease\",\n    \"hover:text-text-primary\",\n    \"outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-border-focus-ring\",\n  ].join(\" \"),\n  container: {\n    \"2xs\": \"size-4\",\n    xs: \"size-5\",\n    sm: \"size-6\",\n    md: \"size-8\",\n  },\n});\n\n// #region critical\nexport function CloseButton({\n  size = \"xs\",\n  className,\n  type = \"button\",\n  ref,\n  ...props\n}: CloseButtonProps) {\n  const glyph = GLYPH_SIZE[size];\n  const strokeWidth = STROKE_WIDTH[size];\n  const inset = GLYPH_INSET[size];\n\n  return (\n    <button\n      ref={ref}\n      type={type}\n      className={cx(styles.base, styles.container[size], className)}\n      {...props}\n    >\n      <svg width={glyph} height={glyph} viewBox={`0 0 ${glyph} ${glyph}`} fill=\"none\" aria-hidden>\n        <path\n          d={`M${inset} ${inset}L${glyph - inset} ${glyph - inset}`}\n          stroke=\"currentColor\"\n          strokeWidth={strokeWidth}\n          strokeLinecap=\"round\"\n        />\n        <path\n          d={`M${glyph - inset} ${inset}L${inset} ${glyph - inset}`}\n          stroke=\"currentColor\"\n          strokeWidth={strokeWidth}\n          strokeLinecap=\"round\"\n        />\n      </svg>\n    </button>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "button",
+      "dismiss",
+      "close",
+      "icon",
+      "boardui"
+    ]
+  }
+}

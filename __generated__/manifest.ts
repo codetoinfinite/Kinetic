@@ -2,7 +2,8 @@
 export interface ManifestEntry {
   slug: string;
   title: string;
-  category: 'scroll' | 'webgl' | 'cursor' | 'transition' | 'text' | 'layout' | 'primitive';
+  category: 'scroll' | 'webgl' | 'cursor' | 'transition' | 'text' | 'layout' | 'primitive' | 'action' | 'form' | 'overlay' | 'navigation' | 'display' | 'block';
+  kit: 'kinetic' | 'boardui';
   cost: 'css' | 'dom' | 'canvas2d' | 'webgl';
   motif: string;
   blurb: string;
@@ -15,6 +16,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "ab-layer-crossfade",
     "title": "A/B Layer Ping-Pong",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Two stacked layers alternate so any change crossfades, however fast you move between rows.",
@@ -30,9 +32,324 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "accent-swatch-picker",
+    "title": "Accent Swatch Picker",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "rings",
+    "blurb": "Glossy colour spheres in one keyboard radio group; the pick becomes one --accent property that re-tints kit controls in its scope.",
+    "tags": [
+      "color",
+      "accent",
+      "theme",
+      "radio",
+      "swatches",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "accordion",
+    "title": "Accordion",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Sections that expand in place in divided, contained and separated styles, with an eased height and a blur-in body, on React Aria.",
+    "tags": [
+      "accordion",
+      "disclosure",
+      "faq",
+      "expand",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "activity-rings-card",
+    "title": "Activity Rings Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "rings",
+    "blurb": "Watch-style concentric goal rings in SVG with value tiles: the rings draw in on mount, and hovering a ring or tile focuses it.",
+    "tags": [
+      "chart",
+      "rings",
+      "progress",
+      "fitness",
+      "svg",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "agent-chat",
+    "title": "Agent Chat",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "A full AI chat screen on the AI SDK: sidebar, a chat card whose replies blur in line by line, and a local thread history rail.",
+    "tags": [
+      "chat",
+      "ai",
+      "streaming",
+      "ai-sdk",
+      "composer",
+      "history",
+      "starter",
+      "boardui"
+    ],
+    "deps": [
+      "@ai-sdk/react",
+      "@remixicon/react",
+      "ai",
+      "motion"
+    ]
+  },
+  {
+    "slug": "agent-creator",
+    "title": "Agent Creator",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "orbit",
+    "blurb": "A create-an-agent card: paper avatar with a face ring and shape arc, colour pill, profile, tools and voice fields, then a created summary.",
+    "tags": [
+      "agent",
+      "form",
+      "avatar",
+      "validation",
+      "ai",
+      "boardui"
+    ],
+    "deps": [
+      "motion",
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "agent-detail-panel",
+    "title": "Agent Detail Panel",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Selected-agent panel: status pill, task, progress, step log and Pause / Resume / Stop actions that change the run state.",
+    "tags": [
+      "boardui",
+      "agents",
+      "panel",
+      "steps",
+      "status"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "agent-limits-card",
+    "title": "Agent Limits Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "An agent budget card: a context window bar split by token bucket, an expandable breakdown, and plan limits with reset times.",
+    "tags": [
+      "agent",
+      "usage",
+      "meter",
+      "tokens",
+      "ai",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "agent-list-panel",
+    "title": "Agent List Panel",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Agent sidebar list with avatar, live status dot, last message and time, single selection, search and All/Running/Done tabs.",
+    "tags": [
+      "boardui",
+      "agents",
+      "sidebar",
+      "list",
+      "filter",
+      "react-aria"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "agent-log",
+    "title": "Agent Log",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "trail",
+    "blurb": "Streaming agent-log parts: a reveal ticker, rows that blur in under a soft clipping edge, and a curved tree guide that draws itself.",
+    "tags": [
+      "agent",
+      "ai",
+      "log",
+      "streaming",
+      "tree",
+      "motion",
+      "boardui"
+    ],
+    "deps": [
+      "motion"
+    ]
+  },
+  {
+    "slug": "agent-progress",
+    "title": "Agent Progress",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "A minimizable step list for multi-step agent work: an overall ring, a timed ring on the running step, check-offs and a completion hand-off.",
+    "tags": [
+      "agent",
+      "progress",
+      "steps",
+      "ring",
+      "ai",
+      "boardui"
+    ],
+    "deps": [
+      "motion",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "agent-thinking",
+    "title": "Agent Thinking",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "wave",
+    "blurb": "The \"thinking\" line above a chat composer: dot wave, dot spin, stars or infinity, with a shimmering label and an elapsed timer.",
+    "tags": [
+      "agent",
+      "ai",
+      "loader",
+      "status",
+      "shimmer",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "agents-bar-card",
+    "title": "Agents Bar Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "One purple bar per agent for a month, grey stubs for idle ones; hover or arrow keys highlight a bar and show its avatar, name and value.",
+    "tags": [
+      "chart",
+      "bars",
+      "agents",
+      "usage",
+      "month",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "ai-chat",
+    "title": "AI Chat",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "A coding-agent workspace: chat history sidebar, a thread with a live step checklist and streamed replies, and a changes panel with diffs.",
+    "tags": [
+      "template",
+      "ai",
+      "agent",
+      "chat",
+      "composer",
+      "diff",
+      "sidebar",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "ai-image-generation",
+    "title": "AI Image Generation",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Three-pane image studio: repo sidebar, prompt thread with a pill composer and live generating tiles, and a masonry gallery with styles.",
+    "tags": [
+      "template",
+      "ai",
+      "image-generation",
+      "gallery",
+      "composer",
+      "sidebar",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "ai-profile",
+    "title": "AI Profile",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "AI usage profile page: cover header with tabs, stat tiles, an activity heatmap, and agent and token charts beside a workspace sidebar.",
+    "tags": [
+      "template",
+      "ai",
+      "profile",
+      "dashboard",
+      "charts",
+      "heatmap",
+      "sidebar",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "analytic-disc-picking",
     "title": "Analytic Disc Picking",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "Hit-test camera-facing discs by intersecting the pointer ray with their plane. Exact, allocation-free, and correct for shader billboards.",
@@ -48,9 +365,32 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "announcement",
+    "title": "Announcement",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "A compact sidebar card with an icon, title, note and full-width call to action that blurs and shrinks away when dismissed.",
+    "tags": [
+      "announcement",
+      "banner",
+      "onboarding",
+      "dismissible",
+      "sidebar",
+      "motion",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "motion"
+    ]
+  },
+  {
     "slug": "antialiased-disc-fragment",
     "title": "Anti-Aliased Point Discs",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "A phyllotaxis field of dots that stay the same weight at every pixel ratio, with no MSAA and no texture.",
@@ -66,9 +406,72 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "app-shell",
+    "title": "App Shell",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Page frame for the chat starter: sidebar, phone drawer, breadcrumb and heading over a 1300px column, with a notification bell.",
+    "tags": [
+      "app-shell",
+      "layout",
+      "sidebar",
+      "page-frame",
+      "notifications",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "appointments-list-card",
+    "title": "Appointments List Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Upcoming visits as inner tiles: date chip, time window, mode, doctor initials and status, with reschedule slots, cancel and undo.",
+    "tags": [
+      "medical",
+      "appointments",
+      "list",
+      "schedule",
+      "health",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "area-chart-card",
+    "title": "Area Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "wave",
+    "blurb": "A dashboard card of stacked gradient areas with a period switch, a hover tooltip and tiles that follow the hovered month.",
+    "tags": [
+      "chart",
+      "area-chart",
+      "stacked",
+      "dashboard",
+      "recharts",
+      "boardui"
+    ],
+    "deps": [
+      "recharts"
+    ]
+  },
+  {
     "slug": "asymmetric-stagger",
     "title": "Asymmetric In/Out Staggers",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "A list that arrives item by item after a hold and leaves twice as fast, from the last row backwards.",
@@ -87,6 +490,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "asymmetric-typewriter",
     "title": "Asymmetric Typewriter",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "Rotating phrases that delete at twice the speed they type, with a beat of nothing at the empty string.",
@@ -100,9 +504,31 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "auth-card",
+    "title": "Auth Card",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Sign-in, sign-up and code-verify cards with social providers stacked, inline or in a grid, and an optional split layout with artwork.",
+    "tags": [
+      "auth",
+      "sign-in",
+      "sign-up",
+      "otp",
+      "form",
+      "carousel",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "auto-advance-filmstrip",
     "title": "Auto-Advance Filmstrip",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A centred strip that steps one panel every few seconds, neighbours dimmed and shrunk, on one CSS transition.",
@@ -116,9 +542,63 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "avatar",
+    "title": "Avatar",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "rings",
+    "blurb": "Round photo or initials avatar in four sizes (20 to 36px) and four tints, with a lazy-loaded image that fills the disc.",
+    "tags": [
+      "avatar",
+      "initials",
+      "profile",
+      "user",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "avatar-stack",
+    "title": "Avatar Stack",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Overlapping assignee discs with surface-coloured rings, a +N overflow disc and a name tooltip on every avatar.",
+    "tags": [
+      "avatar",
+      "group",
+      "assignees",
+      "tooltip",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "badge",
+    "title": "Badge",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "The small numeric counter on nav items and unread totals: a 16px pill in a selected (blue) or resting (neutral) tone.",
+    "tags": [
+      "badge",
+      "counter",
+      "count",
+      "pill",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "banded-scrollspy-rail",
     "title": "Banded Scrollspy Rail",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A tick rail whose active mark widens as a section crosses a 7% band through the middle of the screen.",
@@ -132,9 +612,31 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "bar-list-card",
+    "title": "Bar List Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Ranked analytics rows on proportional bars behind underline tabs, with a share / count switch and a pill that unfolds long lists.",
+    "tags": [
+      "chart",
+      "bar",
+      "list",
+      "analytics",
+      "dashboard",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "batched-blur-reveal",
     "title": "Batched Blur Reveal",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Cards that enter together focus in as one staggered group instead of arriving as a slab.",
@@ -154,6 +656,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "bayer-plasma-hero",
     "title": "Bayer-Quantised Plasma",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "noise",
     "blurb": "An iterated domain-warped plasma crushed to eleven grey levels, so the hero reads as a dot-matrix proof.",
@@ -171,6 +674,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "bayer8-ordered-dither",
     "title": "Bit-Math Bayer8 Dither",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "noise",
     "blurb": "A smooth gradient crushed to five levels through an 8x8 ordered matrix derived from six integer ops.",
@@ -188,6 +692,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "blend-difference-cursor",
     "title": "Blend-Difference Cursor",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "rings",
     "blurb": "A white dot in difference blend mode inverts whatever it crosses, growing 16 to 44 to 150px on hover.",
@@ -204,9 +709,64 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "blob-avatar",
+    "title": "Blob Avatar",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "wave",
+    "blurb": "Seeded SVG blob with eyes: a name picks its shape, colour and face, the body gently morphs and blinks, six sizes.",
+    "tags": [
+      "boardui",
+      "avatar",
+      "svg",
+      "morph",
+      "agents",
+      "generative"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "board-empty-state",
+    "title": "Board Empty State",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Empty board or column: three ticket panels stacked on a soft surface that fan out on hover, with copy and a create button.",
+    "tags": [
+      "empty-state",
+      "kanban",
+      "project-board",
+      "illustration",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "breadcrumb",
+    "title": "Breadcrumb",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "trail",
+    "blurb": "Ancestor-page trail with auto-inserted chevrons; each item is a link, a button or the current page, with optional 16px icons.",
+    "tags": [
+      "breadcrumb",
+      "trail",
+      "navigation",
+      "icon",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "browser-chrome-frame",
     "title": "Browser Chrome Frame",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A macOS window frame with hover-revealed traffic lights and an address pill whose check draws itself on copy.",
@@ -223,6 +783,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "burst-audio-sync",
     "title": "Chord-Synced Particle Burst",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "Fires an arpeggio and its visual flares off one schedule, so each flash lands on its own note.",
@@ -236,9 +797,128 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "button",
+    "title": "Button",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Primary, secondary, ghost and danger buttons in three sizes, with gradient fills that fade on hover and a soft press.",
+    "tags": [
+      "button",
+      "action",
+      "variants",
+      "icon",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "button-group",
+    "title": "Button Group",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Secondary buttons fused into one bordered strip with hairline dividers, for toolbars, range pickers and pressed toggles.",
+    "tags": [
+      "button",
+      "toolbar",
+      "segmented",
+      "toggle",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "calendar",
+    "title": "Calendar",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A full calendar page: Day, Week and Month views, anchored event popovers with guests and RSVP, new events, and an invitation inbox.",
+    "tags": [
+      "calendar",
+      "schedule",
+      "events",
+      "template",
+      "page",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "calendar-event-chip",
+    "title": "Calendar Event Chip",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Tinted calendar event pill in five colour tokens: one-line compact chip for month cells, block variant for time grids, selected ring.",
+    "tags": [
+      "calendar",
+      "event",
+      "chip",
+      "pill",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date"
+    ]
+  },
+  {
+    "slug": "calendar-toolbar",
+    "title": "Calendar Toolbar",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Calendar page header: month title, Today, month stepper, Day/Week/Month segments, event search and a New event button.",
+    "tags": [
+      "calendar",
+      "toolbar",
+      "header",
+      "segmented-control",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "campaigns-table",
+    "title": "Campaigns Table",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A marketing campaigns table with channel icons, delivery status, budget-spent progress bars, CTR and sortable columns.",
+    "tags": [
+      "table",
+      "marketing",
+      "dashboard",
+      "sorting",
+      "progress",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "canvas-handoff-transition",
     "title": "Canvas Handoff Transition",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "stack",
     "blurb": "The live WebGL canvas is handed to the next page and flies to its new slot, instead of being destroyed and rebuilt.",
@@ -260,6 +940,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "capture-phase-click-swallow",
     "title": "Capture-Phase Click Swallow",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Cancels the single click a finished drag would fire, in the capture phase, without eating the next real click or keyboard activation.",
@@ -274,9 +955,72 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "carousel",
+    "title": "Carousel",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "trail",
+    "blurb": "A gallery you slide through on native scroll-snap: swipe, trackpad and arrow keys for free, plus end-aware arrows and a dot indicator.",
+    "tags": [
+      "carousel",
+      "gallery",
+      "scroll-snap",
+      "slides",
+      "rtl",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "changes-diff-panel",
+    "title": "Changes Diff Panel",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Uncommitted-changes list with +/− counts, an inline diff per file and accept / reject per file or for all; totals update live.",
+    "tags": [
+      "boardui",
+      "diff",
+      "git",
+      "review",
+      "agents",
+      "code"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "channel-tabs-bar-list",
+    "title": "Channel Tabs Bar List",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A tabbed card of ranked horizontal bars: switch channels, campaigns or pages and each row shows its share of sessions.",
+    "tags": [
+      "bar-list",
+      "tabs",
+      "marketing",
+      "dashboard",
+      "ranking",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "char-stagger-scale-up",
     "title": "Char Stagger Then Scale-Up",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "Characters resolve left to right, then the whole word scales up with an overshoot as the last one lands.",
@@ -292,9 +1036,108 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "chat-message-bubble",
+    "title": "Chat Message Bubble",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "User and assistant chat rows with avatar, bubble, time and inline code. Hovering shows copy, regenerate and like/dislike actions.",
+    "tags": [
+      "chat",
+      "message",
+      "ai",
+      "clipboard",
+      "feedback",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "chat-starter",
+    "title": "Chat Starter",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Empty AI chat screen with a greeting, suggestion chips that fill the pill composer, and an \"Add an API key to start\" setup card.",
+    "tags": [
+      "chat",
+      "ai",
+      "empty-state",
+      "composer",
+      "suggestions",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "checkbox",
+    "title": "Checkbox",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "React Aria checkbox in two sizes: a gradient box whose white tick draws itself on, plus an indeterminate dash for partial selections.",
+    "tags": [
+      "checkbox",
+      "indeterminate",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "checkbox-card",
+    "title": "Checkbox Card",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Bordered option card with title and description on the left and the kit checkbox on the right; a click anywhere on it toggles.",
+    "tags": [
+      "checkbox",
+      "card",
+      "selectable",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "chip",
+    "title": "Chip",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Coloured status, delta and role chips in three emphasis levels and ten theme-aware colour pairs on a 6px radius.",
+    "tags": [
+      "chip",
+      "status",
+      "label",
+      "delta",
+      "badge",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "clip-path-variable-tween",
     "title": "CSS Variable Clip-Path Tween",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "One tweened custom property drives every clip-path on the panel, and reversing the timeline is the exit.",
@@ -310,9 +1153,254 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "close-button",
+    "title": "Close Button",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "rings",
+    "blurb": "Circular dismiss button in four sizes whose X is redrawn per size, so the stroke is a true 1.6 to 2.5px at every scale.",
+    "tags": [
+      "button",
+      "dismiss",
+      "close",
+      "icon",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "code-block",
+    "title": "Code Block",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Docs code block with a filename chip, sticky line numbers, a dependency-free TSX highlighter, wrap toggle and one-click copy.",
+    "tags": [
+      "code",
+      "syntax-highlighting",
+      "copy",
+      "docs",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "code-diff-viewer",
+    "title": "Code Diff Viewer",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Before / after line diff with old and new line numbers, hunk headers, a unified or split layout and folded unchanged lines.",
+    "tags": [
+      "boardui",
+      "diff",
+      "code",
+      "git",
+      "review",
+      "agents"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "color",
+    "title": "Color",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Semantic colour token palette: grouped swatch tables with light and dark values read from the theme, click a token to copy its variable.",
+    "tags": [
+      "color",
+      "tokens",
+      "palette",
+      "theme",
+      "dark-mode",
+      "docs",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "color-picker",
+    "title": "Color Picker",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A saturation field, hue and opacity rails, a hex field and presets, inline or behind a round swatch that opens a popover.",
+    "tags": [
+      "color",
+      "picker",
+      "hsb",
+      "swatch",
+      "popover",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "combo-chart-card",
+    "title": "Combo Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "A dashboard card with bars on a left axis and a rate line on a right axis; hovering a month spotlights its bar and pops a dot on the line.",
+    "tags": [
+      "chart",
+      "bar-chart",
+      "line-chart",
+      "dual-axis",
+      "dashboard",
+      "recharts",
+      "boardui"
+    ],
+    "deps": [
+      "recharts"
+    ]
+  },
+  {
+    "slug": "combobox",
+    "title": "Combobox",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Type to filter a list: Input's own field with a chevron toggle, and a field-width menu with sections, a check and a scroll fade.",
+    "tags": [
+      "combobox",
+      "autocomplete",
+      "typeahead",
+      "search",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "command-palette",
+    "title": "Command Palette",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "⌘K palette of searchable commands with sections, icons and shortcuts, built-in or custom filtering, on React Aria Autocomplete and Menu.",
+    "tags": [
+      "command-palette",
+      "search",
+      "cmdk",
+      "modal",
+      "menu",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "composer-attachments",
+    "title": "Composer Attachments",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "56px attachment tiles for a chat composer: type icon, name, size and remove, with a ring that traces the tile edge while uploading.",
+    "tags": [
+      "attachments",
+      "file-input",
+      "upload",
+      "composer",
+      "chat",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "composer-footer",
+    "title": "Composer Footer",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "orbit",
+    "blurb": "Bottom bar of a chat composer: attach, tool toggles, a model slot and a key hint, with a send button that becomes stop while replying.",
+    "tags": [
+      "composer",
+      "chat",
+      "toolbar",
+      "send",
+      "stop",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "composer-loader",
+    "title": "Composer Loader",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "orbit",
+    "blurb": "Wraps a chat composer while the agent works: an iridescent band orbits the pill rim with a soft bloom, fading in and out.",
+    "tags": [
+      "agent",
+      "ai",
+      "loader",
+      "composer",
+      "svg",
+      "glow",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "composer-panel",
+    "title": "Composer Panel",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Two-row agent composer: a growing prompt over a toolbar with add, permission mode, model and send, plus a status tab with a context ring.",
+    "tags": [
+      "composer",
+      "chat",
+      "textarea",
+      "agent",
+      "prompt",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "compound-group-hover",
     "title": "Compound Group Hover Card",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "One hover drives four changes on three elements, each with its own duration and curve. Keyboard gets all four.",
@@ -329,6 +1417,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "conic-property-border",
     "title": "Conic @property Border",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "rings",
     "blurb": "A gradient ring that rotates around a rounded box. Two highlights chase each other; no JavaScript runs.",
@@ -345,6 +1434,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "container-animation-reveals",
     "title": "One Reveal Engine, Two Axes",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "The same staggered line reveal fires for vertical sections and for panels on a horizontal track.",
@@ -360,9 +1450,88 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "context-menu",
+    "title": "Context Menu",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Right-click, long-press and Shift+F10 menu anchored to the pointer, with icons, shortcuts, submenus and checkable rows.",
+    "tags": [
+      "context-menu",
+      "menu",
+      "right-click",
+      "long-press",
+      "submenu",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "context-usage-ring",
+    "title": "Context Usage Ring",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "Small ring and percentage for how full a chat context window is. Turns orange, then rose, near the limit; a tooltip breaks the tokens down.",
+    "tags": [
+      "chat",
+      "context",
+      "tokens",
+      "progress",
+      "tooltip",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "context-window-card",
+    "title": "Context Window Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "An agent's context window as one thin segmented bar by category, with a disclosable legend of token counts and shares.",
+    "tags": [
+      "usage",
+      "tokens",
+      "context-window",
+      "meter",
+      "agent",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "contributions-card",
+    "title": "Contributions Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "A GitHub-style contributions card: a week by weekday calendar in five intensity steps, stat tiles, month labels and nine accent palettes.",
+    "tags": [
+      "chart",
+      "calendar",
+      "heatmap",
+      "contributions",
+      "dashboard",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "converging-flow-steps",
     "title": "Converging Flow Steps",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "A process diagram that closes from both ends while the connectors pop in a third of the way through.",
@@ -382,6 +1551,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "converging-scrub-words",
     "title": "Converging Headline Words",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "Headline words slide in from opposite margins and lock into a sentence, pinned to scroll position.",
@@ -397,9 +1567,30 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "copy-page-button",
+    "title": "Copy Page Button",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Docs split button: the main half copies the page as Markdown and flips to Copied, the chevron opens Copy and View as Markdown.",
+    "tags": [
+      "copy",
+      "markdown",
+      "split-button",
+      "dropdown",
+      "docs",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "cpu-mirror-picking",
     "title": "Raycaster-Free Hover Picking",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "orbit",
     "blurb": "Run the GPU's transform again on the CPU and hit-test the result. No raycaster, no rect reads.",
@@ -416,6 +1607,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "css-var-stagger-reveal",
     "title": "CSS Variable Stagger Reveal",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "Groups reveal as they enter their scroll container; the stagger delay is a CSS calc over an index the JS writes once.",
@@ -429,9 +1621,28 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "cta-section",
+    "title": "CTA Section",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Closing call-to-action: a faded stack of product cards, a large headline, copy and buttons that rise in one after another on scroll.",
+    "tags": [
+      "cta",
+      "landing",
+      "marketing",
+      "section",
+      "cards",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "cursor-clip-path-mask",
     "title": "Cursor Clip-Path Mask",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "rings",
     "blurb": "A disc of a second layer follows the pointer; hovering the trigger grows it until it covers the panel.",
@@ -451,6 +1662,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "cursor-reactive-shader-glow",
     "title": "Cursor-Reactive Shader Glow",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "noise",
     "blurb": "A warped-noise atmosphere with a light that trails the cursor, held under a hard luminance ceiling so copy stays readable.",
@@ -471,6 +1683,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "cursor-repulsion-burst",
     "title": "Cursor Repulsion Burst",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "orbit",
     "blurb": "An orbiting particle field the pointer pushes out of the way, and a press detonates into a shock wave with a heat band.",
@@ -491,6 +1704,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "cylinder-dot-score",
     "title": "Dot-Cloud Score Cylinder",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "Two counter-rotating cylinders of dots — rings, bar lines, notes — drawn from one buffer with no depth buffer.",
@@ -509,6 +1723,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "cylinder-gallery",
     "title": "Cylinder Gallery Drum",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "Nineteen planes wrapped around a drum in the vertex shader, spun by wheel or scroll, focus falling off from centre.",
@@ -527,9 +1742,80 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "dashboard-page-header",
+    "title": "Dashboard Page Header",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Dashboard page header: breadcrumb with initials crumbs, title, week stepper, unread bell and trailing action buttons.",
+    "tags": [
+      "boardui",
+      "header",
+      "breadcrumb",
+      "dashboard",
+      "date-range",
+      "toolbar"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "react-aria",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "data-grid",
+    "title": "Data Grid",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A virtualized spreadsheet with range selection, validated in-cell edits, block paste, undo and redo, filters, summaries and CSV export.",
+    "tags": [
+      "data-grid",
+      "spreadsheet",
+      "virtualized",
+      "range-selection",
+      "undo",
+      "csv",
+      "clipboard",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "motion",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "data-table",
+    "title": "Data Table",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A customers table where TanStack owns sorting, selection and pages, filters narrow the rows, and React Aria renders the grid.",
+    "tags": [
+      "table",
+      "data-table",
+      "tanstack",
+      "sorting",
+      "pagination",
+      "selection",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "@tanstack/react-table",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "dataset-parallax",
     "title": "Dataset-Driven Parallax",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "Layers drift at a rate written on the element itself, over the widest possible scroll window.",
@@ -545,9 +1831,100 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "date-calendar",
+    "title": "Date Calendar",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "An inline month calendar for one date or a range, with a continuous range band, a today dot and struck-through unavailable days.",
+    "tags": [
+      "calendar",
+      "date",
+      "range",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@internationalized/date"
+    ]
+  },
+  {
+    "slug": "date-picker",
+    "title": "Date Picker",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A trigger button that opens one month in a popover, with an editable DD/MM/YYYY chip and Cancel / Apply so nothing commits early.",
+    "tags": [
+      "date",
+      "calendar",
+      "popover",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@internationalized/date",
+      "@remixicon/react",
+      "motion"
+    ]
+  },
+  {
+    "slug": "date-range-picker",
+    "title": "Date Range Picker",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "Two adjacent months in a popover with a quick-select sidebar, typed start and end chips, a day count and Cancel / Apply.",
+    "tags": [
+      "date",
+      "range",
+      "calendar",
+      "popover",
+      "presets",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@internationalized/date",
+      "@remixicon/react",
+      "motion"
+    ]
+  },
+  {
+    "slug": "date-range-stepper",
+    "title": "Date Range Stepper",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "A bordered pill with prev/next chevrons that steps a week or month period, with min/max bounds and a label that slides in.",
+    "tags": [
+      "date",
+      "range",
+      "stepper",
+      "week",
+      "month",
+      "dashboard",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "delayed-unmount-loader",
     "title": "Delayed-Unmount Loader",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A loading overlay that stays mounted 600ms past the signal so its fade can actually play before it leaves.",
@@ -564,6 +1941,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "depth-pulse-travelling-wave",
     "title": "Depth Fade And Travelling Pulse",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "wave",
     "blurb": "A dot lattice on an arc: z drives alpha and point size together, and a per-column phase sweeps the pulse across the field.",
@@ -579,9 +1957,31 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "device-preview-frame",
+    "title": "Device Preview Frame",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Browser-window frame that lays any content out at a device width and scales it in; a Desktop/Tablet/Mobile toggle resizes it live.",
+    "tags": [
+      "preview",
+      "frame",
+      "responsive",
+      "device",
+      "showcase",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "dither-trail-image-reveal",
     "title": "Dither Trail Image Reveal",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "trail",
     "blurb": "A dimmed image restored through a trail of Bayer-thresholded blocks that smear in the direction the pointer moved.",
@@ -600,9 +2000,85 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "divider",
+    "title": "Divider",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Horizontal divider in single-hairline, double-line and filled-strip treatments, with optional start, centre or end content.",
+    "tags": [
+      "divider",
+      "separator",
+      "hairline",
+      "layout",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "docs-callout",
+    "title": "Docs Callout",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Docs callout in four variants (note, tip, warning, danger) with a tinted icon chip, title, rich body and an optional collapsing dismiss.",
+    "tags": [
+      "docs",
+      "callout",
+      "admonition",
+      "note",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "docs-pager",
+    "title": "Docs Pager",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Previous / next cards for the foot of a docs page: arrow and title on top, a one-line summary below, mirrored for RTL.",
+    "tags": [
+      "docs",
+      "pagination",
+      "previous-next",
+      "navigation",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "docs-sidebar-nav",
+    "title": "Docs Sidebar Nav",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Floating docs sidebar with collapsible groups, tree rails, New/Pro badges, an active page and a ⌘K filter that highlights matches.",
+    "tags": [
+      "docs",
+      "sidebar",
+      "navigation",
+      "tree",
+      "filter",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "domain-warped-fbm",
     "title": "Domain-Warped FBM Fog",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "noise",
     "blurb": "Slow, low-contrast fog that flows rather than fades, with a faint light that trails the cursor.",
@@ -620,6 +2096,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "dotted-notepad-surface",
     "title": "Dotted Notepad Surface",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "grid",
     "blurb": "A tiled dot grid that dissolves at the panel edges, with a hard-stopped folded corner.",
@@ -636,6 +2113,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "drag-deadzone-capture",
     "title": "Drag with a Dead Zone and Pointer Capture",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Captures the pointer on press but only commits to a drag past a distance threshold, so a shaky click stays a click.",
@@ -653,6 +2131,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "drag-marquee",
     "title": "Drag Marquee",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "trail",
     "blurb": "An endless row that drifts, takes a drag and a throw, and scatters its cards while your hand is down.",
@@ -672,6 +2151,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "drag-throw-scroll",
     "title": "Drag-Throw Scroll",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "trail",
     "blurb": "Grab the page and pull it; let go mid-move and it coasts on, decaying, as far as the flick earned.",
@@ -690,6 +2170,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "drag-to-pin-progress",
     "title": "Drag Mapped To Pin Progress",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "grid",
     "blurb": "Drag a pinned horizontal strip and it moves exactly one pixel per pixel, then throws and settles.",
@@ -705,9 +2186,31 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "drawer",
+    "title": "Drawer",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Panel that slides in from any edge over a dimmed page, for filters, details and bottom sheets, sharing Modal's header, body and actions.",
+    "tags": [
+      "drawer",
+      "sheet",
+      "side-panel",
+      "bottom-sheet",
+      "overlay",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "drifting-smoke-layers",
     "title": "Drifting Smoke Layers",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "noise",
     "blurb": "Slow volumetric fog built from blurred radial gradients on three coprime cycles. No texture, no canvas.",
@@ -721,9 +2224,30 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "dropdown",
+    "title": "Dropdown",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Composable popover menu (trigger, panel, groups, rows, dividers) built on React Aria: the recipe behind the sidebar team and account menus.",
+    "tags": [
+      "dropdown",
+      "menu",
+      "popover",
+      "overlay",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "dual-canvas-z-split",
     "title": "Dual-Canvas Depth Split",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "stack",
     "blurb": "One particle field rendered twice with the depth sign flipped, so the text sits inside the field rather than on top of it.",
@@ -742,6 +2266,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "dual-direction-scrub-entrance",
     "title": "Dual-Direction Scrub Entrance",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "Copy rises while a panel slides in from the side, both on one scrub with 600ms of lag.",
@@ -757,9 +2282,30 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "earnings-chart-card",
+    "title": "Earnings Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "An \"Earned so far\" card of rounded bars in grey tracks; the current or hovered bar darkens, gets an outline ring and drives the headline.",
+    "tags": [
+      "chart",
+      "bar-chart",
+      "earnings",
+      "dashboard",
+      "recharts",
+      "boardui"
+    ],
+    "deps": [
+      "recharts"
+    ]
+  },
+  {
     "slug": "eased-number-counter",
     "title": "Eased Number Counter",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "A statistic that counts up on an eased curve and settles on its exact final figure without shifting the layout.",
@@ -775,9 +2321,32 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "event-detail-popover",
+    "title": "Event Detail Popover",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Anchored calendar event card: colour key, date and time, location, meeting code with Join, guest RSVPs, edit and delete.",
+    "tags": [
+      "calendar",
+      "event",
+      "popover",
+      "details",
+      "attendees",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "exit-warp-navigation",
     "title": "Exit Warp Before Navigate",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "A ring of cards tears itself apart and rushes past the camera, and only then does the route change.",
@@ -794,9 +2363,123 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "faq-section",
+    "title": "FAQ Section",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Landing FAQ: heading block plus the kit accordion tray, two-column at wide container widths, with arrow-key navigation.",
+    "tags": [
+      "faq",
+      "accordion",
+      "landing",
+      "section",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "feature-card-grid",
+    "title": "Feature Card Grid",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Landing grid of feature cards, each topped by a small illustration built from kit parts that plays a state change on hover or focus.",
+    "tags": [
+      "features",
+      "grid",
+      "landing",
+      "marketing",
+      "cards",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "file-upload",
+    "title": "File Upload",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "A drag-and-drop zone that validates type and size, traces progress around its own border, then reports the finished file.",
+    "tags": [
+      "upload",
+      "dropzone",
+      "drag-and-drop",
+      "progress",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "finance-dashboard",
+    "title": "Finance Dashboard",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A full finance dashboard page: in-block sidebar views, KPI cards, cash flow, spending, portfolio, daily spend and a live transactions table.",
+    "tags": [
+      "dashboard",
+      "template",
+      "page",
+      "finance",
+      "charts",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "finance-kpi-row",
+    "title": "Finance KPI Row",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "wave",
+    "blurb": "Balance, income, expense and savings cards with a delta chip coloured by good or bad news and a tiny area sparkline.",
+    "tags": [
+      "kpi",
+      "finance",
+      "dashboard",
+      "sparkline",
+      "stats",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "floating-stickers",
+    "title": "Floating Stickers",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "orbit",
+    "blurb": "Die-cut SVG characters that bob on seeded floats. Drag one and it lifts above the rest, clamped to the frame. Arrow keys nudge it.",
+    "tags": [
+      "stickers",
+      "decoration",
+      "drag",
+      "float",
+      "landing",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "font-safe-text-split",
     "title": "Font-Safe Text Splitting",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "Line splitting gated on document.fonts.ready, re-split on late fonts and on width change, debounced.",
@@ -815,6 +2498,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "fov-derived-row-step",
     "title": "FOV-Derived Row Spacing",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "grid",
     "blurb": "A row whose item spacing is solved from a field of view and a camera distance, so it spans the frame exactly at any size.",
@@ -831,6 +2515,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "fractional-render-scale",
     "title": "Fractional Render Scale",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "grid",
     "blurb": "A field rendered into a backing store 0.6x its box — 36% of the fragments — with a grid measured in texels so the upscale never shows.",
@@ -850,6 +2535,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "fullscreen-triangle-pass",
     "title": "Fullscreen Triangle Pass",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "grid",
     "blurb": "One 3-vertex triangle covers the viewport and runs your fragment shader. No three, no ogl, no seam.",
@@ -863,9 +2549,72 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "funnel-chart-card",
+    "title": "Funnel Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "A horizontal conversion funnel: tapered SVG bands per stage with share pills, stat tiles and a headline that follows the hovered stage.",
+    "tags": [
+      "chart",
+      "funnel",
+      "conversion",
+      "dashboard",
+      "svg",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "github-star-button",
+    "title": "GitHub Star Button",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "A star toggle with a glyph, a Star label and a count pill. Starring pops the star and rolls the en-US formatted count by one.",
+    "tags": [
+      "github",
+      "star",
+      "toggle",
+      "counter",
+      "number-roll",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "motion",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "github-stars-cta",
+    "title": "GitHub Stars CTA",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Open-source free tier section: copy and checklist beside a repo card with a counting star total, star button and repo facts.",
+    "tags": [
+      "github",
+      "open-source",
+      "cta",
+      "landing",
+      "count-up",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "gpu-bezier-burst",
     "title": "GPU Cubic-Bezier Burst",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "Rings of dots that burst on click, every particle solving its own cubic-bezier easing in the vertex shader.",
@@ -884,6 +2633,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "gsap-cursor-follower",
     "title": "GSAP Cursor Follower",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "trail",
     "blurb": "A puck that replaces the arrow inside a panel, trailing 0.4s behind and swelling to a label over targets.",
@@ -899,9 +2649,30 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "heatmap-chart-card",
+    "title": "Heatmap Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "A two-axis heatmap card on a plain CSS grid: cells mix the accent into the chart track, and hovering one rings it and swaps the headline.",
+    "tags": [
+      "chart",
+      "heatmap",
+      "matrix",
+      "dashboard",
+      "css-grid",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "height-first-media-stage",
     "title": "Height-First Media Stage",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A media stage sized from its height, with the width derived from the ratio, cross-fading layers and a caption that replays per index.",
@@ -919,6 +2690,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "hinged-container-intro",
     "title": "Hinged Container Intro",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "The page body swings up from below the fold, hinged on its own bottom edge, with captions following it in.",
@@ -934,9 +2706,32 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "home-dashboard",
+    "title": "Home Dashboard",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A full home dashboard page: in-block sidebar views, hires, earnings, revenue, contributions, key numbers and a working customers table.",
+    "tags": [
+      "dashboard",
+      "template",
+      "page",
+      "customers",
+      "charts",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "@internationalized/date",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "hover-list-image-trail",
     "title": "Hover List Image Trail",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "trail",
     "blurb": "Hovering a row stacks a plate into a column that follows the pointer; the oldest is culled past twenty.",
@@ -956,6 +2751,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "hover-prefetch-wipe",
     "title": "Prefetch-On-Hover Wipe",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Warms the next page on hover, wipes the screen on click, and navigates once the wipe has actually covered.",
@@ -969,9 +2765,27 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "icon-button",
+    "title": "Icon Button",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Square bordered icon-only button in 36 and 32px with a fixed 10px radius, plus an anchor twin for navigational actions.",
+    "tags": [
+      "button",
+      "icon",
+      "toolbar",
+      "action",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "idle-gated-page-states",
     "title": "Idle-Gated Page States",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "A page entrance that will not start until a floor delay has elapsed and the main thread has reported itself idle.",
@@ -988,9 +2802,156 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "image-gallery-masonry",
+    "title": "Image Gallery Masonry",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "A masonry wall of generated images with hover captions, a favourite toggle, a safe download action and a modal lightbox with paging.",
+    "tags": [
+      "gallery",
+      "masonry",
+      "lightbox",
+      "ai",
+      "image-generation",
+      "favourite",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "image-generating-loader",
+    "title": "Image Generating Loader",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "A chat tile for an image still being generated: a rippling halftone ring, a % and stage pill, a seconds countdown and a halftone reveal.",
+    "tags": [
+      "loader",
+      "progress",
+      "ai",
+      "image-generation",
+      "halftone",
+      "chat",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "image-prompt-composer",
+    "title": "Image Prompt Composer",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "The request form of an image model: style chips, an auto-growing prompt, ratio select, count stepper and a Generate that turns into Stop.",
+    "tags": [
+      "composer",
+      "prompt",
+      "form",
+      "ai",
+      "image-generation",
+      "toggle-group",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "important-alerts-card",
+    "title": "Important Alerts Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A health dashboard card: weekly alert count, a week pill, and a scrolling feed of tinted-icon alerts that fades under its header.",
+    "tags": [
+      "card",
+      "alerts",
+      "feed",
+      "dashboard",
+      "medical",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "input",
+    "title": "Input",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "React Aria text field on a filled shell with an inset ring for hover and focus, label with required mark, hint or error line, and icons.",
+    "tags": [
+      "input",
+      "text-field",
+      "label",
+      "hint",
+      "validation",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "input-otp",
+    "title": "Input OTP",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "One-time-code field: a monospace box per digit that advances on type, steps back on Backspace, spreads a paste and accepts OS autofill.",
+    "tags": [
+      "otp",
+      "one-time-code",
+      "verification",
+      "input",
+      "form",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "install-command-tabs",
+    "title": "Install Command Tabs",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "pnpm, npm, yarn and bun tabs that spell the same install or run command four ways, with copy and numbered docs steps on a rail.",
+    "tags": [
+      "install",
+      "package-manager",
+      "tabs",
+      "copy",
+      "docs",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "instanced-quad-particles",
     "title": "Instanced Quad Particles",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "grid",
     "blurb": "Up to 1800 drifting particles in one draw call — quads rather than point sprites, so each one has its own size, spin and shape.",
@@ -1009,6 +2970,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "inverse-scroll-scale",
     "title": "Inverse Scroll Scale",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Media enters oversized at 1.25x and settles to exactly 1.0 as it rises through the first 60% of the scroller.",
@@ -1026,6 +2988,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "io-reveal-lite",
     "title": "IntersectionObserver Reveal",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "One element, one fade-and-rise on entry, no stylesheet and no library — with a single observer shared across every instance.",
@@ -1039,9 +3002,65 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "kanban-card",
+    "title": "Kanban Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Project board ticket: key and area, assignee stack, priority and project tags, title, description, counts and due date.",
+    "tags": [
+      "kanban",
+      "card",
+      "ticket",
+      "project-board",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "kanban-column",
+    "title": "Kanban Column",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Board column with name, WIP count and add button; cards move by pointer drag, Alt + arrow keys or a per-card move menu.",
+    "tags": [
+      "kanban",
+      "drag-and-drop",
+      "project-board",
+      "keyboard",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "kbd",
+    "title": "Kbd",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A fully rounded keyboard-shortcut pill on a semantic <kbd>, 20px tall, for search triggers, menus and command rows.",
+    "tags": [
+      "kbd",
+      "keyboard",
+      "shortcut",
+      "hint",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "keyframe-param-object",
     "title": "Single Param Object Timeline",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "One plain object holds every animated value; the scroll story is a table of keyframes anchored to real sections.",
@@ -1061,6 +3080,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "knockout-zoom-pin",
     "title": "Knockout Zoom Pin",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "A word the size of the screen shrinks into a headline as you scroll, with the scene showing through its letters.",
@@ -1074,9 +3094,30 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "language-select",
+    "title": "Language Select",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A footer language picker on the kit Select: translate glyph or flag in the trigger, flag emoji, native names with lang and dir per option.",
+    "tags": [
+      "select",
+      "language",
+      "i18n",
+      "footer",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "layout-lerp-scalar",
     "title": "Layout Lerp Scalar",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "stack",
     "blurb": "Row, stack, drum and fan are one placement function of seven numbers. Switching layout is a tween over an object.",
@@ -1094,9 +3135,28 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "legend-stat-tiles",
+    "title": "Legend Stat Tiles",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "A headline total over a segmented proportion bar and legend tiles with dots, values and percents that toggle series in and out.",
+    "tags": [
+      "dashboard",
+      "stats",
+      "legend",
+      "proportion",
+      "chart",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "lenis-gsap-ticker",
     "title": "Lenis On The GSAP Ticker",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "Smooth scroll and ScrollTrigger on one clock, with the lag-smoothing line everyone omits.",
@@ -1113,9 +3173,48 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "line-chart-card",
+    "title": "Line Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "wave",
+    "blurb": "A dashboard card with smooth multi-series lines on a dashed grid, a Weekly/Monthly/Yearly switch and a hover tooltip listing every series.",
+    "tags": [
+      "chart",
+      "line-chart",
+      "dashboard",
+      "recharts",
+      "tooltip",
+      "boardui"
+    ],
+    "deps": [
+      "recharts",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "link-button",
+    "title": "Link Button",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "trail",
+    "blurb": "Container-less text action that renders an anchor with href or a button without, with an underline as its only hover cue.",
+    "tags": [
+      "button",
+      "link",
+      "text",
+      "inline",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "looping-scroll-cue",
     "title": "Looping Scroll Cue",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "wave",
     "blurb": "The hairline that dives down a hero. One keyframe pair, a hard ease, and a seamless loop.",
@@ -1132,6 +3231,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "lottie-ratio-poster",
     "title": "Lottie Ratio Poster",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Reserves the box, holds a drawn poster, fetches the JSON only in view, then corrects the ratio from the animation's own w and h.",
@@ -1148,6 +3248,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "magnetic-button",
     "title": "Magnetic Pointer Button",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "orbit",
     "blurb": "A button that leans toward the cursor and springs back, with the label leading the box.",
@@ -1166,6 +3267,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "manufactured-scroll-range",
     "title": "Manufactured Scroll Range",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "An empty box N screens tall turns a one-screen scene into a scrollable sequence, with progress as a CSS variable and the index as state.",
@@ -1179,9 +3281,30 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "marketing-dashboard",
+    "title": "Marketing Dashboard",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A full marketing dashboard page: in-block sidebar views, key metrics, funnel, channel spend, traffic, ad spend, visitors and campaigns.",
+    "tags": [
+      "dashboard",
+      "template",
+      "page",
+      "marketing",
+      "charts",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "matchmedia-layout-teardown",
     "title": "matchMedia Layout Teardown",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Two layouts behind one gsap.matchMedia block. Cross the breakpoint and the desktop branch reverts itself.",
@@ -1197,9 +3320,94 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "mcp-install-card",
+    "title": "MCP Install Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Install card with client tabs (Cursor, Claude Code, VS Code), a highlighted config snippet per client and a copy button with feedback.",
+    "tags": [
+      "mcp",
+      "install",
+      "code",
+      "clipboard",
+      "tabs",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "medical-profile",
+    "title": "Medical Profile",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "A full patient dashboard page: profile, steps, sleep, a day picker driving activity rings, alerts and a filterable patients table.",
+    "tags": [
+      "dashboard",
+      "health",
+      "template",
+      "patients",
+      "page",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "@internationalized/date"
+    ]
+  },
+  {
+    "slug": "meeting-scheduler",
+    "title": "Meeting Scheduler",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A Cal.com-style booking popover: host and meeting summary, a month calendar and a half-hour slot list, committed by \"Send meeting\".",
+    "tags": [
+      "scheduler",
+      "booking",
+      "calendar",
+      "time-slots",
+      "popover",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "meter",
+    "title": "Meter",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "A level within a known range (storage, seats, quotas) with accent, success, warning and error tones, on React Aria Meter.",
+    "tags": [
+      "meter",
+      "usage",
+      "quota",
+      "gauge",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "mixed-scrub-depth-layers",
     "title": "Mixed Scrub Depth Layers",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "grid",
     "blurb": "Layers separate while you scroll and converge when you stop, because each depth has its own scrub.",
@@ -1215,9 +3423,114 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "modal",
+    "title": "Modal",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Dialog over a dimmed page with a header, scrolling body and actions, plus an alert dialog for destructive confirms.",
+    "tags": [
+      "modal",
+      "dialog",
+      "alert-dialog",
+      "overlay",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "model-select",
+    "title": "Model Select",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Model picker on the kit Select. Rows show a tinted monogram, name, description, New/Pro badges and a check on the current model.",
+    "tags": [
+      "select",
+      "model",
+      "composer",
+      "chat",
+      "listbox",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "models-picker",
+    "title": "Models Picker",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "A card of models with provider monograms: pick one with radios, or enable several with switches, a search filter and a live count.",
+    "tags": [
+      "models",
+      "agent",
+      "radio",
+      "switch",
+      "search",
+      "settings",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "month-stepper",
+    "title": "Month Stepper",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "A bordered month label between prev/next chevrons, with spinbutton keys: arrows step a month, Page Up/Down a year, Home/End the bounds.",
+    "tags": [
+      "calendar",
+      "month",
+      "stepper",
+      "spinbutton",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "month-view-grid",
+    "title": "Month View Grid",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Six-week month calendar: muted outside days, event chips per day with \"+N more\", a selected-day pill and full arrow-key navigation.",
+    "tags": [
+      "calendar",
+      "month",
+      "schedule",
+      "grid",
+      "events",
+      "keyboard",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date"
+    ]
+  },
+  {
     "slug": "morphsvg-letter-scramble",
     "title": "Letter Scramble",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "A word assembles out of noise — each character flips through wrong glyphs, decelerating onto the right one.",
@@ -1233,9 +3546,54 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "most-active-days-card",
+    "title": "Most Active Days Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "A scrolling year calendar where each day is a mini activity ring, with a month pill that follows the scroll and selectable days.",
+    "tags": [
+      "calendar",
+      "rings",
+      "fitness",
+      "scroll-spy",
+      "chart",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "multi-agent-chat",
+    "title": "Multi Agent Chat",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "A group chat with a team of agents who reply in turn, plus a workspace switcher and a panel to edit agents and browse files.",
+    "tags": [
+      "template",
+      "ai",
+      "agent",
+      "multi-agent",
+      "chat",
+      "composer",
+      "workspace",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "multipass-offscreen-composite",
     "title": "Multipass Offscreen Composite",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "stack",
     "blurb": "Four passes into two render targets — ramp, additive fills, half-size bloom — and one composite that writes the canvas once.",
@@ -1255,6 +3613,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "nav-dot-wave",
     "title": "Nav Dot Wave",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "wave",
     "blurb": "Nav dots that lift in sequence. The index is an inline custom property; CSS derives the delay.",
@@ -1271,6 +3630,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "ndc-mouse-bulge",
     "title": "In-Shader Mouse Bulge",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "noise",
     "blurb": "A soft lens that follows the cursor, measured by projecting every vertex to screen space instead of raycasting.",
@@ -1289,6 +3649,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "nested-splittext-restore",
     "title": "Nested Split With True Restore",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "Splits rich markup into masked lines and restores the original innerHTML byte-for-byte on teardown.",
@@ -1304,9 +3665,153 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "newsletter-card",
+    "title": "Newsletter Card",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "wave",
+    "blurb": "Email sign-up card with inline validation, a submitting state on a cleaned-up timer, success with reset, and an error path.",
+    "tags": [
+      "newsletter",
+      "email",
+      "form",
+      "validation",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "not-found-page",
+    "title": "Not Found Page",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A 404 block: big error code, the missing path, home and browse actions, suggested page cards and an agent footnote, staggered in.",
+    "tags": [
+      "404",
+      "error",
+      "empty state",
+      "navigation",
+      "page",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "notification",
+    "title": "Notification",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Dismissible notification card with status icon or avatar, actions and a pausable countdown bar, stacked in a corner viewport.",
+    "tags": [
+      "notification",
+      "toast",
+      "alert",
+      "countdown",
+      "motion",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "motion",
+      "react-aria"
+    ]
+  },
+  {
+    "slug": "notification-bell-badge",
+    "title": "Notification Bell Badge",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "rings",
+    "blurb": "Bell button with a red unread badge that opens a notification popover; mark one or all read and the badge follows.",
+    "tags": [
+      "boardui",
+      "notifications",
+      "badge",
+      "popover",
+      "bell",
+      "dashboard"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "notification-center",
+    "title": "Notification Center",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Tabbed activity inbox with unread counts, avatars or status icons, inline action buttons and a mark-all-read control.",
+    "tags": [
+      "notifications",
+      "inbox",
+      "tabs",
+      "unread",
+      "activity",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "number-field",
+    "title": "Number Field",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Input's field shell plus minus and plus steppers on React Aria NumberField: locale currency, percent and unit formats, clamped to limits.",
+    "tags": [
+      "number",
+      "stepper",
+      "currency",
+      "percent",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "on-this-page-toc",
+    "title": "On This Page TOC",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Right-hand \"On this page\" list that tracks the section you are reading with an IntersectionObserver and a sliding active bar.",
+    "tags": [
+      "docs",
+      "toc",
+      "scrollspy",
+      "navigation",
+      "intersection-observer",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "orbit-ring-points",
     "title": "Single-Draw Orbit Rings",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "Concentric rings of dots, one bright marker travelling each ring, all of it in a single draw call.",
@@ -1322,9 +3827,31 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "orders-chart-card",
+    "title": "Orders Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A dashboard card of monthly orders as paired bars, this year beside last, whose count-up headline follows the hovered month.",
+    "tags": [
+      "chart",
+      "bar-chart",
+      "dashboard",
+      "recharts",
+      "comparison",
+      "kpi",
+      "boardui"
+    ],
+    "deps": [
+      "recharts"
+    ]
+  },
+  {
     "slug": "page-reveal-overlay",
     "title": "Key-Replayed Page Reveal",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "An opaque overlay that fades away on every route change, replayed by nothing more than a changed React key.",
@@ -1338,9 +3865,30 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "pagination",
+    "title": "Pagination",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Controlled pager with Previous/Next buttons, 32px page cells and ellipsis collapsing that turns compact below a 420px container.",
+    "tags": [
+      "pagination",
+      "pager",
+      "ellipsis",
+      "responsive",
+      "navigation",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "panel-wipe-preloader",
     "title": "Staggered Panel Wipe",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "An eased 0-100 counter, a word list and a five-column wipe, all on one timeline so they cannot drift.",
@@ -1356,9 +3904,54 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "patient-info-card",
+    "title": "Patient Info Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A medical-dashboard profile card: a 66px avatar with an add-photo button, the patient's name and four icon label/value rows.",
+    "tags": [
+      "profile",
+      "card",
+      "medical",
+      "dashboard",
+      "avatar",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "patients-table",
+    "title": "Patients Table",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A clinic patient list: initials, age, admission select, status pill, conditions, next and last visit, row selection, sort, filter, pages.",
+    "tags": [
+      "table",
+      "medical",
+      "patients",
+      "selection",
+      "sorting",
+      "pagination",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "pause-dont-unmount",
     "title": "Pause, Don't Unmount",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "stack",
     "blurb": "React 19's Activity hides a WebGL scene without losing its state. Effects still tear down, so the GL context is genuinely released.",
@@ -1377,6 +3970,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "percent-slide-carousel",
     "title": "Percent Slide Carousel",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A flex track translated by -100% per slide. One CSS transition, no measurement, no library.",
@@ -1393,6 +3987,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "perspective-coverflow-scroller",
     "title": "Perspective Coverflow Scroller",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "orbit",
     "blurb": "Panels turn away from the centre in real 3D as you scroll a native container — no tween, no loop.",
@@ -1409,6 +4004,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "pinned-horizontal-track",
     "title": "Pinned Horizontal Track",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "grid",
     "blurb": "A section pins while a strip of panels slides sideways, one scroll pixel per track pixel.",
@@ -1424,9 +4020,50 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "plan-comparison-table",
+    "title": "Plan Comparison Table",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "Feature-by-plan table with a sticky plan header, collapsible groups, check, dash and text cells, and a tinted highlighted column.",
+    "tags": [
+      "pricing",
+      "table",
+      "comparison",
+      "landing",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "plan-usage-card",
+    "title": "Plan Usage Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A plan's rolling limits as thin meters with reset times, turning amber then red as they fill, plus renewal date and upgrade.",
+    "tags": [
+      "usage",
+      "billing",
+      "plan",
+      "meter",
+      "limits",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "pointer-palette-sampling",
     "title": "Pointer Palette Sampling",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "canvas2d",
     "motif": "grid",
     "blurb": "Point at the artwork and it names the colour — a clamped pixel read snapped to the nearest palette entry.",
@@ -1444,6 +4081,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "pointer-var-gradient",
     "title": "Pointer-Variable Gradient",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "rings",
     "blurb": "A soft glow tracks the pointer through two CSS custom properties. No rAF, no tween, no string rebuilding.",
@@ -1460,6 +4098,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "pooled-image-trail",
     "title": "Pooled Cursor Image Trail",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "trail",
     "blurb": "Tiles drop behind the cursor from a fixed ring of 22 reused nodes, one every 130px of travel.",
@@ -1476,9 +4115,30 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "popover",
+    "title": "Popover",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Free-form content anchored to a trigger, with an optional arrow, smart positioning and the menu family's motion, built on React Aria.",
+    "tags": [
+      "popover",
+      "overlay",
+      "dialog",
+      "arrow",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "prescatter-horizontal-gallery",
     "title": "Pre-Scatter Horizontal Gallery",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "grid",
     "blurb": "A pinned strip where each item rests slightly off its slot, flies in from ahead and peels away behind.",
@@ -1495,9 +4155,202 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "preview-code-tabs",
+    "title": "Preview Code Tabs",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Docs Preview / Code switcher: a pill tab track with a sliding thumb over a bordered live stage and a highlighted, copyable source.",
+    "tags": [
+      "tabs",
+      "code",
+      "preview",
+      "docs",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "pricing-plan-cards",
+    "title": "Pricing Plan Cards",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Plan cards with a monthly/yearly switch that rolls the prices, shows yearly savings, highlights one plan and lists features with icons.",
+    "tags": [
+      "pricing",
+      "plans",
+      "billing",
+      "landing",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "priority-badge",
+    "title": "Priority Badge",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Urgent, high, medium and low ticket pills with a signal-bars glyph, in tinted, plain and icon-only looks.",
+    "tags": [
+      "badge",
+      "priority",
+      "kanban",
+      "status",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "pro-access-card",
+    "title": "Pro Access Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Pro-locked component placeholder: metallic lock tile, a blurred inert preview, upsell copy and a get-access action that lifts the veil.",
+    "tags": [
+      "docs",
+      "paywall",
+      "locked",
+      "upsell",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "pro-upsell-toast",
+    "title": "Pro Upsell Toast",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "noise",
+    "blurb": "A floating Upgrade-to-Pro card with a grainy pastel wash, app tile, dismiss and a full-width CTA; it rises in and returns focus on close.",
+    "tags": [
+      "upsell",
+      "toast",
+      "paywall",
+      "dialog",
+      "pricing",
+      "boardui"
+    ],
+    "deps": [
+      "motion"
+    ]
+  },
+  {
+    "slug": "profile-cover-header",
+    "title": "Profile Cover Header",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Profile identity card: gradient cover, overlapping initials avatar, name, handle and badges, Follow or Edit actions and underline tabs.",
+    "tags": [
+      "profile",
+      "header",
+      "cover",
+      "avatar",
+      "tabs",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "profile-stat-tiles",
+    "title": "Profile Stat Tiles",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A rolling headline figure with a trend chip over a row of grey stat tiles (value, label, trend) that can act as toggles.",
+    "tags": [
+      "stats",
+      "kpi",
+      "profile",
+      "trend",
+      "tiles",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "progress",
+    "title": "Progress",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "trail",
+    "blurb": "Progress bar and ring, determinate or indeterminate, with an eased translate fill and a layered light sweep, on React Aria.",
+    "tags": [
+      "progress",
+      "loading",
+      "upload",
+      "ring",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "project-board",
+    "title": "Project Board",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "A full kanban page: drag tickets across five columns, open a side panel to edit them, create, sort and filter, with an activity inbox.",
+    "tags": [
+      "kanban",
+      "board",
+      "template",
+      "drag-and-drop",
+      "page",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "props-table",
+    "title": "Props Table",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "API props table with code-styled names, types and defaults; long unions collapse, and narrow slots stack each prop into a card.",
+    "tags": [
+      "docs",
+      "api-reference",
+      "table",
+      "responsive",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "proximity-snap-track",
     "title": "Proximity Snap Track",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A horizontal rail of variable-width cards that snaps only when you stop near one, and never skips past two at once.",
@@ -1511,9 +4364,53 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "questionnaire",
+    "title": "Questionnaire",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "The questions an agent asks before it plans: one per step, checkbox or numbered rows, a free-text Other and step pills.",
+    "tags": [
+      "agent",
+      "form",
+      "stepper",
+      "survey",
+      "checkbox",
+      "radio",
+      "ai",
+      "boardui"
+    ],
+    "deps": [
+      "motion"
+    ]
+  },
+  {
+    "slug": "quick-search-button",
+    "title": "Quick Search Button",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "A \"Search...\" field-style trigger with a ⌘K hint that opens the kit command palette, and a global ⌘K / Ctrl+K shortcut that toggles it.",
+    "tags": [
+      "search",
+      "command-palette",
+      "shortcut",
+      "kbd",
+      "header",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "quickto-cursor-preview",
     "title": "quickTo Cursor Preview",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "trail",
     "blurb": "A preview panel drifts a full second behind the pointer, driven by two reused quickTo tweens.",
@@ -1530,9 +4427,69 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "radar-chart-card",
+    "title": "Radar Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "orbit",
+    "blurb": "A \"Visitors\" card with a lime radar on a hexagon grid; hovering an axis pulses its vertex and counts the header to that month.",
+    "tags": [
+      "chart",
+      "radar-chart",
+      "polar",
+      "dashboard",
+      "recharts",
+      "boardui"
+    ],
+    "deps": [
+      "recharts"
+    ]
+  },
+  {
+    "slug": "radar-comparison-card",
+    "title": "Radar Comparison Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "orbit",
+    "blurb": "Desktop and Mobile as lime and blue radar outlines on one grid, with a live legend whose entries toggle each series on and off.",
+    "tags": [
+      "chart",
+      "radar-chart",
+      "comparison",
+      "legend",
+      "dashboard",
+      "recharts",
+      "boardui"
+    ],
+    "deps": [
+      "recharts"
+    ]
+  },
+  {
+    "slug": "radial-chart-card",
+    "title": "Radial Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "Concentric radial bars in the dashboard card shell, with a tooltip on the arc tip, a count-up headline that follows hover, and stat tiles.",
+    "tags": [
+      "chart",
+      "radial",
+      "rings",
+      "gauge",
+      "dashboard",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "radial-mask-spotlight",
     "title": "Radial Mask Spotlight",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "rings",
     "blurb": "A layer masked to a soft disc follows the pointer, with a flat core that makes it read as a beam.",
@@ -1549,6 +4506,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "radial-ripple-dot-cloud",
     "title": "Radial Ripple Dot Cloud",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "wave",
     "blurb": "A dot field with a travelling wave running out of one off-centre point, its density drawn by hand as a B-spline.",
@@ -1565,9 +4523,49 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "radio",
+    "title": "Radio",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "rings",
+    "blurb": "React Aria radio group with a gradient selected dot that cross-fades in while the white centre scales up, in two sizes.",
+    "tags": [
+      "radio",
+      "radio-group",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "radio-card",
+    "title": "Radio Card",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Bordered option card with title, description and the kit radio dot on the right; inside a RadioGroup a click anywhere selects it.",
+    "tags": [
+      "radio",
+      "card",
+      "selectable",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "realtime-cube-envmap",
     "title": "Realtime Cube EnvMap",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "orbit",
     "blurb": "A metal knot reflecting panels that are actually orbiting it, captured six faces at a time every other frame.",
@@ -1583,9 +4581,31 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "recent-hires-card",
+    "title": "Recent Hires Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "A recent hires card: team switcher, headline count and a paged grid of tiles with initials, status, start date and role.",
+    "tags": [
+      "dashboard",
+      "people",
+      "list",
+      "pagination",
+      "hr",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "rekey-caption-replay",
     "title": "Re-Key Caption Replay",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A caption block whose staggered entrance replays on every index change, restarted by a changed React key.",
@@ -1602,6 +4622,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "relaxed-seeded-scatter",
     "title": "Relaxed Seeded Scatter",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "orbit",
     "blurb": "Seeded angles around a ring, pushed apart until nothing collides. Ghost ticks mark where they started.",
@@ -1615,9 +4636,52 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "repo-tree-nav",
+    "title": "Repo Tree Nav",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Repository file tree with folder expand/collapse, file-type icons, single file selection and +/− line counts per file.",
+    "tags": [
+      "boardui",
+      "tree",
+      "files",
+      "git",
+      "sidebar",
+      "react-aria"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "revenue-chart-card",
+    "title": "Revenue Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "wave",
+    "blurb": "A dashboard card that draws a year of revenue as a filled area over last year's dashed line, with a hover-following count-up headline.",
+    "tags": [
+      "chart",
+      "area-chart",
+      "dashboard",
+      "recharts",
+      "revenue",
+      "comparison",
+      "boardui"
+    ],
+    "deps": [
+      "recharts"
+    ]
+  },
+  {
     "slug": "rotary-drag-carousel",
     "title": "Rotary Drag Carousel",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "orbit",
     "blurb": "A wheel of cards you grab and spin. Angular drag, projected inertia, and it always lands on a station.",
@@ -1634,9 +4698,50 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "rotating-word-hero",
+    "title": "Rotating Word Hero",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Landing hero whose key word slides and blurs through a list while the line glides to each new width, with CTAs and a stack badges row.",
+    "tags": [
+      "hero",
+      "landing",
+      "marketing",
+      "text",
+      "boardui"
+    ],
+    "deps": [
+      "motion"
+    ]
+  },
+  {
+    "slug": "row-actions",
+    "title": "Row Actions",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Kebab menu at the end of a table row with Edit, Duplicate and a red Delete that asks first through the kit AlertDialog.",
+    "tags": [
+      "boardui",
+      "table",
+      "kebab",
+      "dropdown",
+      "confirm",
+      "dashboard"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "safe-preloader",
     "title": "Preloader That Cannot Hang",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "An intro overlay with a hard ceiling, a minimum visible time and a once-per-session flag, so a stalled load cannot trap the page.",
@@ -1650,9 +4755,50 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "sankey-chart-card",
+    "title": "Sankey Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "trail",
+    "blurb": "Source-to-sink flows as tinted SVG ribbons in a dashboard card: hover a node or ribbon to isolate its path while the headline follows.",
+    "tags": [
+      "chart",
+      "sankey",
+      "flow",
+      "dashboard",
+      "svg",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "scatter-chart-card",
+    "title": "Scatter Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A dashboard scatter card: records grouped into coloured series, sized by a third measure, with a hover headline, readout and average tiles.",
+    "tags": [
+      "chart",
+      "scatter-chart",
+      "bubble-chart",
+      "dashboard",
+      "recharts",
+      "correlation",
+      "boardui"
+    ],
+    "deps": [
+      "recharts",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "scroll-deform-wave",
     "title": "Scroll Deformation Wave",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "wave",
     "blurb": "An image that ripples with scroll speed and bends the other way on the way back, from two sine terms.",
@@ -1671,6 +4817,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "scroll-scrubbed-video",
     "title": "Scroll-Scrubbed Video",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "The scroll-to-frame mapping a scrubbed hero actually needs: smoothing, a snap, a frame quantiser and a loop that parks itself.",
@@ -1687,6 +4834,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "scrub-char-color-reveal",
     "title": "Scrubbed Character Colour Reveal",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "A dim paragraph resolves character by character as it crosses the viewport, tied to scroll position not a clock.",
@@ -1705,6 +4853,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "scrub-timeline-spine",
     "title": "Scrub Timeline Spine",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "split",
     "blurb": "A rule that fills as you scroll, with entries alternating either side and reversing on the way back.",
@@ -1724,6 +4873,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "seamless-marquee",
     "title": "Pixels-Per-Second Marquee",
     "category": "text",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "A marquee whose duration is derived from measured width and a px/second speed, so every strip moves at the same rate.",
@@ -1739,9 +4889,73 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "search-field",
+    "title": "Search Field",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "orbit",
+    "blurb": "Pill or rounded search input on React Aria SearchField: Escape clears, a clear button scales in with text, and the icon fades to a spinner.",
+    "tags": [
+      "search",
+      "filter",
+      "input",
+      "clear-button",
+      "loading",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "segmented-control",
+    "title": "Segmented Control",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "A pill switcher for Weekly / Monthly / Yearly choices: one white thumb, measured from the DOM, slides under the selected segment.",
+    "tags": [
+      "segmented",
+      "toggle-group",
+      "tabs",
+      "switcher",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "select",
+    "title": "Select",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A React Aria select: bordered trigger with a turning chevron, non-modal popover on the shared menu surface, free-form rows.",
+    "tags": [
+      "select",
+      "dropdown",
+      "listbox",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "self-parking-raf",
     "title": "Self-Parking RAF",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "An epsilon snap lets a damped value reach its target exactly, so the frame loop hits its exit test and dies.",
@@ -1755,9 +4969,109 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "settings-modal",
+    "title": "Settings Modal",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "webgl",
+    "motif": "split",
+    "blurb": "A controlled settings dialog with a section rail and General, Profile, Tools and Storage pages. It scales in from 85% with a light blur.",
+    "tags": [
+      "settings",
+      "modal",
+      "dialog",
+      "preferences",
+      "webgl",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria",
+      "react-aria-components",
+      "@internationalized/date"
+    ]
+  },
+  {
+    "slug": "sidebar",
+    "title": "Sidebar",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "A floating dashboard sidebar that folds from 260px to a 60px icon rail, with ⌘L nav search, team and account menus and a settings entry.",
+    "tags": [
+      "sidebar",
+      "navigation",
+      "collapsible",
+      "search",
+      "menu",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "site-footer",
+    "title": "Site Footer",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Marketing footer: logo, tagline and socials, six link columns with View all counts, then a language, theme, swatch and legal bar.",
+    "tags": [
+      "footer",
+      "marketing",
+      "navigation",
+      "landing",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "site-header",
+    "title": "Site Header",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Marketing header with a menu link, a ⌘K search pill, a GitHub star pill and the theme toggle, folding into a drawer in narrow containers.",
+    "tags": [
+      "header",
+      "navigation",
+      "marketing",
+      "landing",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "skeleton",
+    "title": "Skeleton",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "trail",
+    "blurb": "Content-shaped placeholders with a layered light sheen that size themselves to real content and blur it in once loaded.",
+    "tags": [
+      "skeleton",
+      "loading",
+      "placeholder",
+      "shimmer",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "slab-page-transition",
     "title": "Slab Page Transition",
     "category": "transition",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "An opaque slab rises through the frame, the route changes under it, and it keeps going — nothing ever reverses.",
@@ -1774,9 +5088,50 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "sleep-score-card",
+    "title": "Sleep Score Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "rings",
+    "blurb": "A segmented SVG ring that sums sleep sub-scores to a total out of 100, with a week switcher and metric rows that focus their arc.",
+    "tags": [
+      "chart",
+      "gauge",
+      "rings",
+      "health",
+      "svg",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "slider",
+    "title": "Slider",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "Single and min/max sliders on React Aria: a gradient fill, thumbs that grow while dragged, and a value bubble above each thumb.",
+    "tags": [
+      "slider",
+      "range",
+      "range-slider",
+      "input",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "slow-float-idle",
     "title": "Slow Idle Float",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "wave",
     "blurb": "A 14px rise and fall over 5 seconds, on the independent translate property so hover transforms still work.",
@@ -1790,9 +5145,65 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "social-button",
+    "title": "Social Button",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Sign-in button for 24 named providers: one brand prop supplies logo, colour and label, in colourful, black or outlined styles.",
+    "tags": [
+      "button",
+      "auth",
+      "sign-in",
+      "oauth",
+      "brand",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "speedometer-chart-card",
+    "title": "Speedometer Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "A 220° half gauge in the dashboard card shell: stacked segments with the main share in the centre, or a value arc and needle.",
+    "tags": [
+      "chart",
+      "gauge",
+      "speedometer",
+      "needle",
+      "dashboard",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "spinner",
+    "title": "Spinner",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "orbit",
+    "blurb": "An orbiting light in three layers (crisp arc, tight glow, wide bloom) in five sizes and any text colour, announced as loading.",
+    "tags": [
+      "spinner",
+      "loading",
+      "progress",
+      "indeterminate",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "spring-lattice-field",
     "title": "Spring Lattice Field",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "grid",
     "blurb": "A CPU damped-spring lattice uploaded as a texture each frame, displacing a procedural grid the cursor can push around.",
@@ -1810,6 +5221,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "spring-to-linear-easing",
     "title": "Spring To CSS linear()",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "wave",
     "blurb": "Solves a spring once, samples it into a CSS linear() string, and runs the whole bounce on the compositor.",
@@ -1823,9 +5235,111 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "stacked-card-fan",
+    "title": "Stacked Card Fan",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A fanned stack of tilted cards: hover spreads the fan, clicking or arrow keys bring the next card forward, and a pill lays them all out.",
+    "tags": [
+      "cards",
+      "stack",
+      "fan",
+      "carousel",
+      "showcase",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria"
+    ]
+  },
+  {
+    "slug": "stage-bars-card",
+    "title": "Stage Bars Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "A funnel as rounded stage pills with value and share, optional stacked parts with a legend, stat tiles and a headline that follows hover.",
+    "tags": [
+      "chart",
+      "funnel",
+      "bar",
+      "stacked",
+      "dashboard",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "stat-cards",
+    "title": "Stat Cards",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "A responsive row of KPI cards in two looks: a compact tile with a delta chip, or a gradient icon tile over a caption band and delta pill.",
+    "tags": [
+      "stat",
+      "kpi",
+      "dashboard",
+      "metric",
+      "delta",
+      "tooltip",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "status-dot",
+    "title": "Status Dot",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "rings",
+    "blurb": "A 12px status indicator: a solid 6px dot centred on a tinted halo, in green, yellow and indigo, for selects and table cells.",
+    "tags": [
+      "status",
+      "dot",
+      "indicator",
+      "badge",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "status-select-cell",
+    "title": "Status Select Cell",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Table status pill in status-* colours that is also a select: hover reveals a chevron, press or Enter opens the list to change it.",
+    "tags": [
+      "boardui",
+      "status",
+      "select",
+      "table",
+      "pill",
+      "inline-edit"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "step-end-caret",
     "title": "Step-End Blinking Caret",
     "category": "text",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "stack",
     "blurb": "A text caret that snaps on and off instead of fading, using step-end timing and an uneven blink rhythm.",
@@ -1842,6 +5356,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "stepped-film-grain",
     "title": "Stepped Film Grain",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "noise",
     "blurb": "A transparent grain overlay whose pattern jumps twelve times a second instead of every frame, so it reads as film.",
@@ -1857,9 +5372,30 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "steps-card",
+    "title": "Steps Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Seven daily step bars with a week switcher, a total that counts up, and an outline on the hovered bar that rolls the headline to that day.",
+    "tags": [
+      "chart",
+      "bar-chart",
+      "count-up",
+      "fitness",
+      "health",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "stroke-to-fill-hover",
     "title": "Stroke-To-Fill Hover Rows",
     "category": "text",
+    "kit": "kinetic",
     "cost": "css",
     "motif": "split",
     "blurb": "An index of outlined type where the hovered row fills in solid, drops its stroke, and steps sideways.",
@@ -1876,6 +5412,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "superellipse-text-avoidance",
     "title": "Superellipse Text Avoidance",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "A particle field that flows around the headline, held off by a 6-norm superellipse fitted to the measured text box.",
@@ -1894,9 +5431,27 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "support-cta-card",
+    "title": "Support CTA Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "trail",
+    "blurb": "A \"Still have a question?\" card: stacked initials avatars, a line of copy, one contact action and an accent beam on the top border.",
+    "tags": [
+      "cta",
+      "support",
+      "avatars",
+      "card",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
     "slug": "surface-sampled-particles",
     "title": "Area-Weighted Surface Particles",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "orbit",
     "blurb": "Any mesh becomes a particle shell of even density, assembling bottom-up, with orbit rings measured off the sampled silhouette.",
@@ -1913,9 +5468,212 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "switch",
+    "title": "Switch",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "React Aria toggle with a gradient track, a white thumb that slides 200ms, and an embossed chip that turns blue when on; 3 sizes, 2 shapes.",
+    "tags": [
+      "switch",
+      "toggle",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "switch-card",
+    "title": "Switch Card",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Bordered settings row with an optional icon, title and description; a click anywhere on the card flips the kit switch on its trailing edge.",
+    "tags": [
+      "switch",
+      "toggle",
+      "card",
+      "settings",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "table",
+    "title": "Table",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Semantic table on React Aria with a scroll container, an md/sm density flag and dashboard styling from one scoped stylesheet.",
+    "tags": [
+      "table",
+      "data",
+      "rows",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "table-filter-bar",
+    "title": "Table Filter Bar",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Strip above a data table: \"All ...\" select filters, a pill search, removable active-filter chips, Clear all and a live result count.",
+    "tags": [
+      "boardui",
+      "filters",
+      "table",
+      "search",
+      "chips",
+      "dashboard"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "tabs",
+    "title": "Tabs",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "split",
+    "blurb": "React Aria underline tabs with a measured 2px indicator that slides between tabs, plus a pill switcher whose thumb settles with a spring.",
+    "tags": [
+      "tabs",
+      "underline",
+      "pill",
+      "react-aria",
+      "navigation",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "tag-group",
+    "title": "Tag Group",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Selectable or removable tags in Chip's colours, with grid keyboard navigation and an empty state, on React Aria's TagGroup.",
+    "tags": [
+      "tags",
+      "tag-group",
+      "filter",
+      "selection",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "task-list",
+    "title": "Task List",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "trail",
+    "blurb": "A streaming agent log: task headers and their steps blur in one unit at a time down a curved guide, then each task settles and folds.",
+    "tags": [
+      "agent",
+      "log",
+      "tasks",
+      "streaming",
+      "ai",
+      "boardui"
+    ],
+    "deps": [
+      "motion",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "tech-badges-row",
+    "title": "Tech Badges Row",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "A \"built with\" strip of monogram glyphs, names and versions; each badge lifts on hover or focus and names itself in a tooltip.",
+    "tags": [
+      "badges",
+      "tech stack",
+      "built with",
+      "tooltip",
+      "hero",
+      "logos",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "template-showcase-tabs",
+    "title": "Template Showcase Tabs",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "Landing section with a framed card of template tabs: a pill slides to the chosen tab and miniature app layouts crossfade below it.",
+    "tags": [
+      "tabs",
+      "templates",
+      "landing",
+      "marketing",
+      "showcase",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "testimonial-carousel",
+    "title": "Testimonial Carousel",
+    "category": "block",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "trail",
+    "blurb": "A centred quote carousel with faded neighbours, initials avatars, prev / next, progress dots and autoplay that pauses on hover and focus.",
+    "tags": [
+      "testimonial",
+      "carousel",
+      "autoplay",
+      "landing",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "text-target-particle-glyphs",
     "title": "Text-Target Particle Glyphs",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "split",
     "blurb": "A particle cloud gathers into a word rasterised from a font already on the page, written left to right, then lets it go.",
@@ -1932,9 +5690,52 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "textarea",
+    "title": "Textarea",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Multiline sibling of Input on the same filled shell: grows a line at a time up to maxRows, or keeps a resize handle; optional counter.",
+    "tags": [
+      "textarea",
+      "multiline",
+      "auto-resize",
+      "character-count",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "theme-toggle",
+    "title": "Theme Toggle",
+    "category": "action",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "rings",
+    "blurb": "Light and dark switch that reveals the new theme in a soft circle growing from the click point, using the View Transition API.",
+    "tags": [
+      "theme",
+      "dark-mode",
+      "view-transition",
+      "switch",
+      "segmented",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
     "slug": "throttled-scrub-state",
     "title": "Throttled Scrub To State",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "A scrubbed trigger fires 120x a second; a time, distance and frame gate turns that into a handful of React renders.",
@@ -1951,9 +5752,152 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "time-field",
+    "title": "Time Field",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "split",
+    "blurb": "A time of day typed segment by segment in the kit's input shell, with 12 or 24 hour cycles, seconds, limits and an accent focus.",
+    "tags": [
+      "time",
+      "input",
+      "segments",
+      "react-aria",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "toast",
+    "title": "Toast",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Imperative toast() with success, error, update and dismiss, drawn by one Toaster as a capped, pausable stack of Notification cards.",
+    "tags": [
+      "toast",
+      "notification",
+      "snackbar",
+      "imperative",
+      "boardui"
+    ],
+    "deps": []
+  },
+  {
+    "slug": "tokens-chart-card",
+    "title": "Tokens Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "wave",
+    "blurb": "Daily token usage as a sharp purple line over a soft area, idle days dashed on the baseline, with a period switch and day scrubbing.",
+    "tags": [
+      "chart",
+      "recharts",
+      "tokens",
+      "usage",
+      "area",
+      "boardui"
+    ],
+    "deps": [
+      "recharts"
+    ]
+  },
+  {
+    "slug": "tooltip",
+    "title": "Tooltip",
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Light-surface tooltip built on React Aria, with a hand-drawn caret per side and a quick blur-and-scale in and out.",
+    "tags": [
+      "tooltip",
+      "overlay",
+      "hint",
+      "arrow",
+      "react-aria",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "transactions-table",
+    "title": "Transactions Table",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "grid",
+    "blurb": "A finance transactions table with sortable headers, category and status pills, signed currency amounts, search and pagination.",
+    "tags": [
+      "table",
+      "finance",
+      "dashboard",
+      "sorting",
+      "pagination",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date",
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "tree-view",
+    "title": "Tree View",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "React Aria file tree with curved guide lines, folder icons that open, and rows that unfold and blur in as branches expand.",
+    "tags": [
+      "tree",
+      "file-tree",
+      "react-aria",
+      "motion",
+      "navigation",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react",
+      "motion",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "trend-badge",
+    "title": "Trend Badge",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Up, down or flat change pill for dashboard KPIs: one rotating arrow, a signed percent, lime, rose or grey, in three sizes.",
+    "tags": [
+      "boardui",
+      "kpi",
+      "trend",
+      "percent",
+      "badge",
+      "dashboard"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "tweened-cursor-uniform",
     "title": "Tweened Cursor Uniform",
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "trail",
     "blurb": "A shader grid with a lens under the pointer, whose position is tweened into the uniform so it settles instead of chasing.",
@@ -1971,9 +5915,74 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "typewriter-install",
+    "title": "Typewriter Install",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "trail",
+    "blurb": "An install command that types itself behind a caret; pnpm, npm, yarn and bun tabs restart the typing and a copy button takes the full line.",
+    "tags": [
+      "install",
+      "command",
+      "typewriter",
+      "caret",
+      "copy",
+      "tabs",
+      "package-manager",
+      "boardui"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "typography",
+    "title": "Typography",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Type-scale specimen of the 13 kit text families in four weights, with size and line height read from the live CSS and copyable class names.",
+    "tags": [
+      "typography",
+      "type-scale",
+      "specimen",
+      "tokens",
+      "docs",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
+    "slug": "users-access-card",
+    "title": "Users Access Card",
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "stack",
+    "blurb": "Workspace members with initials, email and a role select per row, a remove button, and an invite field that validates before adding a row.",
+    "tags": [
+      "members",
+      "access",
+      "invite",
+      "roles",
+      "settings",
+      "form",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "uv-cover-fit",
     "title": "Cover-Fit UV Maths",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "grid",
     "blurb": "object-fit: cover for a textured quad, solved in UV space so the crop follows a frame that reshapes every frame.",
@@ -1992,6 +6001,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "velocity-afterimage-pass",
     "title": "Velocity Afterimage Pass",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "trail",
     "blurb": "Marks that smear into a tail when the pointer moves fast and stay crisp when it slows, from two targets swapping roles.",
@@ -2011,6 +6021,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "velocity-deform-cards",
     "title": "Velocity-Deformed Cards",
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "Cards skew, stretch and trail in proportion to scroll speed, then settle on their own with no easing curve anywhere.",
@@ -2027,6 +6038,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "vertex-cylinder-bend",
     "title": "Vertex Shader Cylinder Bend",
     "category": "webgl",
+    "kit": "kinetic",
     "cost": "webgl",
     "motif": "rings",
     "blurb": "A flat plane wrapped around a cylinder on the GPU, with the curvature living in a uniform you can animate.",
@@ -2042,9 +6054,30 @@ export const MANIFEST: ManifestEntry[] = [
     ]
   },
   {
+    "slug": "vitals-chart-card",
+    "title": "Vitals Chart Card",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "A weekly vital-sign card: track-and-fill columns, a dashed normal-range band, pink out-of-range bars and a period stepper.",
+    "tags": [
+      "chart",
+      "medical",
+      "vitals",
+      "health",
+      "bar-chart",
+      "boardui"
+    ],
+    "deps": [
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "web-audio-scheduler",
     "title": "Web Audio Scheduling Kit",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "wave",
     "blurb": "A lookahead sequencer: a coarse timer queues beats onto the sample-accurate audio clock, so tempo never drifts.",
@@ -2058,9 +6091,53 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "web-search",
+    "title": "Web Search",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "dom",
+    "motif": "trail",
+    "blurb": "The research half of an agent log: each query lands on a curved guide, and a step that found something branches into overlapping site marks.",
+    "tags": [
+      "agent",
+      "search",
+      "sources",
+      "log",
+      "streaming",
+      "ai",
+      "boardui"
+    ],
+    "deps": [
+      "motion",
+      "@remixicon/react",
+      "react-aria-components"
+    ]
+  },
+  {
+    "slug": "week-view-grid",
+    "title": "Week View Grid",
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "grid",
+    "blurb": "Seven-day time grid: hour gutter, day columns, events placed by start and duration, overlaps side by side, a fixed now-line.",
+    "tags": [
+      "calendar",
+      "week",
+      "schedule",
+      "time-grid",
+      "events",
+      "boardui"
+    ],
+    "deps": [
+      "@internationalized/date"
+    ]
+  },
+  {
     "slug": "wheel-accumulator-stepper",
     "title": "Wheel Accumulator Stepper",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "stack",
     "blurb": "Wheel input normalised by deltaMode and accumulated to a threshold, so one flick of any device moves exactly one step.",
@@ -2075,9 +6152,30 @@ export const MANIFEST: ManifestEntry[] = [
     "deps": []
   },
   {
+    "slug": "workspace-switcher",
+    "title": "Workspace Switcher",
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "motif": "stack",
+    "blurb": "Sidebar-top workspace menu: mark, name and plan on the trigger, a checked list of workspaces and a create-workspace row.",
+    "tags": [
+      "boardui",
+      "menu",
+      "workspace",
+      "sidebar",
+      "react-aria"
+    ],
+    "deps": [
+      "react-aria-components",
+      "@remixicon/react"
+    ]
+  },
+  {
     "slug": "wrapped-ring-offset",
     "title": "Shortest Signed Ring Offset",
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "rings",
     "blurb": "Ten dots on a ring, each showing its wrapped offset and the raw index difference it replaces.",
@@ -2094,6 +6192,7 @@ export const MANIFEST: ManifestEntry[] = [
     "slug": "wrapping-drum-carousel",
     "title": "Wrapping Drum Carousel",
     "category": "layout",
+    "kit": "kinetic",
     "cost": "dom",
     "motif": "orbit",
     "blurb": "An endless carousel that reads as a rotating drum with no 3D at all — only x, scale and fading opacity.",
@@ -2118,7 +6217,13 @@ export const CATEGORY_LABEL = {
   "transition": "Transition",
   "text": "Text",
   "layout": "Layout",
-  "primitive": "Primitives"
+  "primitive": "Primitives",
+  "action": "Actions",
+  "form": "Forms",
+  "overlay": "Overlays",
+  "navigation": "Navigation",
+  "display": "Display",
+  "block": "Blocks"
 } as const;
 export const CATEGORY_BLURB = {
   "scroll": "Systems driven by scroll position, velocity, or direction.",
@@ -2127,7 +6232,13 @@ export const CATEGORY_BLURB = {
   "transition": "Route changes, reveals, enter and exit choreography.",
   "text": "Splitting, staggering, scrambling, and typographic motion.",
   "layout": "Grids, carousels, sticky stacks, and spatial arrangement.",
-  "primitive": "The hooks and math everything else is built from."
+  "primitive": "The hooks and math everything else is built from.",
+  "action": "Buttons, button groups, toggles and the controls that commit a choice.",
+  "form": "Inputs, selects, pickers, sliders — accessible form controls on React Aria.",
+  "overlay": "Dialogs, popovers, menus, tooltips and other layered surfaces.",
+  "navigation": "Tabs, breadcrumbs, pagination, sidebars and steppers.",
+  "display": "Badges, avatars, cards, tables, charts and status readouts.",
+  "block": "Whole sections and pages: chat, dashboard, auth, settings."
 } as const;
 export const CATEGORY_COUNTS: Record<string, number> = {
   "scroll": 22,
@@ -2136,5 +6247,11 @@ export const CATEGORY_COUNTS: Record<string, number> = {
   "transition": 14,
   "text": 11,
   "layout": 11,
-  "primitive": 21
+  "primitive": 21,
+  "action": 11,
+  "form": 37,
+  "overlay": 12,
+  "navigation": 13,
+  "display": 93,
+  "block": 31
 };

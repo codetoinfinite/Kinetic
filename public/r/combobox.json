@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox",
+  "type": "registry:ui",
+  "title": "Combobox",
+  "description": "Type to filter a list: Input's own field with a chevron toggle, and a field-width menu with sections, a check and a scroll fade.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0",
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/input.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/chevrons.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/direction.json",
+    "https://kinetic.example.com/r/menu-styles.json",
+    "https://kinetic.example.com/r/scroll-fade.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/combobox.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/combobox.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/combobox/combobox.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport { useEffect, useRef, useState } from \"react\";\nimport type { ComponentType, ReactNode, Ref } from \"react\";\nimport {\n  Button as AriaButton,\n  ComboBox as AriaComboBox,\n  Header as AriaHeader,\n  ListBox as AriaListBox,\n  ListBoxItem as AriaListBoxItem,\n  ListBoxSection as AriaListBoxSection,\n  Popover as AriaPopover,\n} from \"react-aria-components\";\nimport type {\n  ComboBoxProps as AriaComboBoxProps,\n  ListBoxItemProps as AriaListBoxItemProps,\n  ListBoxSectionProps as AriaListBoxSectionProps,\n} from \"react-aria-components\";\nimport { RiCheckLine } from \"@remixicon/react\";\nimport { MENU_ITEM, MENU_ITEM_ACTIVE, MENU_ITEMS_CONTAINER, MENU_POPOVER_SURFACE } from \"@/lib/menu-styles\";\nimport { HintText } from \"@/components/motion/hint-text\";\nimport { InputBase, type InputSize } from \"@/components/motion/input\";\nimport { Label } from \"@/components/motion/label\";\nimport { useDirection } from \"@/lib/direction\";\nimport { ChevronDownSmall } from \"@/lib/chevrons\";\nimport { ScrollFade, useScrollFade } from \"@/lib/scroll-fade\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * ComboBox — a text field that filters a list as you type: pick an assignee,\n * a country, a timezone. Built on React Aria's ComboBox, so the list is a\n * real listbox with arrow-key navigation, typeahead filtering, and\n * screen-reader announcements.\n *\n *   <ComboBox label=\"Assignee\" placeholder=\"Search people\" defaultItems={people}>\n *     {(person) => <ComboBoxItem textValue={person.name}>…</ComboBoxItem>}\n *   </ComboBox>\n *\n * The field is Input's own InputBase (same surface, hover and focus rings,\n * invalid and disabled states), with the toggle in its trailing slot. The\n * list is Select's: the shared menu surface and motion, radius/2lg rows,\n * the hover surface on the focused row, and a check on the selected one. It\n * opens under the whole field at the field's width, rather than under the\n * bare input React Aria would anchor to, and its rows scroll under the\n * shared progressive top blur.\n */\n\ntype IconComponent = ComponentType<{ className?: string; \"aria-hidden\"?: boolean | \"true\" | \"false\" }>;\n\nexport interface ComboBoxProps<T extends object> extends Omit<AriaComboBoxProps<T>, \"children\" | \"className\"> {\n  label?: ReactNode;\n  /** Help text under the field; shown in the error colour while invalid. */\n  hint?: ReactNode;\n  placeholder?: string;\n  leadingIcon?: IconComponent;\n  /** `medium` (default, 36px) or `small` (32px), as Input. */\n  size?: InputSize;\n  /** Shown in the list when nothing matches. */\n  emptyMessage?: ReactNode;\n  className?: string;\n  /** Classes on the list's popover. */\n  popoverClassName?: string;\n  children: ReactNode | ((item: T) => ReactNode);\n  ref?: Ref<HTMLDivElement>;\n}\n\n// #region critical\nexport function ComboBox<T extends object>({\n  label,\n  hint,\n  placeholder,\n  leadingIcon,\n  size,\n  emptyMessage = \"No results\",\n  className,\n  popoverClassName,\n  children,\n  ref,\n  ...props\n}: ComboBoxProps<T>) {\n  const direction = useDirection();\n  const fieldRef = useRef<HTMLDivElement>(null);\n  const fade = useScrollFade();\n  const [fieldWidth, setFieldWidth] = useState<number>();\n\n  useEffect(() => {\n    const field = fieldRef.current;\n    if (!field) return;\n    const observer = new ResizeObserver(() => setFieldWidth(field.offsetWidth));\n    observer.observe(field);\n    return () => observer.disconnect();\n  }, []);\n\n  return (\n    <AriaComboBox\n      ref={ref}\n      allowsEmptyCollection\n      {...props}\n      className={cx(\"group flex flex-col gap-1\", className)}\n      onOpenChange={(isOpen, trigger) => {\n        // Each opening starts the list at the top, so the fade starts hidden.\n        if (isOpen) fade.reset();\n        props.onOpenChange?.(isOpen, trigger);\n      }}\n    >\n      {({ isOpen, isRequired, isInvalid }) => (\n        <>\n          {label ? <Label isRequired={isRequired}>{label}</Label> : null}\n          <InputBase\n            groupRef={fieldRef}\n            size={size}\n            placeholder={placeholder}\n            leadingIcon={leadingIcon}\n            trailingAddon={\n              <AriaButton\n                className={({ isFocusVisible }) =>\n                  cx(\n                    \"-m-1 flex shrink-0 cursor-pointer items-center justify-center rounded-md p-1 text-text-secondary outline-none\",\n                    isFocusVisible && \"ring-2 ring-border-focus-ring\",\n                  )\n                }\n              >\n                <ChevronDownSmall\n                  className={cx(\"size-4 transition-transform duration-200 ease\", isOpen && \"rotate-180\")}\n                />\n              </AriaButton>\n            }\n          />\n          {hint ? <HintText isInvalid={isInvalid}>{hint}</HintText> : null}\n          <AriaPopover\n            triggerRef={fieldRef}\n            dir={direction}\n            offset={4}\n            style={{ width: fieldWidth }}\n            className={cx(MENU_POPOVER_SURFACE, \"flex flex-col overflow-hidden p-2\", popoverClassName)}\n          >\n            <div className=\"relative flex min-h-0 flex-col\">\n              <AriaListBox\n                onScroll={fade.onScroll}\n                renderEmptyState={() => (\n                  <div className=\"px-2 py-2 text-body-medium text-text-tertiary\">{emptyMessage}</div>\n                )}\n                className={cx(MENU_ITEMS_CONTAINER, \"max-h-[240px] min-h-0 overflow-y-auto overscroll-contain\")}\n              >\n                {children}\n              </AriaListBox>\n              <ScrollFade progress={fade.progress} />\n            </div>\n          </AriaPopover>\n        </>\n      )}\n    </AriaComboBox>\n  );\n}\n// #endregion\n\nexport interface ComboBoxItemProps extends Omit<AriaListBoxItemProps, \"children\"> {\n  children?: ReactNode;\n}\n\n/** A row in the list. Content is free-form: an avatar and a name, a flag and a country. */\nexport function ComboBoxItem({ className, children, ...props }: ComboBoxItemProps) {\n  return (\n    <AriaListBoxItem\n      {...props}\n      className={(state) =>\n        cx(\n          MENU_ITEM,\n          \"text-body-medium\",\n          state.isFocused && MENU_ITEM_ACTIVE,\n          state.isDisabled && \"cursor-not-allowed text-text-disabled\",\n          typeof className === \"function\" ? className(state) : className,\n        )\n      }\n    >\n      {({ isSelected }) => (\n        <>\n          <span className=\"flex min-w-0 flex-1 items-center gap-2\">{children}</span>\n          {isSelected ? <RiCheckLine className=\"size-4 shrink-0 text-accent-500\" aria-hidden /> : null}\n        </>\n      )}\n    </AriaListBoxItem>\n  );\n}\n\nexport interface ComboBoxSectionProps<T extends object> extends Omit<AriaListBoxSectionProps<T>, \"className\" | \"children\"> {\n  /** Muted heading above the section's rows. */\n  title?: ReactNode;\n  className?: string;\n  /** ComboBoxItems, or a React Aria Collection for a dynamic section. */\n  children: ReactNode;\n}\n\nexport function ComboBoxSection<T extends object>({ title, className, children, ...props }: ComboBoxSectionProps<T>) {\n  return (\n    <AriaListBoxSection {...props} className={cx(\"flex flex-col gap-1 [&:not(:first-child)]:pt-2\", className)}>\n      {title ? <AriaHeader className=\"ps-2 pt-1 pb-0.5 text-body-medium text-text-secondary\">{title}</AriaHeader> : null}\n      {children}\n    </AriaListBoxSection>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "dom",
+    "tags": [
+      "combobox",
+      "autocomplete",
+      "typeahead",
+      "search",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

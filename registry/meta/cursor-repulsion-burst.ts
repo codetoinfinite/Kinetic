@@ -23,7 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['ogl@^1.0.11'],
-  registryDependencies: ['prng'],
 
   summary:
     'Up to 1400 particles in one instanced draw call, each circling its own home on its own phase. The pointer opens a hole in the field with a linear falloff inside its radius, and a press fires a shock wave whose front tints the particles it is passing through. The pointer is damped on the CPU before it reaches a uniform, and bursts run in a pool of three slots so overlapping presses produce overlapping waves rather than one wave restarting.',

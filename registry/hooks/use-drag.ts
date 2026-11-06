@@ -21,6 +21,13 @@ import { useEffect, useRef, type RefObject } from 'react';
       caller whether it happened.
    ========================================================================== */
 
+/**
+ * How long the post-drag click gate stays armed. The click the browser
+ * dispatches after a release arrives in the same task or the next one; anything
+ * this far out is a new user intent, not the tail of the gesture.
+ */
+const SWALLOW_TIMEOUT_MS = 300;
+
 export interface DragState {
   /** Pixels from the press point. */
   dx: number;
@@ -66,6 +73,19 @@ export function useDrag(
     let lastY = 0;
     let passed = false;
     let swallowClick = false;
+    let swallowTimer: number | null = null;
+
+    // An expiry, not a standing flag. A drag that ends over empty space, or one
+    // the browser cancelled, produces no click at all — and an arm left standing
+    // swallows the user's next real click, however long afterwards it arrives.
+    // `capture-phase-click-swallow` is the worked example of this.
+    const disarmSwallow = () => {
+      swallowClick = false;
+      if (swallowTimer !== null) {
+        window.clearTimeout(swallowTimer);
+        swallowTimer = null;
+      }
+    };
 
     const stateAt = (clientX: number, clientY: number): DragState => ({
       dx: clientX - startX,
@@ -79,6 +99,9 @@ export function useDrag(
     const onPointerDown = (e: PointerEvent) => {
       if (primaryOnly && !e.isPrimary) return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
+      // A fresh press means the previous gesture is over and the click it was
+      // going to produce never came. Deterministic, where the timer is timed.
+      disarmSwallow();
       pointerId = e.pointerId;
       startX = lastX = e.clientX;
       startY = lastY = e.clientY;
@@ -113,7 +136,12 @@ export function useDrag(
       pointerId = null;
       passed = false;
       dragging.current = false;
-      swallowClick = moved;
+
+      disarmSwallow();
+      if (moved) {
+        swallowClick = true;
+        swallowTimer = window.setTimeout(disarmSwallow, SWALLOW_TIMEOUT_MS);
+      }
 
       handlers.current.onDragEnd?.(state, moved);
     };
@@ -121,7 +149,14 @@ export function useDrag(
     // Capture phase, so it runs before any child's own click handler.
     const onClick = (e: MouseEvent) => {
       if (!swallowClick) return;
-      swallowClick = false;
+
+      // Enter and Space on a focused link or button dispatch a click with
+      // `detail === 0` and no pointer sequence behind it, as does
+      // `element.click()`. None of those is the tail of a drag, and swallowing
+      // them is what makes a draggable carousel keyboard-inoperable.
+      if (e.detail === 0) return;
+
+      disarmSwallow();
       e.preventDefault();
       e.stopPropagation();
     };
@@ -141,6 +176,8 @@ export function useDrag(
       if (pointerId !== null && el.hasPointerCapture(pointerId)) {
         el.releasePointerCapture(pointerId);
       }
+      // Otherwise the timer outlives the effect, and a remount starts armed.
+      disarmSwallow();
       dragging.current = false;
     };
   }, [ref, threshold, primaryOnly, enabled]);

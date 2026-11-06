@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: ['step-end-caret'],
 
   summary:
     'A phrase erases itself and a new one is typed in its place, cycling forever. Deleting runs at exactly half the interval of typing, because backspacing is a held key with a mechanical auto-repeat while typing is composition — give both phases the same interval and the result reads as a ticker tape rather than as somebody at a keyboard. A quarter-second pause at the empty string turns the turnaround from a dropped frame into a decision.',

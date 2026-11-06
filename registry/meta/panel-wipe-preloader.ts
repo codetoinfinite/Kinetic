@@ -15,7 +15,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/hooks/use-reduced-motion.ts', type: 'registry:hook', role: 'motion preference' },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'The counter, the word list and the exit wipe are three parts of a single `gsap.timeline`, not three independent animations racing each other. The number is tweened on a plain object with `power2.inOut`, so it accelerates and settles instead of ticking linearly — the difference between a loading count and a progress bar wearing a costume.',

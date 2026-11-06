@@ -11,7 +11,6 @@ const meta: ComponentMetaInput = {
 
   files: [{ path: 'registry/ui/burst-audio-sync.tsx', type: 'registry:ui', role: 'hook' }],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A burst is N notes a fixed interval apart, each with a visual flare that has to appear on the same beat as its note. Audio is scheduled on `AudioContext.currentTime`, which is sample-accurate; the flares are driven by a rAF loop, which is not. This hook schedules both from one set of offsets and converts the audio times into wall-clock times via `getOutputTimestamp()`, so a flare is never more than one frame from its note however long the burst runs.',

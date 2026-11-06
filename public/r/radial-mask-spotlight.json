@@ -9,8 +9,8 @@
   ],
   "dependencies": [],
   "registryDependencies": [
-    "http://localhost:8927/r/use-raf.json",
-    "http://localhost:8927/r/use-smooth-pointer.json"
+    "https://kinetic.example.com/r/use-raf.json",
+    "https://kinetic.example.com/r/use-smooth-pointer.json"
   ],
   "files": [
     {
@@ -22,6 +22,7 @@
   ],
   "meta": {
     "category": "cursor",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "mask-image",

@@ -67,6 +67,16 @@ export function priority(
 function settle(): void {
   scheduled = false;
 
+  // A hidden tab gets nothing. Checked here rather than only on
+  // `visibilitychange`, because a tab opened in the background — cmd-click, or
+  // a restored session — is hidden from its very first paint and never fires
+  // that event, so it would allocate its full budget of real GPU contexts and
+  // evict them from the tab the user is actually looking at.
+  if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+    revokeAll();
+    return;
+  }
+
   const byCost = new Map<Cost, Entry[]>();
   for (const entry of entries.values()) {
     const list = byCost.get(entry.cost);
@@ -121,9 +131,9 @@ export function update(id: string, weight: number): void {
 }
 
 /**
- * Revoke everything. Bound to `visibilitychange` so a backgrounded tab holds
- * zero GPU contexts — which matters because the user's other tab is the one
- * that now needs them.
+ * Revoke everything, so a backgrounded tab holds zero GPU contexts — which
+ * matters because the user's other tab is the one that now needs them. Reached
+ * both from `visibilitychange` and from `settle` itself.
  */
 export function revokeAll(): void {
   for (const entry of entries.values()) {

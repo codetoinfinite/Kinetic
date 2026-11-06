@@ -40,6 +40,12 @@ export const category = z.enum([
   'text',
   'layout',
   'primitive',
+  'action',
+  'form',
+  'overlay',
+  'navigation',
+  'display',
+  'block',
 ]);
 export type Category = z.infer<typeof category>;
 
@@ -55,6 +61,12 @@ export const CATEGORY_LABEL: Record<Category, string> = {
   text: 'Text',
   layout: 'Layout',
   primitive: 'Primitives',
+  action: 'Actions',
+  form: 'Forms',
+  overlay: 'Overlays',
+  navigation: 'Navigation',
+  display: 'Display',
+  block: 'Blocks',
 };
 
 export const CATEGORY_BLURB: Record<Category, string> = {
@@ -65,7 +77,21 @@ export const CATEGORY_BLURB: Record<Category, string> = {
   text: 'Splitting, staggering, scrambling, and typographic motion.',
   layout: 'Grids, carousels, sticky stacks, and spatial arrangement.',
   primitive: 'The hooks and math everything else is built from.',
+  action: 'Buttons, button groups, toggles and the controls that commit a choice.',
+  form: 'Inputs, selects, pickers, sliders — accessible form controls on React Aria.',
+  overlay: 'Dialogs, popovers, menus, tooltips and other layered surfaces.',
+  navigation: 'Tabs, breadcrumbs, pagination, sidebars and steppers.',
+  display: 'Badges, avatars, cards, tables, charts and status readouts.',
+  block: 'Whole sections and pages: chat, dashboard, auth, settings.',
 };
+
+/**
+ * Which design language an item is drawn in. `boardui` items are adapted from
+ * BoardUI (MIT) and read its token sheet, so the build makes every one of them
+ * depend on the `boardui-theme` registry item that ships that sheet.
+ */
+export const kit = z.enum(['kinetic', 'boardui']);
+export type Kit = z.infer<typeof kit>;
 
 /** A file that ships to the consumer's project via `npx shadcn add`. */
 const registryFile = z.object({
@@ -78,7 +104,7 @@ const registryFile = z.object({
    * and a wrong one installs a file where nothing imports it.
    */
   target: z.string().min(1).optional(),
-  type: z.enum(['registry:ui', 'registry:hook', 'registry:lib']),
+  type: z.enum(['registry:ui', 'registry:hook', 'registry:lib', 'registry:file']),
   /** Human label used in the AI prompt's file manifest. */
   role: z.string().min(1).optional(),
 });
@@ -109,6 +135,7 @@ export const componentMeta = z.object({
     .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'slug must be kebab-case'),
   title: z.string().min(1),
   category,
+  kit: kit.default('kinetic'),
   tags: z.array(z.string().min(1)).min(2),
   /** Grid card copy and the registry item's `description`. One line. */
   blurb: z.string().min(1).max(140),
@@ -119,8 +146,6 @@ export const componentMeta = z.object({
 
   /** npm specifiers, version included: `three@^0.185.1`. */
   dependencies: z.array(z.string()).default([]),
-  /** Other registry items, by bare slug. Resolved transitively by shadcn. */
-  registryDependencies: z.array(z.string()).default([]),
   cssVars: z
     .object({
       theme: cssVarBucket.optional(),
@@ -158,6 +183,19 @@ export const componentMeta = z.object({
   criticalRegion: z.string().default('critical'),
 });
 
-export type ComponentMeta = z.infer<typeof componentMeta>;
+/**
+ * Metadata as the rest of the site consumes it: everything the meta file
+ * declares, plus `registryDependencies`.
+ *
+ * That one field is derived from the source's imports by the build and never
+ * written by hand. It used to be declared here too, and the two drifted the
+ * moment an import changed — 52 components advertised no registry dependencies
+ * while shipping several, and two named an item nothing imported. The imports
+ * are the truth; there is now only one place that truth is read from.
+ */
+export type ComponentMeta = z.infer<typeof componentMeta> & {
+  /** Other registry items, by bare slug. Resolved transitively by shadcn. */
+  registryDependencies: string[];
+};
 /** What authors write — `.default()` fields are optional on the way in. */
 export type ComponentMetaInput = z.input<typeof componentMeta>;

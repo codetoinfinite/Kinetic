@@ -24,7 +24,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['pinned-horizontal-track'],
 
   summary:
     'Lines rise out of a clipping box and fade up as their group enters. The interesting part is that the same builder serves a vertical page section and a panel riding a pinned horizontal strip — handed the strip\'s tween as `containerAnimation`, ScrollTrigger measures against that timeline\'s progress instead of scroll position. One set of numbers, two directions, nothing to keep in sync by hand.',

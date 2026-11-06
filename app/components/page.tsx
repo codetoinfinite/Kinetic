@@ -8,6 +8,7 @@ import { site } from '@/site.config';
 export const metadata: Metadata = {
   title: 'Components',
   description: `Every ${site.name} component, with a live preview, full source and an agent prompt.`,
+  alternates: { canonical: '/components' },
 };
 
 /* ==========================================================================

@@ -18,13 +18,13 @@ const meta: ComponentMetaInput = {
     },
     {
       path: 'registry/lib/wrap.ts',
-      target: 'lib/motion/wrap.ts',
+      target: 'lib/wrap.ts',
       type: 'registry:lib',
       role: 'ring index arithmetic — wrappedOffset, mod, shortestAngle',
     },
     {
       path: 'registry/lib/damp.ts',
-      target: 'lib/motion/damp.ts',
+      target: 'lib/damp.ts',
       type: 'registry:lib',
       role: 'frame-rate-independent damping and gaussian falloff',
     },
@@ -54,7 +54,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A ring of items laid out from `wrappedOffset(i, position, count)` — the shortest signed distance around the circle — with the naive `i - position` printed beside each one so the two can be compared while the ring turns. The dots move continuously through the seam; the raw numbers leap by a whole count at it. This is the single function that makes a finite array behave like an infinite one, and the only honest way to teach it is to show the version it replaces failing.',

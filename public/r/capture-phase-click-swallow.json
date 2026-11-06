@@ -19,6 +19,7 @@
   ],
   "meta": {
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "click",

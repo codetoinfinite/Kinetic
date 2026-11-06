@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A list of large type where every row is an outline with a ghost of fill, and the hovered row materialises: the stroke drops to zero width, the fill goes to full `currentColor`, and the row steps 12px to the right while its siblings recede. The row does not light up, it becomes solid. Everything is CSS, so nothing but the compositor runs on hover.',

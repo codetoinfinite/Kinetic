@@ -14,7 +14,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/css-var-stagger-reveal.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A reveal system where JavaScript writes one number per element and then gets out of the way. The stagger delay is `calc(var(--kx-reveal-index) * var(--kx-reveal-step))`, so duration, travel, easing and the delay ramp all live in CSS where they can be retuned — or overridden from an unrelated stylesheet — without touching the component. The observer measures against the nearest scrollable ancestor, so the same component works inside a card, a modal, or the document.',

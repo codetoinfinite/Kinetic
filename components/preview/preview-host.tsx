@@ -5,9 +5,10 @@ import { Activity, Suspense, useEffect, useId, useRef, useState } from 'react';
 import { PREVIEWS } from '@/__generated__/previews';
 import { useInView } from '@/registry/hooks/use-in-view';
 import { claim, priority, update } from '@/lib/preview-budget';
+import { BoardStage } from '@/components/preview/board-stage';
 import { MotifPoster } from '@/components/preview/motif';
 import { PreviewErrorBoundary } from '@/components/preview/preview-error';
-import type { Cost, Motif } from '@/scripts/schema';
+import type { Category, Cost, Kit, Motif } from '@/scripts/schema';
 import { cn } from '@/lib/cn';
 
 /* ==========================================================================
@@ -39,14 +40,32 @@ export interface PreviewHostProps {
    * and stays live regardless of hover.
    */
   focused?: boolean;
+  /** BoardUI-kit demos render on their own stage; see `board-stage.tsx`. */
+  kit?: Kit;
+  category?: Category;
+  /**
+   * Hover reported by an ancestor. A grid card's stretched link sits above
+   * the preview, so the pointer never reaches this element's own listeners.
+   */
+  hovered?: boolean;
   className?: string;
 }
 
-export function PreviewHost({ slug, cost, motif, focused = false, className }: PreviewHostProps) {
+export function PreviewHost({
+  slug,
+  cost,
+  motif,
+  focused = false,
+  kit = 'kinetic',
+  category,
+  hovered: hoveredProp,
+  className,
+}: PreviewHostProps) {
   const ref = useRef<HTMLDivElement>(null);
   const instanceId = useId();
   const { ratio } = useInView(ref, { threshold: [0, 0.25, 0.5, 0.75, 1], rootMargin: '96px' });
-  const [hovered, setHovered] = useState(false);
+  const [pointerOver, setPointerOver] = useState(false);
+  const hovered = hoveredProp ?? pointerOver;
   const [live, setLive] = useState(false);
   const [everLive, setEverLive] = useState(false);
 
@@ -82,8 +101,8 @@ export function PreviewHost({ slug, cost, motif, focused = false, className }: P
       ref={ref}
       data-preview={slug}
       data-live={live}
-      onPointerEnter={() => setHovered(true)}
-      onPointerLeave={() => setHovered(false)}
+      onPointerEnter={() => setPointerOver(true)}
+      onPointerLeave={() => setPointerOver(false)}
       className={cn(
         'relative isolate overflow-hidden bg-bg-subtle',
         // Contain layout and paint so a preview that writes to `transform` or
@@ -109,7 +128,13 @@ export function PreviewHost({ slug, cost, motif, focused = false, className }: P
           <Activity mode={live ? 'visible' : 'hidden'}>
             <Suspense fallback={null}>
               <div data-demo={slug} className="absolute inset-0">
-                <Demo />
+                {kit === 'boardui' ? (
+                  <BoardStage block={category === 'block'} focused={focused}>
+                    <Demo />
+                  </BoardStage>
+                ) : (
+                  <Demo />
+                )}
               </div>
             </Suspense>
           </Activity>

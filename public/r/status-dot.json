@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-dot",
+  "type": "registry:ui",
+  "title": "Status Dot",
+  "description": "A 12px status indicator: a solid 6px dot centred on a tinted halo, in green, yellow and indigo, for selects and table cells.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/status-dot.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/status-dot.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/badges/status-dot.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport type { HTMLAttributes, Ref } from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Figma source: Board UI → dashboard 1 status dropdown dots (node 3731:3266).\n *\n * 12×12 status indicator: a 6px solid dot centered on a tinted halo.\n * Color pairs from Figma variables:\n *   green  → halo color/green/100,  dot color/green/500\n *   yellow → halo color/yellow/200, dot color/yellow/500\n *   indigo → halo color/indigo/100, dot color/indigo/500\n * In dark mode only the halo drops to 40% opacity; the center dot stays solid.\n */\n\ntype StatusDotColor = \"green\" | \"yellow\" | \"indigo\";\n\nexport interface StatusDotProps extends HTMLAttributes<HTMLSpanElement> {\n  color?: StatusDotColor;\n  ref?: Ref<HTMLSpanElement>;\n}\n\n// #region critical\nconst styles = sortCx({\n  base: \"inline-flex size-3 shrink-0 items-center justify-center rounded-full\",\n  halo: {\n    green: \"bg-status-dot-green-halo\",\n    yellow: \"bg-status-dot-yellow-halo\",\n    indigo: \"bg-status-dot-indigo-halo\",\n  },\n  dot: {\n    green: \"bg-green-500\",\n    yellow: \"bg-yellow-500\",\n    indigo: \"bg-indigo-500\",\n  },\n});\n\nexport function StatusDot({ color = \"green\", className, ref, ...props }: StatusDotProps) {\n  return (\n    <span\n      ref={ref}\n      aria-hidden\n      className={cx(styles.base, styles.halo[color], className)}\n      {...props}\n    >\n      <span className={cx(\"size-1.5 rounded-full\", styles.dot[color])} />\n    </span>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "status",
+      "dot",
+      "indicator",
+      "badge",
+      "boardui"
+    ]
+  }
+}

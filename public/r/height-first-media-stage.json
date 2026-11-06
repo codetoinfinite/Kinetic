@@ -9,8 +9,8 @@
   ],
   "dependencies": [],
   "registryDependencies": [
-    "http://localhost:8927/r/use-reduced-motion.json",
-    "http://localhost:8927/r/wrap.json"
+    "https://kinetic.example.com/r/use-reduced-motion.json",
+    "https://kinetic.example.com/r/wrap.json"
   ],
   "files": [
     {
@@ -22,6 +22,7 @@
   ],
   "meta": {
     "category": "layout",
+    "kit": "kinetic",
     "cost": "css",
     "tags": [
       "layout",

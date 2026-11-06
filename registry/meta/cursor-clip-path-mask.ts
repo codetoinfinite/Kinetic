@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/cursor-clip-path-mask.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'An upper layer is clipped to a circle that trails the pointer, so a disc of alternate content moves across a base layer. GSAP never tweens `clip-path`; it tweens a plain `{ x, y, r }` object and one `onUpdate` writes both the clip string and the ring outline from the same numbers on the same frame.',

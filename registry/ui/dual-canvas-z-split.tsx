@@ -348,9 +348,20 @@ export function DualCanvasZSplit({
     stage.current = { layers, resize, draw };
     draw(STATIC_ELAPSED);
 
+    // Two contexts means two ways to be dropped, and a layer nobody hears lose
+    // its context is a blank canvas for the rest of the page's life, with no
+    // fallback. Either loss retires both layers; `preventDefault` is required
+    // or the browser will never offer a restore.
+    const onLost = (event: Event): void => {
+      event.preventDefault();
+      setUnsupported(true);
+    };
+    for (const layer of layers) layer.canvas.addEventListener('webglcontextlost', onLost);
+
     return () => {
       stage.current = null;
       for (const layer of layers) {
+        layer.canvas.removeEventListener('webglcontextlost', onLost);
         // ogl has no `dispose()`: `remove()` deletes the VAOs and every buffer,
         // then the program and its shaders, and only `WEBGL_lose_context` gives
         // the context itself back. This component holds two of them.

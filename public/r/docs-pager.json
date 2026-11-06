@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "docs-pager",
+  "type": "registry:ui",
+  "title": "Docs Pager",
+  "description": "Previous / next cards for the foot of a docs page: arrow and title on top, a one-line summary below, mirrored for RTL.",
+  "categories": [
+    "navigation"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/directional-icon.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/docs-pager.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/docs-pager.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Docs Pager\" (boardui.com/components/line-chart-card).\n * No BoardUI source was used.\n */\n\"use client\";\n\nimport { useEffect, useRef } from \"react\";\nimport type { ReactNode } from \"react\";\nimport { RiArrowLeftLine, RiArrowRightLine } from \"@remixicon/react\";\nimport { cx } from \"@/lib/cx\";\nimport { directionalIconClass } from \"@/lib/directional-icon\";\n\nexport type DocsPagerDirection = \"prev\" | \"next\";\n\nexport interface DocsPagerLink {\n  title: string;\n  /** Short line under the title, e.g. what the page covers. */\n  description?: ReactNode;\n  /** Renders an anchor. Without it the card is a button and only `onNavigate` fires. */\n  href?: string;\n}\n\nexport interface DocsPagerProps {\n  prev?: DocsPagerLink | null;\n  next?: DocsPagerLink | null;\n  onNavigate?: (direction: DocsPagerDirection, link: DocsPagerLink) => void;\n  /** Small label above each title. Hidden when false. */\n  showLabels?: boolean;\n  prevLabel?: string;\n  nextLabel?: string;\n  \"aria-label\"?: string;\n  className?: string;\n}\n\nexport function DocsPager({\n  prev,\n  next,\n  onNavigate,\n  showLabels = false,\n  prevLabel = \"Previous\",\n  nextLabel = \"Next\",\n  \"aria-label\": ariaLabel = \"Previous and next page\",\n  className,\n}: DocsPagerProps) {\n  const refs = useRef<Record<DocsPagerDirection, HTMLElement | null>>({ prev: null, next: null });\n  const pendingFocus = useRef<DocsPagerDirection | null>(null);\n\n  // #region critical\n  // In button mode the pager re-renders in place with new neighbours. When the\n  // card that was clicked disappears (first or last page reached), focus would\n  // fall to <body>; hand it to the card that is still there instead.\n  useEffect(() => {\n    const side = pendingFocus.current;\n    if (!side) return;\n    pendingFocus.current = null;\n    const active = document.activeElement;\n    if (active && active !== document.body && active.isConnected) return;\n    const other: DocsPagerDirection = side === \"prev\" ? \"next\" : \"prev\";\n    (refs.current[side] ?? refs.current[other])?.focus();\n  }, [prev?.title, next?.title]);\n\n  const card = (direction: DocsPagerDirection, link: DocsPagerLink) => {\n    const isPrev = direction === \"prev\";\n    const Arrow = isPrev ? RiArrowLeftLine : RiArrowRightLine;\n    const label = isPrev ? prevLabel : nextLabel;\n    const className = cx(\n      \"group flex min-w-0 flex-col gap-1 rounded-xl border border-border-button-default bg-background-primary-default px-4 py-3.5 shadow-xs outline-none\",\n      \"transition-[background-color,border-color] duration-150 ease-out motion-reduce:transition-none\",\n      \"hover:border-border-button-hover hover:bg-background-secondary-hover\",\n      \"focus-visible:ring-2 focus-visible:ring-border-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background-primary-default\",\n      isPrev ? \"items-start text-start\" : \"items-end text-end sm:col-start-2\",\n    );\n    const content = (\n      <>\n        {showLabels ? (\n          <span className=\"text-caption-1-regular text-text-tertiary\">{label}</span>\n        ) : (\n          <span className=\"sr-only\">{label}: </span>\n        )}\n        <span className={cx(\"flex max-w-full items-center gap-1.5 text-body-medium text-text-primary\", !isPrev && \"flex-row-reverse\")}>\n          <Arrow\n            aria-hidden\n            className={cx(\n              \"size-4 shrink-0 text-foreground-icon-secondary transition-transform duration-200 ease-out motion-reduce:transition-none\",\n              \"group-hover:text-foreground-icon-primary\",\n              isPrev\n                ? \"group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5\"\n                : \"group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5\",\n              directionalIconClass(Arrow),\n            )}\n          />\n          <span className=\"truncate\">{link.title}</span>\n        </span>\n        {link.description ? (\n          <span className=\"max-w-full truncate text-caption-1-regular text-text-tertiary\">{link.description}</span>\n        ) : null}\n      </>\n    );\n    const setRef = (node: HTMLElement | null) => {\n      refs.current[direction] = node;\n    };\n    const handle = () => {\n      pendingFocus.current = direction;\n      onNavigate?.(direction, link);\n    };\n    return link.href ? (\n      <a key={direction} ref={setRef} href={link.href} rel={direction} onClick={handle} className={className}>\n        {content}\n      </a>\n    ) : (\n      <button key={direction} ref={setRef} type=\"button\" onClick={handle} className={cx(className, \"cursor-pointer\")}>\n        {content}\n      </button>\n    );\n  };\n  // #endregion\n\n  if (!prev && !next) return null;\n\n  return (\n    <nav aria-label={ariaLabel} className={cx(\"grid w-full grid-cols-1 gap-3 sm:grid-cols-2\", className)}>\n      {prev ? card(\"prev\", prev) : null}\n      {next ? card(\"next\", next) : null}\n    </nav>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "navigation",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "docs",
+      "pagination",
+      "previous-next",
+      "navigation",
+      "boardui"
+    ]
+  }
+}

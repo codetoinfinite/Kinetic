@@ -104,6 +104,56 @@ function flattenChildrenToLines(host: HTMLElement): void {
   }
 }
 
+/**
+ * A stable string identity for `children`: the text that will be split, plus
+ * the element tags the pre-pass above re-emits around every line.
+ *
+ * React builds a fresh node object on every parent render for anything that is
+ * not a bare string, so naming `children` in a dependency array actually says
+ * "re-run whenever the parent renders, for any reason at all". Here that is
+ * destructive rather than merely wasteful. The cleanup reverts the split and
+ * writes `originalHTML` back; the next run re-splits and calls `gsap.from`
+ * again; and because `useInView` is `once: true` the gate is still open, so it
+ * happens immediately. A reader half way down the paragraph watches it drop
+ * back below the mask and rise a second time, and whatever tween was in flight
+ * is thrown away with the context that owned it. A sibling toggling a menu is
+ * enough to trigger it.
+ *
+ * Dropping the dependency outright is not the fix either — the split would
+ * then describe a paragraph that is no longer on screen. So the node is
+ * flattened to the only things the split actually depends on, and that string
+ * is the dependency. Same content, same string, no re-run.
+ */
+function childrenSignature(node: ReactNode): string {
+  if (node === null || node === undefined || typeof node === 'boolean') return '';
+  if (typeof node === 'string' || typeof node === 'number' || typeof node === 'bigint') {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    // A separator that cannot occur in text, so ['ab', 'c'] and ['a', 'bc'] do
+    // not collapse onto the same key.
+    return (node as ReactNode[]).map(childrenSignature).join('\u0001');
+  }
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    // The tag belongs in the signature: `flattenChildrenToLines` clones it
+    // around each line, so <h2>Same words</h2> and <p>Same words</p> are two
+    // different splits of identical text.
+    const { type } = node;
+    const tag =
+      typeof type === 'string'
+        ? type
+        : (type as { displayName?: string; name?: string }).displayName ||
+          (type as { name?: string }).name ||
+          'component';
+    return `<${tag}>${childrenSignature(node.props.children)}`;
+  }
+  // Iterables, portals and promises have no cheap textual identity. A constant
+  // under-reports a change, which is the safe direction: the alternative is a
+  // fresh value every render, i.e. exactly the bug this function exists to
+  // remove.
+  return '';
+}
+
 export function NestedSplitRestore({
   children,
   type = 'lines',
@@ -119,6 +169,11 @@ export function NestedSplitRestore({
   const root = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const { inView } = useInView(root, { threshold: VIEW_THRESHOLD, once: true });
+  // Compared by value, not by identity. The node itself still goes into the
+  // tree below — only the effect's notion of "the content changed" is derived
+  // from this string. See `childrenSignature` for what listing `children` here
+  // costs.
+  const contentKey = childrenSignature(children);
 
   useEffect(() => {
     const el = root.current;
@@ -180,7 +235,7 @@ export function NestedSplitRestore({
       if (el.innerHTML !== originalHTML) el.innerHTML = originalHTML;
     };
   }, [
-    children,
+    contentKey,
     type,
     mask,
     nested,

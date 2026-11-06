@@ -9,9 +9,9 @@
   ],
   "dependencies": [],
   "registryDependencies": [
-    "http://localhost:8927/r/damp.json",
-    "http://localhost:8927/r/easing.json",
-    "http://localhost:8927/r/use-reduced-motion.json"
+    "https://kinetic.example.com/r/damp.json",
+    "https://kinetic.example.com/r/easing.json",
+    "https://kinetic.example.com/r/use-reduced-motion.json"
   ],
   "files": [
     {
@@ -23,6 +23,7 @@
   ],
   "meta": {
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "css",
     "tags": [
       "easing",

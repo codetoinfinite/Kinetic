@@ -14,7 +14,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/io-reveal-lite.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion'],
 
   summary:
     'A wrapper that fades and lifts its child into place the first time it enters the scroll container. The transition is one inline string built from four numbers, so nothing is injected into the document and nothing has to load. Every instance that asks for the same root and the same observation box shares one IntersectionObserver, which is what makes it safe to put two hundred of these on a page.',

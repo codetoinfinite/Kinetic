@@ -25,7 +25,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A grid that behaves like a stretched sheet. A coarse lattice of damped springs runs on the CPU, is packed into an RGBA8 texture once per frame, and the fragment shader reads that texture with LINEAR filtering to displace its own sample coordinate. The pointer pushes cells outward and drags them along with its velocity; diffusion between neighbours turns each push into a wave that spreads and settles.',

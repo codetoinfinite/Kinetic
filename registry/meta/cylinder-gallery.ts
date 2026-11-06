@@ -23,7 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1', 'gsap@^3.15.0', 'lenis@^1.3.11'],
-  registryDependencies: [],
 
   summary:
     'A flat PlaneGeometry per item, all sharing one compiled program, each bent around a common cylinder by its own uniform. The camera never moves and the CPU never touches a vertex: scrolling changes one float, `position`, and every plane recomputes its angle, its height and its focus weight from that single scalar. Because the ring offset is the shortest signed distance on a circular index, the list is genuinely endless in both directions with no clones and no rebuilding.',

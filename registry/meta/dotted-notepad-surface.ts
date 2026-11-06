@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A panel textured with a dot grid drawn by a single tiled radial gradient, masked so the pattern dissolves toward the edges instead of ending on a rectangle. An optional turned-down corner is one hard-stopped linear gradient. Nothing is an image, nothing animates, and the whole surface costs one background layer.',

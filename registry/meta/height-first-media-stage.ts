@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion', 'wrap'],
 
   summary:
     'Almost every media stage on the web is sized width-first: a full-width box with an aspect ratio and whatever height falls out of it. On a short laptop that makes a 3:2 hero taller than the viewport, so the piece built to be seen at a glance has to be scrolled. This inverts the constraint — the height is authored, the width is derived from it through `aspect-ratio`, and `max-width: 100%` is the only escape hatch. The stage always fits vertically, and on a narrow screen it gives up size rather than overflowing. Layers cross-fade on opacity alone; the only JavaScript is the index.',

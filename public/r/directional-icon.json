@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "directional-icon",
+  "type": "registry:lib",
+  "title": "directional-icon",
+  "description": "Shared utility used by Kinetic components.",
+  "dependencies": [
+    "@remixicon/react@^4.9.0"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/directional-icon.ts",
+      "type": "registry:lib",
+      "target": "lib/directional-icon.ts",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (utils/directional-icon.ts)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport {\n  RiArrowLeftLine,\n  RiArrowLeftSLine,\n  RiArrowRightLine,\n  RiArrowRightSLine,\n  RiSidebarFoldLine,\n  RiSidebarUnfoldLine,\n} from \"@remixicon/react\";\n\n/** Navigation glyphs mirror; logos, media controls and trend arrows do not. */\nconst directionalIcons: ReadonlySet<unknown> = new Set([\n  RiArrowLeftLine, RiArrowLeftSLine, RiArrowRightLine, RiArrowRightSLine,\n  RiSidebarFoldLine, RiSidebarUnfoldLine,\n]);\n\nexport function directionalIconClass(icon: unknown): string | undefined {\n  return directionalIcons.has(icon) ? \"rtl:rotate-180\" : undefined;\n}\n"
+    }
+  ]
+}

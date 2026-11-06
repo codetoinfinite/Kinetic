@@ -100,6 +100,12 @@ const VELOCITY_WINDOW = 0.07;
 const MAX_VELOCITY = 900;
 /** Stations further than this from the top are not painted at all. */
 const CULL_DEG = 96;
+/**
+ * How long the post-throw click gate stays armed, in ms. The click a release
+ * produces arrives in the same task or the next; past this it is a new intent
+ * rather than the tail of the gesture.
+ */
+const SWALLOW_TIMEOUT_MS = 300;
 
 export function RotaryDragCarousel({
   children,
@@ -250,6 +256,18 @@ export function RotaryDragCarousel({
     let pressY = 0;
     let moved = false;
     let swallowClick = false;
+    let swallowTimer: number | null = null;
+
+    // The gate expires. A throw released over a gap between cards, or one the
+    // browser cancels, produces no click at all — and a gate left armed eats
+    // the visitor's next real click, however long afterwards it lands.
+    const disarmSwallow = () => {
+      swallowClick = false;
+      if (swallowTimer !== null) {
+        window.clearTimeout(swallowTimer);
+        swallowTimer = null;
+      }
+    };
     /** Rolling window: the wheel angle and clock at the start of the window. */
     let sampleAngle = 0;
     let sampleTime = 0;
@@ -273,6 +291,9 @@ export function RotaryDragCarousel({
       if (pointerId !== null || !e.isPrimary) return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
 
+      // A new press means the previous gesture is over and whatever click it
+      // was owed never came.
+      disarmSwallow();
       pointerId = e.pointerId;
       pressX = e.clientX;
       pressY = e.clientY;
@@ -335,7 +356,11 @@ export function RotaryDragCarousel({
           ? clamp((angleRef.current - sampleAngle) / elapsed, -MAX_VELOCITY, MAX_VELOCITY)
           : 0;
 
-      swallowClick = moved;
+      disarmSwallow();
+      if (moved) {
+        swallowClick = true;
+        swallowTimer = window.setTimeout(disarmSwallow, SWALLOW_TIMEOUT_MS);
+      }
       moved = false;
 
       if (host.hasPointerCapture(id)) host.releasePointerCapture(id);
@@ -347,7 +372,13 @@ export function RotaryDragCarousel({
     // gesture that spins the wheel also activates a card.
     const onClick = (e: MouseEvent) => {
       if (!swallowClick) return;
-      swallowClick = false;
+
+      // Enter or Space on a focused card dispatches a click with `detail === 0`
+      // and no pointer sequence behind it. Nothing was thrown, and swallowing
+      // it is what makes the wheel keyboard-inoperable.
+      if (e.detail === 0) return;
+
+      disarmSwallow();
       e.preventDefault();
       e.stopPropagation();
     };
@@ -381,6 +412,8 @@ export function RotaryDragCarousel({
       host.removeEventListener('pointercancel', finish);
       host.removeEventListener('lostpointercapture', finish);
       host.removeEventListener('click', onClick, true);
+      // Or the timer outlives the effect and a remount starts life armed.
+      disarmSwallow();
       host.removeEventListener('keydown', onKeyDown);
       if (pointerId !== null && host.hasPointerCapture(pointerId)) {
         host.releasePointerCapture(pointerId);

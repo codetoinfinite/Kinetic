@@ -81,7 +81,17 @@ useEffect(() => {
   }
   setFallback(false);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  let renderer: THREE.WebGLRenderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  } catch {
+    // A context can still be refused between the probe and the construction —
+    // the tab may have hit the browser's live-context ceiling in between. three
+    // throws rather than returning null, and an uncaught throw here takes the
+    // page with it.
+    setFallback(true);
+    return;
+  }
   renderer.setPixelRatio(pixelRatio(2));
   renderer.setClearAlpha(0);
   el.appendChild(renderer.domElement);
@@ -166,6 +176,11 @@ useEffect(() => {
 
   return () => {
     observer.disconnect();
+    // A rebuild — the caller changed the item ids — must not leave the latch
+    // set, or every button on the new ring is dead for the life of the page.
+    exitTl.current?.kill();
+    exitTl.current = null;
+    exiting.current = false;
     gsap.killTweensOf(state);
     for (const mesh of meshes) gsap.killTweensOf(mesh.material);
     // disposeRenderer stops the animation loop first: a queued frame that
@@ -188,8 +203,11 @@ const start = useCallback(
     const chromeEl = chrome.current;
 
     // Re-entrancy guard. Without it a double click starts two warps that
-    // tween the same scalars in opposite directions and the ring jitters.
-    if (b?.exiting) return;
+    // tween the same scalars in opposite directions and the ring jitters —
+    // and on the no-GL branch below, two crossfades each ending in their own
+    // `onNavigate`.
+    if (exiting.current) return;
+    exiting.current = true;
 
     const chromeTargets = chromeEl
       ? Array.from(chromeEl.querySelectorAll<HTMLElement>('[data-warp-chrome]'))
@@ -199,7 +217,10 @@ const start = useCallback(
       // No GL: the static crossfade. Same shape, no warp.
       const target = chromeTargets.length > 0 ? chromeTargets : chromeEl;
       if (target) {
-        gsap.to(target, {
+        // On the same ref as the GL path's timeline, so one kill on unmount
+        // covers both branches — and this is the branch the build effect
+        // returns early from, so it has no cleanup of its own.
+        exitTl.current = gsap.timeline().to(target, {
           opacity: 0,
           duration: reduced ? 0.15 : 0.3,
           ease: 'power2.out',
@@ -215,6 +236,7 @@ const start = useCallback(
     const state = b.state;
 
     const tl = gsap.timeline();
+    exitTl.current = tl;
     if (chromeTargets.length > 0) {
       tl.to(chromeTargets, {
         opacity: 0,

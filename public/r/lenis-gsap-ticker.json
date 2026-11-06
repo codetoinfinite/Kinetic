@@ -12,8 +12,8 @@
     "lenis@^1.3.11"
   ],
   "registryDependencies": [
-    "http://localhost:8927/r/use-lenis.json",
-    "http://localhost:8927/r/use-reduced-motion.json"
+    "https://kinetic.example.com/r/use-lenis.json",
+    "https://kinetic.example.com/r/use-reduced-motion.json"
   ],
   "files": [
     {
@@ -25,6 +25,7 @@
   ],
   "meta": {
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "scroll",

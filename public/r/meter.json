@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "meter",
+  "type": "registry:ui",
+  "title": "Meter",
+  "description": "A level within a known range (storage, seats, quotas) with accent, success, warning and error tones, on React Aria Meter.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/input.json",
+    "https://kinetic.example.com/r/progress.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/meter.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/meter.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/meter/meter.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ReactNode } from \"react\";\nimport { Meter as AriaMeter } from \"react-aria-components\";\nimport type { MeterProps as AriaMeterProps } from \"react-aria-components\";\nimport { Label } from \"@/components/motion/label\";\nimport { ProgressTrack, type ProgressSize } from \"@/components/motion/progress\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Meter — a quantity within a known range: storage used, seats taken, a\n * password's strength. Unlike ProgressBar it describes a level rather than\n * a task moving towards done, and React Aria's Meter announces it that way\n * (role=\"meter\").\n *\n *   <Meter label=\"Storage\" value={72} valueLabel=\"7.2 of 10 GB\" />\n *   <Meter label=\"Seats\" value={19} maxValue={20} tone=\"warning\" />\n *\n * It is drawn on ProgressBar's track: the same rail, fill, and eased\n * translate when the value changes. `tone` colours the fill from semantic\n * tokens, so a meter can turn amber or red as it fills up.\n */\n\nexport type MeterTone = \"accent\" | \"success\" | \"warning\" | \"error\";\n\n// #region critical\nconst tones = sortCx({\n  accent: \"text-accent-500\",\n  success: \"text-notification-success-foreground\",\n  warning: \"text-chart-8-active\",\n  error: \"text-notification-error-foreground\",\n});\n\nexport interface MeterProps extends Omit<AriaMeterProps, \"children\" | \"className\"> {\n  label?: ReactNode;\n  /** Show the formatted value at the end of the label row. Default: shown with a label. */\n  showValueLabel?: boolean;\n  /** Helper text under the bar. */\n  description?: ReactNode;\n  /** Colour of the fill. Default `accent`. */\n  tone?: MeterTone;\n  /** Track thickness: 4, 6 (default), or 8px. */\n  size?: ProgressSize;\n  className?: string;\n}\n\nexport function Meter({\n  label,\n  showValueLabel,\n  description,\n  tone = \"accent\",\n  size = \"md\",\n  className,\n  ...props\n}: MeterProps) {\n  const showValue = showValueLabel ?? label != null;\n  return (\n    <AriaMeter {...props} className={cx(\"flex w-full flex-col gap-1.5\", className)}>\n      {({ percentage, valueText }) => (\n        <>\n          {label != null || showValue ? (\n            <div className=\"flex items-baseline justify-between gap-3\">\n              {label != null ? <Label className=\"min-w-0 truncate\">{label}</Label> : <span />}\n              {showValue ? (\n                <span className=\"shrink-0 text-body-medium text-text-secondary tabular-nums\">{valueText}</span>\n              ) : null}\n            </div>\n          ) : null}\n          <ProgressTrack percentage={percentage} size={size} className={tones[tone]} />\n          {description ? <span className=\"text-caption-1-medium text-text-secondary\">{description}</span> : null}\n        </>\n      )}\n    </AriaMeter>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "meter",
+      "usage",
+      "quota",
+      "gauge",
+      "react-aria",
+      "boardui"
+    ]
+  }
+}

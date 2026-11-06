@@ -68,7 +68,10 @@ export function BrowseToolbar({
     <div
       ref={ref}
       className={cn(
-        'sticky top-14 z-30 border-b border-line bg-bg/85 backdrop-blur-xl',
+        // `top-16`, matching the header's own `h-16`. At `top-14` the toolbar
+        // stuck 8px too high and spent the whole page with its first row behind
+        // the header.
+        'sticky top-16 z-30 border-b border-line bg-bg/85 backdrop-blur-xl',
         'shadow-[var(--k-elev-2)]',
       )}
     >

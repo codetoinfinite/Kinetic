@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'The ambient motion you put on a hero image, a floating card or a badge so the page does not feel frozen. Fourteen pixels over five seconds is under the threshold at which the eye tracks it as movement — you read it as presence. Because it animates `translate` rather than `transform`, the element can still carry a hover scale or a tilt without the two fighting.',

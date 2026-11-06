@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['prng'],
 
   summary:
     'Sweeping the pointer across the panel drops a trail of tiles behind it, each fading up over 220ms, holding, and fading out — total life 520ms. The tiles come from a fixed ring of 22 nodes created once at mount and reused by index, and a new one is only released when the pointer has travelled more than 130px since the last. Those two rules are the component; the tween values are decoration.',

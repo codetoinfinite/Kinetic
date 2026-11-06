@@ -24,7 +24,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A full-height section is pinned by ScrollTrigger while a flex strip inside it translates on x. The pin lasts exactly as many scroll pixels as the strip has to travel, so the mapping is 1:1 and the section releases the moment the last panel lands. The tween and the trigger are handed back to the parent, so reveal systems and drag handles can drive off the same pin instead of building a second one.',

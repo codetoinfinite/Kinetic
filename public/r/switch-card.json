@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch-card",
+  "type": "registry:ui",
+  "title": "Switch Card",
+  "description": "Bordered settings row with an optional icon, title and description; a click anywhere on the card flips the kit switch on its trailing edge.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/switch.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/switch-card.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/switch-card.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/switch/switch-card.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ComponentType, ReactNode, Ref } from \"react\";\nimport { Switch as AriaSwitch } from \"react-aria-components\";\nimport type { SwitchProps as AriaSwitchProps } from \"react-aria-components\";\nimport { cx } from \"@/lib/cx\";\nimport { SwitchTrack } from \"@/components/motion/switch\";\nimport type { SwitchShape, SwitchSize } from \"@/components/motion/switch\";\n\ntype IconComponent = ComponentType<{\n  className?: string;\n  \"aria-hidden\"?: boolean | \"true\" | \"false\";\n}>;\n\n/**\n * Selectable settings card: title + description on the left, Switch on the\n * right. The whole card toggles (react-aria Switch renders the label), so a\n * click anywhere flips the state — the switch counterpart to CheckboxCard.\n *\n * Card chrome mirrors CheckboxCard, but with rounded-xl (12px) corners:\n *   card   rounded-xl (12px), 1px border/button/default, pl 16 pr 20 py 12\n *   hover  bg background/primary/hover (#f7f7f7)\n *   title  Body 1/Medium, text/primary\n *   desc   Body 1/Regular, text/secondary\n */\n\nexport interface SwitchCardProps extends Omit<AriaSwitchProps, \"children\"> {\n  title: ReactNode;\n  description?: ReactNode;\n  /** Optional 24×24 leading icon — pass a Remix Icon component (`RiMailLine`, not `<RiMailLine />`). */\n  icon?: IconComponent;\n  size?: SwitchSize;\n  shape?: SwitchShape;\n  ref?: Ref<HTMLLabelElement>;\n}\n\n// #region critical\nexport function SwitchCard({\n  className,\n  title,\n  description,\n  icon: Icon,\n  size = \"md\",\n  shape = \"pill\",\n  ref,\n  ...props\n}: SwitchCardProps) {\n  return (\n    <AriaSwitch\n      ref={ref}\n      {...props}\n      className={(state) =>\n        cx(\n          \"group flex w-full items-center justify-between gap-3 rounded-xl border border-border-button-default py-3 pe-5 ps-4 select-none\",\n          \"transition-colors duration-150 ease\",\n          state.isHovered && !state.isDisabled\n            ? \"bg-background-primary-hover\"\n            : \"bg-background-primary-default\",\n          state.isDisabled ? \"cursor-not-allowed opacity-50\" : \"cursor-pointer\",\n          typeof className === \"function\" ? className(state) : className,\n        )\n      }\n    >\n      {(state) => (\n        <>\n          <span className=\"flex min-w-0 items-center gap-3\">\n            {Icon && <Icon className=\"size-6 shrink-0 text-foreground-icon-secondary\" aria-hidden />}\n            <span className=\"flex min-w-0 flex-col gap-0.5\">\n              <span className=\"truncate text-body-medium text-text-primary\">{title}</span>\n              {description !== undefined && description !== null && (\n                <span className=\"truncate text-body-regular text-text-secondary\">{description}</span>\n              )}\n            </span>\n          </span>\n          <span className=\"flex shrink-0 items-center\">\n            <SwitchTrack state={state} size={size} shape={shape} />\n          </span>\n        </>\n      )}\n    </AriaSwitch>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "switch",
+      "toggle",
+      "card",
+      "settings",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

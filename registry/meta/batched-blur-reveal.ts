@@ -30,7 +30,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A page-wide entrance that reveals elements in groups rather than one at a time. Everything that crosses the start line inside the same 100 ms window is handed to one tween, so a real stagger runs across a row of cards that entered simultaneously. Opacity, rise, scale and blur move together, which reads as the content focusing rather than sliding.',

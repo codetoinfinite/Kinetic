@@ -60,7 +60,6 @@ export function TweenedCursorUniform({
   className,
 }: TweenedCursorUniformProps) {
   const host = useRef<HTMLDivElement>(null);
-  const canvas = useRef<HTMLCanvasElement>(null);
   const api = useRef<Scene | null>(null);
 
   /* The two tween targets. Plain objects, not uniforms: GSAP writes numbers
@@ -80,16 +79,34 @@ export function TweenedCursorUniform({
      when the ~16-per-process ceiling is hit, so an unrelated canvas
      elsewhere on the page goes black. */
   useEffect(() => {
-    const el = canvas.current;
+    const el = host.current;
     if (!el || !hasWebGL()) return;
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas: el,
-      antialias: false,
-      alpha: false,
-      powerPreference: 'low-power',
-    });
+    /* three owns its canvas and it is appended here, per effect run. Handing
+       the constructor a React-rendered `<canvas ref>` was the bug: cleanup
+       calls `forceContextLoss()`, and `getContext` on an element that has been
+       through that returns the same dead context, so the next construction
+       threw straight into the catch below and the component stayed blank. The
+       preview host hides components with `<Activity mode="hidden">` — effects
+       unmount, the DOM does not — so that cycle is ordinary scrolling here,
+       not just StrictMode in development. */
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        alpha: false,
+        powerPreference: 'low-power',
+      });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      return;
+    }
     renderer.setPixelRatio(pixelRatio(2));
+    renderer.domElement.className = 'block h-full w-full';
+    el.append(renderer.domElement);
 
     const material = new THREE.ShaderMaterial({
       vertexShader,
@@ -124,7 +141,24 @@ export function TweenedCursorUniform({
       disposeRenderer(renderer);
       geometry.dispose();
       material.dispose();
+      renderer.domElement.remove();
     };
+    // Deliberately empty. `radius` and `amount` are uniform values and used to
+    // sit here, which meant changing either tore the renderer down and built a
+    // whole new context for what is one float. The effect below writes them
+    // onto the live material instead.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* Uniform values, not construction inputs. Written straight onto the live
+     material so a prop change costs one assignment rather than a context. */
+  useEffect(() => {
+    const s = api.current;
+    if (!s) return;
+    const r = s.material.uniforms.uRadius;
+    if (r) r.value = radius;
+    const a = s.material.uniforms.uAmount;
+    if (a) a.value = amount;
   }, [radius, amount]);
 
   /* Size in its own effect so a resize never touches the renderer's lifetime. */
@@ -209,7 +243,7 @@ export function TweenedCursorUniform({
 
   return (
     <div ref={host} className={cn('relative h-full w-full overflow-hidden bg-bg', className)}>
-      <canvas ref={canvas} className="block h-full w-full" />
+      {/* The canvas is three's own, appended by the effect above. */}
     </div>
   );
 }

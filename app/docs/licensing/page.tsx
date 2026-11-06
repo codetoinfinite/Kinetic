@@ -5,6 +5,7 @@ import { site } from '@/site.config';
 export const metadata: Metadata = {
   title: 'Licensing',
   description: `What you may do with the ${site.name} code, and what the peer dependencies require.`,
+  alternates: { canonical: '/docs/licensing' },
 };
 
 /**
@@ -20,6 +21,15 @@ const DEPENDENCIES = [
   { name: 'three', license: 'MIT', note: 'Used by the WebGL components.' },
   { name: 'ogl', license: 'Unlicense', note: 'Lighter WebGL alternative to three.' },
   { name: 'lenis', license: 'MIT', note: 'Smooth-scroll driver.' },
+  { name: 'react-aria-components', license: 'Apache-2.0', note: 'BoardUI form, overlay and navigation components.' },
+  { name: 'react-aria', license: 'Apache-2.0', note: 'BoardUI notifications and settings.' },
+  { name: '@internationalized/date', license: 'Apache-2.0', note: 'BoardUI date and time fields.' },
+  { name: '@remixicon/react', license: 'Remix Icon License 1.0', note: 'BoardUI icons. See the section above.' },
+  { name: 'motion', license: 'MIT', note: 'BoardUI enter and exit animations.' },
+  { name: 'recharts', license: 'MIT', note: 'BoardUI chart cards.' },
+  { name: '@tanstack/react-table', license: 'MIT', note: 'BoardUI data table.' },
+  { name: 'tailwind-merge', license: 'MIT', note: 'BoardUI class merging.' },
+  { name: 'ai, @ai-sdk/*', license: 'Apache-2.0', note: 'BoardUI agent chat and its API route.' },
   { name: 'shiki', license: 'MIT', note: 'Site only — never installed with a component.' },
   { name: 'fuse.js', license: 'Apache-2.0', note: 'Site only — powers search.' },
 ] as const;
@@ -39,13 +49,36 @@ export default function LicensingPage() {
         <p>
           Every component on this site is {site.license} licensed. Installing writes files into your
           repository and the relationship ends there — no runtime, no package, no phone-home. Use it
-          commercially, edit it beyond recognition, ship it. No attribution is required. A link back
-          is welcome and never obligatory.
+          commercially, edit it beyond recognition, ship it. The Kinetic components need no
+          attribution, and a link back is welcome but never required. The BoardUI kit carries its
+          own MIT notice, described below.
         </p>
         <p>
           What you cannot get from here is a warranty. Every component is written to handle its own
           edge cases and clean up after itself, and each one states its acceptance criterion — but
           it is your production, so test it in your production.
+        </p>
+
+        <h2>The BoardUI kit</h2>
+        <p>
+          The components marked BoardUI are not written from scratch. They are adapted from the free
+          source of <a href="https://github.com/BoardUI/boardui">BoardUI</a>, which is MIT licensed,
+          copyright (c) 2026 Mertcan Dundar Esmergul. MIT does ask for one thing: the copyright and
+          permission notice stays with every copy. Each adapted file keeps the copyright line in
+          its header, and the full notice is in <code>boardui-theme.css</code>, which installs with
+          every BoardUI component. Keep both, and the obligation is met. The repository&rsquo;s{' '}
+          <code>THIRD_PARTY_NOTICES.md</code> lists every adapted file.
+        </p>
+        <p>
+          BoardUI&rsquo;s own licence page says its free source may be used under MIT terms
+          wherever it came from, and that the rest of the page applies only where MIT is silent.
+          That rest includes the author&rsquo;s wish that the code not be used to build a competing
+          component library. BoardUI Pro is not included here.
+        </p>
+        <p>
+          The kit&rsquo;s icons come from <code>@remixicon/react</code> under the Remix Icon
+          License. It allows commercial use without attribution, but it forbids selling the icons on
+          their own, building a competing icon set from them, and using one as a logo.
         </p>
 
         <h2>GSAP</h2>
@@ -113,8 +146,9 @@ export default function LicensingPage() {
         <p>
           Motion techniques are shared craft. A scroll-scrubbed cylinder of images, a magnetic
           cursor target, a pinned horizontal track — these are methods, and methods get reused
-          constantly across the web. Every implementation here is written from scratch, and the
-          licence above covers it.
+          constantly across the web. Every Kinetic implementation here is written from scratch, and
+          the licence above covers it. The BoardUI kit is the one exception, and it is credited
+          above.
         </p>
         <p>
           What a licence never covers is content. The photographs, copy, typefaces and layout you

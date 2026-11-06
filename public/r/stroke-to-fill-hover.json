@@ -19,6 +19,7 @@
   ],
   "meta": {
     "category": "text",
+    "kit": "kinetic",
     "cost": "css",
     "tags": [
       "css",

@@ -25,7 +25,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A full-screen plasma built from sixteen passes of iterated domain warping, then reduced to eleven grey levels through an 8x8 ordered dither matrix. The quantisation is the whole point: a smooth plasma is a screensaver, and the same plasma printed in eleven tones is a texture that type can sit on. The pointer displaces the plasma\'s own coordinate space so the field leans into the cursor rather than growing a highlight under it.',

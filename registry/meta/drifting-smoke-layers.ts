@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'An absolutely-positioned atmosphere layer for the back of a hero or a card. Three oversized elements, each painting two soft radial gradients, blurred and drifting on periods that never line up. It looks like a rendered volumetric pass and costs three composited transforms.',

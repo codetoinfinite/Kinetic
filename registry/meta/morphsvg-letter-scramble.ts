@@ -18,7 +18,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'Every character flips through a handful of wrong glyphs and then lands on the right one, each character starting a tenth of a second after the one before it, so the resolution sweeps left to right across the word. Each successive flip is held slightly longer than the last, which is what makes it read as settling rather than as a spinner that was switched off. Character widths are frozen to their final glyph before the first substitution, so the word does not breathe while it scrambles.',

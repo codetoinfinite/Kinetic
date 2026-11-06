@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:ui",
+  "title": "Skeleton",
+  "description": "Content-shaped placeholders with a layered light sheen that size themselves to real content and blur it in once loaded.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/skeleton.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/skeleton.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/skeleton/skeleton.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { CSSProperties, ReactNode } from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Skeleton — placeholders in the shape of the content that is on its way.\n *\n *   <Skeleton shape=\"circle\" className=\"size-10\" />\n *   <SkeletonText lines={3} />\n *   <Skeleton isLoaded={user != null}><Avatar … /></Skeleton>\n *\n * Blocks are tinted from the text colour at 8%, so they show on any surface\n * in both themes (a fixed grey disappears on dark cards). A sheen of light\n * sweeps each one, drawn in layers like Spinner and Progress: a crisp 2px\n * line leads, a tight glow and a wide bloom trail it. It mirrors in RTL and\n * gives way to a gentle opacity pulse under reduced motion. The sheen lives\n * in globals.css (`.bui-skeleton`).\n *\n * With children, a Skeleton sizes itself to them: it lays the real content\n * out invisibly, then, once `isLoaded`, cross-fades the block away while the\n * content sharpens in from a 4px blur.\n *\n * Skeletons are hidden from assistive technology; mark the region that is\n * loading with `aria-busy`.\n */\n\nexport type SkeletonShape = \"rect\" | \"text\" | \"circle\";\n\n// #region critical\nconst styles = sortCx({\n  block: \"bui-skeleton block bg-text-primary/8\",\n  shape: {\n    rect: \"rounded-xl\",\n    text: \"rounded-md\",\n    circle: \"rounded-full\",\n  },\n});\n\nconst FADE = \"transition-[opacity,filter] duration-300 ease-out motion-reduce:transition-none\";\n\nexport interface SkeletonProps {\n  /** `rect` (radius 12, default), `text` (radius 6), or `circle`. */\n  shape?: SkeletonShape;\n  /** With children: show them once true, blurring them in. */\n  isLoaded?: boolean;\n  /** Size and placement, e.g. `h-4 w-40` or `size-10`. */\n  className?: string;\n  style?: CSSProperties;\n  /** Real content to measure the placeholder from and reveal when loaded. */\n  children?: ReactNode;\n}\n\nexport function Skeleton({ shape = \"rect\", isLoaded = false, className, style, children }: SkeletonProps) {\n  if (children === undefined) {\n    return <span aria-hidden className={cx(styles.block, \"relative\", styles.shape[shape], className)} style={style} />;\n  }\n\n  return (\n    <span className={cx(\"relative block\", className)} style={style}>\n      <span\n        aria-hidden={!isLoaded || undefined}\n        inert={!isLoaded}\n        className={cx(\"block\", FADE, isLoaded ? \"opacity-100 blur-[0px]\" : \"opacity-0 motion-safe:blur-[4px]\")}\n      >\n        {children}\n      </span>\n      <span\n        aria-hidden\n        className={cx(styles.block, styles.shape[shape], \"pointer-events-none absolute inset-0\", FADE, isLoaded && \"opacity-0\")}\n      />\n    </span>\n  );\n}\n// #endregion\n\nexport interface SkeletonTextProps {\n  /** Number of lines. Default 3; the last one runs 60% wide. */\n  lines?: number;\n  /** Line height, matched to the text it stands in for. Default `h-3.5` (Body 1). */\n  lineClassName?: string;\n  className?: string;\n}\n\nexport function SkeletonText({ lines = 3, lineClassName = \"h-3.5\", className }: SkeletonTextProps) {\n  return (\n    <span aria-hidden className={cx(\"flex w-full flex-col gap-2.5\", className)}>\n      {Array.from({ length: lines }, (_, index) => (\n        <Skeleton\n          key={index}\n          shape=\"text\"\n          className={cx(lineClassName, index === lines - 1 && lines > 1 ? \"w-3/5\" : \"w-full\")}\n        />\n      ))}\n    </span>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "skeleton",
+      "loading",
+      "placeholder",
+      "shimmer",
+      "boardui"
+    ]
+  }
+}

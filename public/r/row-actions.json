@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "row-actions",
+  "type": "registry:ui",
+  "title": "Row Actions",
+  "description": "Kebab menu at the end of a table row with Edit, Duplicate and a red Delete that asks first through the kit AlertDialog.",
+  "categories": [
+    "overlay"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0",
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/button.json",
+    "https://kinetic.example.com/r/dropdown.json",
+    "https://kinetic.example.com/r/modal.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/row-actions.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/row-actions.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"Row Actions\" (boardui.com/templates/finance).\n * No BoardUI source was used.\n */\n'use client';\n\nimport { useRef, useState, type ComponentType, type ReactNode } from 'react';\nimport { RiDeleteBinLine, RiFileCopyLine, RiMore2Fill, RiPencilLine } from '@remixicon/react';\nimport { Button, buttonStyles } from '@/components/motion/button';\nimport { Dropdown, DropdownDivider, DropdownItem, DropdownPopover, DropdownTrigger } from '@/components/motion/dropdown';\nimport { AlertDialog } from '@/components/motion/modal';\nimport { cx } from '@/lib/cx';\n\n/**\n * RowActions: the action cluster at the end of a BoardUI table row. A 32px\n * bordered kebab opens the kit Dropdown with Edit, Duplicate and a red Delete;\n * Delete never runs straight away but asks through the kit AlertDialog first.\n * With `inline`, delete and edit also sit in front of the kebab as 32px icon\n * buttons (as in the finance table), collapsing into the kebab below 640px.\n * Actions without a handler are left out of the menu.\n */\n\nexport interface RowActionsProps {\n  /** Row name used in every label: \"Actions for Ana Carter\", \"Delete Ana Carter?\". */\n  name: string;\n  onEdit?: () => void;\n  onDuplicate?: () => void;\n  /**\n   * Runs once the delete is confirmed. Return a promise to keep the dialog\n   * open with a busy Delete button until it settles (it stays open on reject).\n   */\n  onDelete?: () => void | Promise<unknown>;\n  /** Also show delete and edit as icon buttons before the kebab, from 640px up. */\n  inline?: boolean;\n  confirmTitle?: ReactNode;\n  confirmDescription?: ReactNode;\n  confirmLabel?: ReactNode;\n  placement?: 'bottom end' | 'bottom start' | 'top end' | 'top start';\n  className?: string;\n}\n\ntype Icon = ComponentType<{ className?: string; 'aria-hidden'?: boolean | 'true' | 'false' }>;\n\n/** The kit secondary small icon-only Button, applied to the Dropdown's own trigger. */\nconst KEBAB = cx(\n  buttonStyles.base,\n  buttonStyles.size.small,\n  buttonStyles.variant.secondary,\n  buttonStyles.iconOnlySize.small,\n);\n/** Keeps the kebab pressed-looking while its menu is open. */\nconst KEBAB_OPEN = 'bg-background-primary-active border-border-button-active';\nconst DANGER_ITEM =\n  'text-text-error-primary hover:bg-background-tertiary-error focus-visible:bg-background-tertiary-error';\n\nfunction ItemLabel({ icon: Glyph, danger, children }: { icon: Icon; danger?: boolean; children: ReactNode }) {\n  return (\n    <>\n      <Glyph aria-hidden className={cx('size-[18px] shrink-0', danger ? 'text-foreground-icon-error' : 'text-foreground-icon-tertiary')} />\n      <span className=\"text-body-medium\">{children}</span>\n    </>\n  );\n}\n\n// #region critical\nexport function RowActions({\n  name,\n  onEdit,\n  onDuplicate,\n  onDelete,\n  inline = false,\n  confirmTitle,\n  confirmDescription,\n  confirmLabel = 'Delete',\n  placement = 'bottom end',\n  className,\n}: RowActionsProps) {\n  const rootRef = useRef<HTMLDivElement>(null);\n  const [menuOpen, setMenuOpen] = useState(false);\n  const [confirmOpen, setConfirmOpen] = useState(false);\n\n  // Park focus on the kebab before the panel unmounts: whatever opens next\n  // (the caller's edit form, the confirm dialog) then records the kebab as\n  // the element to restore focus to, instead of a detached menu row.\n  const run = (action: (() => void) | undefined) => {\n    rootRef.current?.querySelector<HTMLElement>('[data-row-actions-trigger]')?.focus();\n    setMenuOpen(false);\n    action?.();\n  };\n  const askDelete = () => setConfirmOpen(true);\n  const hasMenuAbove = Boolean(onEdit || onDuplicate);\n\n  return (\n    <div ref={rootRef} className={cx('inline-flex items-center gap-2', className)}>\n      {inline && onDelete ? (\n        <Button\n          variant=\"secondary\"\n          size=\"small\"\n          iconOnly\n          leadingIcon={RiDeleteBinLine}\n          aria-label={`Delete ${name}`}\n          onClick={askDelete}\n          className=\"max-sm:hidden\"\n        />\n      ) : null}\n      {inline && onEdit ? (\n        <Button\n          variant=\"secondary\"\n          size=\"small\"\n          iconOnly\n          leadingIcon={RiPencilLine}\n          aria-label={`Edit ${name}`}\n          onClick={onEdit}\n          className=\"max-sm:hidden\"\n        />\n      ) : null}\n\n      <Dropdown isOpen={menuOpen} onOpenChange={setMenuOpen}>\n        <DropdownTrigger data-row-actions-trigger aria-label={`Actions for ${name}`} className={cx(KEBAB, menuOpen && KEBAB_OPEN)}>\n          <RiMore2Fill aria-hidden className={buttonStyles.icon.small} />\n        </DropdownTrigger>\n        <DropdownPopover aria-label={`Actions for ${name}`} placement={placement} className=\"w-48 p-1.5\" dialogClassName=\"gap-0.5\">\n          {onEdit ? (\n            <DropdownItem onSelect={() => run(onEdit)} className=\"px-2 py-1.5\">\n              <ItemLabel icon={RiPencilLine}>Edit</ItemLabel>\n            </DropdownItem>\n          ) : null}\n          {onDuplicate ? (\n            <DropdownItem onSelect={() => run(onDuplicate)} className=\"px-2 py-1.5\">\n              <ItemLabel icon={RiFileCopyLine}>Duplicate</ItemLabel>\n            </DropdownItem>\n          ) : null}\n          {onDelete ? (\n            <>\n              {hasMenuAbove ? <DropdownDivider className=\"-mx-1.5 my-1\" /> : null}\n              <DropdownItem onSelect={() => run(askDelete)} className={cx('px-2 py-1.5', DANGER_ITEM)}>\n                <ItemLabel icon={RiDeleteBinLine} danger>\n                  Delete\n                </ItemLabel>\n              </DropdownItem>\n            </>\n          ) : null}\n        </DropdownPopover>\n      </Dropdown>\n\n      {onDelete ? (\n        <AlertDialog\n          isOpen={confirmOpen}\n          onOpenChange={setConfirmOpen}\n          icon={RiDeleteBinLine}\n          title={confirmTitle ?? `Delete ${name}?`}\n          description={confirmDescription ?? 'This row will be removed from the table. You can’t undo this.'}\n          confirmLabel={confirmLabel}\n          onConfirm={onDelete}\n        />\n      ) : null}\n    </div>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "overlay",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "boardui",
+      "table",
+      "kebab",
+      "dropdown",
+      "confirm",
+      "dashboard"
+    ]
+  }
+}

@@ -25,7 +25,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'The smallest possible host for a full-screen fragment shader: a raw WebGL2 context, one buffer, one triangle whose vertices sit at (-1,-1), (3,-1) and (-1,3). The clipped triangle covers the viewport exactly, so there is no diagonal seam and no doubly-shaded band where two triangles would meet. Pass any GLSL ES 3.00 fragment source and it runs against `v_uv`, `u_resolution`, `u_time` and `u_pointer`.',

@@ -14,7 +14,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/rekey-caption-replay.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'A wrapper that replays a staggered entrance every time its `entryKey` changes. It does it by being a different node: React unmounts the old caption and mounts a new one, and a freshly mounted element starts its CSS animation at frame zero. No forced reflow to restart the animation, no tween to kill, and a fast prev/next cannot leave the block half-entered because the half-entered node no longer exists.',

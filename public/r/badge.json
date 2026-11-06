@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "type": "registry:ui",
+  "title": "Badge",
+  "description": "The small numeric counter on nav items and unread totals: a 16px pill in a selected (blue) or resting (neutral) tone.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/badge.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/badge.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/badges/badge.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport type { HTMLAttributes, Ref } from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\n/**\n * Figma source: Board UI → dashboard 1 sidebar counters (nodes 3731:2964,\n * 3731:2982).\n *\n * Small numeric counter pill (nav item counts, unread totals).\n *   - 12/16 semibold, tracking 0 (Figma uses font/size/xs + font/leading/4)\n *   - px 4, py 1, radius/sm (4px)\n *   - primary → bg color/blue/400, white text (sits on the selected nav item)\n *   - neutral → bg color/neutral/200, text/secondary\n */\n\ntype BadgeColor = \"primary\" | \"neutral\";\n\nexport interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {\n  color?: BadgeColor;\n  ref?: Ref<HTMLSpanElement>;\n}\n\n// #region critical\nconst styles = sortCx({\n  base: \"inline-flex items-center justify-center rounded-sm px-1 py-px text-caption-1-semibold tracking-normal whitespace-nowrap\",\n  color: {\n    primary: \"bg-accent-400 text-white\",\n    neutral: \"bg-badge-neutral-background text-text-secondary\",\n  },\n});\n\nexport function Badge({ color = \"neutral\", className, ref, ...props }: BadgeProps) {\n  return (\n    <span\n      ref={ref}\n      className={cx(styles.base, styles.color[color], className)}\n      {...props}\n    />\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "badge",
+      "counter",
+      "count",
+      "pill",
+      "boardui"
+    ]
+  }
+}

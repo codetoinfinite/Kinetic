@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "number-field",
+  "type": "registry:ui",
+  "title": "Number Field",
+  "description": "Input's field shell plus minus and plus steppers on React Aria NumberField: locale currency, percent and unit formats, clamped to limits.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0",
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/input.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/number-field.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/number-field.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/number-field/number-field.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport type { ComponentType, ReactNode } from \"react\";\nimport { Button as AriaButton, NumberField as AriaNumberField } from \"react-aria-components\";\nimport type { NumberFieldProps as AriaNumberFieldProps } from \"react-aria-components\";\nimport { RiAddLine, RiSubtractLine } from \"@remixicon/react\";\nimport { HintText } from \"@/components/motion/hint-text\";\nimport { InputBase } from \"@/components/motion/input\";\nimport type { InputSize } from \"@/components/motion/input\";\nimport { Label } from \"@/components/motion/label\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Number field — a number typed or stepped: seats, a price, a percentage,\n * a weight.\n *\n *   <NumberField label=\"Seats\" defaultValue={5} minValue={1} maxValue={50} />\n *   <NumberField label=\"Price\" defaultValue={49} formatOptions={{ style: \"currency\", currency: \"USD\" }} />\n *\n * Input's field (surface, hover and focus rings, invalid and disabled\n * states, two sizes) with minus and plus steppers at its end. Built on React\n * Aria's NumberField, so the value is formatted and parsed for the locale\n * (currency, percent and unit styles through `formatOptions`), stays within\n * `minValue` and `maxValue` on blur, and the steppers switch off at either\n * limit. Up and Down step it, Home and End jump to the limits, the scroll\n * wheel steps it while it has focus (`isWheelDisabled` turns that off), and\n * holding a stepper repeats it.\n */\n\ntype IconComponent = ComponentType<{ className?: string; \"aria-hidden\"?: boolean | \"true\" | \"false\" }>;\n\nexport interface NumberFieldProps extends Omit<AriaNumberFieldProps, \"className\" | \"children\"> {\n  label?: ReactNode;\n  hint?: ReactNode;\n  /** Show an info icon next to the label. */\n  tooltip?: boolean | string;\n  placeholder?: string;\n  /** 36px (default) or 32px. */\n  size?: InputSize;\n  leadingIcon?: IconComponent;\n  /** Hide the minus and plus buttons; the keys still step the value. */\n  hideSteppers?: boolean;\n  className?: string;\n  fieldClassName?: string;\n}\n\nconst STEPPER = [\n  \"flex shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground-icon-secondary outline-none\",\n  \"transition-colors duration-150 ease-out hover:bg-background-tertiary-hover hover:text-text-primary\",\n  \"data-[pressed]:bg-background-tertiary-hover data-[focus-visible]:ring-2 data-[focus-visible]:ring-border-focus-ring\",\n  \"data-[disabled]:cursor-not-allowed data-[disabled]:text-input-disabled-text data-[disabled]:hover:bg-transparent\",\n].join(\" \");\n\n// #region critical\nexport function NumberField({\n  label,\n  hint,\n  tooltip,\n  placeholder,\n  size = \"medium\",\n  leadingIcon,\n  hideSteppers = false,\n  \"aria-label\": ariaLabel,\n  className,\n  fieldClassName,\n  ...props\n}: NumberFieldProps) {\n  const stepper = cx(STEPPER, size === \"small\" ? \"size-5\" : \"size-6\");\n\n  return (\n    <AriaNumberField\n      {...props}\n      aria-label={ariaLabel ?? (!label ? placeholder : undefined)}\n      className={cx(\"group flex w-full flex-col items-start gap-1\", className)}\n    >\n      {({ isInvalid }) => (\n        <>\n          {label ? (\n            <Label isRequired={props.isRequired} isInvalid={isInvalid} tooltip={tooltip}>\n              {label}\n            </Label>\n          ) : null}\n          <InputBase\n            size={size}\n            placeholder={placeholder}\n            leadingIcon={leadingIcon}\n            fieldClassName={fieldClassName}\n            className=\"tabular-nums\"\n            trailingAddon={\n              hideSteppers ? undefined : (\n                <span className=\"-my-1 -me-1 flex shrink-0 items-center gap-0.5\">\n                  <AriaButton slot=\"decrement\" className={stepper}>\n                    <RiSubtractLine aria-hidden className=\"size-4\" />\n                  </AriaButton>\n                  <AriaButton slot=\"increment\" className={stepper}>\n                    <RiAddLine aria-hidden className=\"size-4\" />\n                  </AriaButton>\n                </span>\n              )\n            }\n          />\n          {hint ? <HintText isInvalid={isInvalid}>{hint}</HintText> : null}\n        </>\n      )}\n    </AriaNumberField>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "number",
+      "stepper",
+      "currency",
+      "percent",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

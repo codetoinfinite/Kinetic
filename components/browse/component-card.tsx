@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { CATEGORY_LABEL, type ManifestEntry } from '@/__generated__/manifest';
 import { RUNTIME, TIER_TICKS } from '@/components/browse/runtime';
@@ -20,6 +23,16 @@ import type { Motif } from '@/scripts/schema';
    lights its meter in the category accent. Styling the attribute costs one
    selector; mirroring it into React state would be a second copy of a fact that
    could only ever disagree with the first.
+
+   A stretched link, not a link around the tile. The tile shows a live demo,
+   and a demo is allowed to render its own <a> — a link button, a nav, a card
+   with a "Read more" — which inside a wrapping <a> is invalid nesting that
+   React reports on every mount. So the tile is a plain box and the title's
+   link stretches over it with an ::after. Two consequences, both handled here:
+   the overlay sits above the preview, so the preview cannot see the pointer
+   and is told about hover instead; and the demo is `inert`, because it was
+   never meant to be operable from the grid and would otherwise add every one
+   of its controls to the page's tab order.
    ========================================================================== */
 
 export interface ComponentCardProps {
@@ -32,17 +45,23 @@ export interface ComponentCardProps {
 }
 
 export function ComponentCard({ entry, showCategory = false }: ComponentCardProps) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <Link
-      href={`/c/${entry.slug}`}
+    <div
       data-category={entry.category}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
       className={cn(
         'rise panel lift group/card relative flex h-full flex-col overflow-hidden rounded-sm',
         // `.lift` declares will-change:transform, which is right for a handful
         // of panels and wrong for 119 — every hint is a standing request for a
         // compositor layer. Hover is early enough: the transform has not begun.
         'will-change-auto hover:will-change-transform',
-        'focus-visible:outline-offset-4',
+        // The focus ring belongs to the tile, not to the title text the link
+        // wraps. Drawn here because `overflow-hidden` would clip it on the
+        // ::after overlay.
+        'has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-accent',
       )}
     >
       {/* The motion the grid was missing: the tile's top edge draws itself in
@@ -55,20 +74,25 @@ export function ComponentCard({ entry, showCategory = false }: ComponentCardProp
           'pointer-events-none absolute inset-x-0 top-0 z-10 h-px origin-right scale-x-0 bg-accent',
           'transition-transform duration-control ease-out-quart',
           'group-hover/card:origin-left group-hover/card:scale-x-100',
-          'group-focus-visible/card:origin-left group-focus-visible/card:scale-x-100',
+          'group-has-[a:focus-visible]/card:origin-left group-has-[a:focus-visible]/card:scale-x-100',
         )}
       />
 
-      <PreviewHost
-        slug={entry.slug}
-        cost={entry.cost}
-        motif={entry.motif as Motif}
-        // Skip layout and paint for the previews that are off screen, which is
-        // most of them. Safe on this element specifically because only imagery
-        // lives inside it: Safari's find-in-page cannot see text in a skipped
-        // subtree, and every word on the tile is outside this box.
-        className="aspect-[16/10] w-full border-b border-line [content-visibility:auto]"
-      />
+      <div inert>
+        <PreviewHost
+          slug={entry.slug}
+          cost={entry.cost}
+          motif={entry.motif as Motif}
+          kit={entry.kit}
+          category={entry.category}
+          hovered={hovered}
+          // Skip layout and paint for the previews that are off screen, which is
+          // most of them. Safe on this element specifically because only imagery
+          // lives inside it: Safari's find-in-page cannot see text in a skipped
+          // subtree, and every word on the tile is outside this box.
+          className="aspect-[16/10] w-full border-b border-line [content-visibility:auto]"
+        />
+      </div>
 
       <div className="flex flex-1 flex-col p-4">
         {showCategory ? (
@@ -77,7 +101,13 @@ export function ComponentCard({ entry, showCategory = false }: ComponentCardProp
 
         <div className="flex items-start justify-between gap-3">
           <h3 className="text-[0.9375rem] leading-snug tracking-[-0.011em] text-fg">
-            {entry.title}
+            <Link
+              href={`/c/${entry.slug}`}
+              data-category={entry.category}
+              className="after:absolute after:inset-0 focus-visible:outline-none"
+            >
+              {entry.title}
+            </Link>
           </h3>
           <RuntimeMeter cost={entry.cost} />
         </div>
@@ -98,14 +128,14 @@ export function ComponentCard({ entry, showCategory = false }: ComponentCardProp
               'shrink-0 text-[0.8125rem] leading-none text-faint',
               'transition-[transform,color] duration-control ease-out-quart',
               'group-hover/card:translate-x-0.5 group-hover/card:text-fg',
-              'group-focus-visible/card:translate-x-0.5 group-focus-visible/card:text-fg',
+              'group-has-[a:focus-visible]/card:translate-x-0.5 group-has-[a:focus-visible]/card:text-fg',
             )}
           >
             →
           </span>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

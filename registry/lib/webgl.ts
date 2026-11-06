@@ -80,20 +80,24 @@ export function pixelRatio(max = 2): number {
 }
 
 /**
- * Whether WebGL is actually available. Some browsers expose the constructor
+ * Whether WebGL 2 is actually available. Some browsers expose the constructor
  * but fail to create a context (blocklisted GPU, no hardware acceleration);
  * a component that assumes success renders a permanently blank box.
+ *
+ * WebGL 2 specifically, not "any WebGL". three r150+ asks for `'webgl2'` and
+ * nothing else, and *throws* when it cannot get one — so on a WebGL1-only
+ * device (iOS Safari ≤ 14, older Android WebViews, a GPU on the WebGL2
+ * blocklist) a check that accepted WebGL1 waved the component straight into a
+ * constructor that threw out of its mount effect. The raw-GL components in this
+ * catalogue are `#version 300 es`, which is WebGL 2 only as well.
  */
 export function hasWebGL(): boolean {
   if (typeof document === 'undefined') return false;
   try {
     const canvas = document.createElement('canvas');
-    const gl =
-      canvas.getContext('webgl2') ??
-      canvas.getContext('webgl') ??
-      canvas.getContext('experimental-webgl');
+    const gl = canvas.getContext('webgl2');
     if (!gl) return false;
-    (gl as WebGLRenderingContext).getExtension('WEBGL_lose_context')?.loseContext();
+    gl.getExtension('WEBGL_lose_context')?.loseContext();
     return true;
   } catch {
     return false;

@@ -15,7 +15,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/hooks/use-reduced-motion.ts', type: 'registry:hook', role: 'motion preference' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'Two opaque layers and one CSS keyframe do the whole job of a route transition. The inbound layer carries `key={revealKey}`, so a route change unmounts it and mounts a new one — and a freshly mounted element runs its animation from frame zero, which replays the fade with no state, no library and nothing to reset. The outbound layer fades up to opaque and the navigation commits at 80% of that, while the screen is already covered, so the two halves hand off invisibly without ever referring to each other.',

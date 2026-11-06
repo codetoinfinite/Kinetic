@@ -100,7 +100,12 @@ export function VelocityDeformCards({
   const velocity = useScrollVelocity({
     reference,
     smoothing,
-    target: host === document.documentElement ? null : host,
+    // `host` is null until the effect above runs, which means it is null for
+    // the whole of the server render — and null is already the answer there.
+    // Short-circuiting on it is what keeps `document` out of the render path:
+    // reading it unguarded threw a ReferenceError on the server, and a client
+    // component still renders there.
+    target: host === null || host === document.documentElement ? null : host,
   });
 
   // Cached rather than queried per frame: a `querySelectorAll` inside the rAF

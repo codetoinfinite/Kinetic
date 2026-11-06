@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group",
+  "type": "registry:ui",
+  "title": "Tag Group",
+  "description": "Selectable or removable tags in Chip's colours, with grid keyboard navigation and an empty state, on React Aria's TagGroup.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0",
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/chip.json",
+    "https://kinetic.example.com/r/input.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/tag-group.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/tag-group.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/tag-group/tag-group.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport { createContext, useContext } from \"react\";\nimport type { ComponentType, ReactNode } from \"react\";\nimport {\n  Button as AriaButton,\n  Tag as AriaTag,\n  TagGroup as AriaTagGroup,\n  TagList as AriaTagList,\n} from \"react-aria-components\";\nimport type { TagGroupProps as AriaTagGroupProps, TagProps as AriaTagProps } from \"react-aria-components\";\nimport { RiCloseLine } from \"@remixicon/react\";\nimport { CHIP_COLORS } from \"@/components/motion/chip\";\nimport type { ChipColor } from \"@/components/motion/chip\";\nimport { HintText } from \"@/components/motion/hint-text\";\nimport { Label } from \"@/components/motion/label\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Tag group — a set of tags to filter by, pick from, or prune: topics,\n * skills, recipients, labels on a ticket.\n *\n *   <TagGroup label=\"Topics\" selectionMode=\"multiple\" defaultSelectedKeys={[\"design\"]}>\n *     <Tag id=\"design\">Design</Tag>\n *     <Tag id=\"engineering\">Engineering</Tag>\n *   </TagGroup>\n *\n *   <TagGroup label=\"Skills\" items={skills} onRemove={(keys) => drop(keys)}>\n *     {(skill) => <Tag>{skill.name}</Tag>}\n *   </TagGroup>\n *\n * Tags take Chip's colour pairs (neutral by default) at 28px, or 24px with\n * `size=\"small\"`. With a `selectionMode`, tags toggle and a selected tag fills\n * with the accent colour. With `onRemove`, each tag gets a small remove\n * button and Backspace or Delete removes the focused tag.\n *\n * Built on React Aria's TagGroup, a grid: Tab enters it once, arrows move\n * between tags, Space and Enter toggle selection, and screen readers hear\n * the tag count, each label and whether it is selected.\n */\n\ntype IconComponent = ComponentType<{ className?: string; \"aria-hidden\"?: boolean | \"true\" | \"false\" }>;\n\nexport type TagSize = \"medium\" | \"small\";\n\nconst SizeContext = createContext<TagSize>(\"medium\");\n\nexport interface TagGroupProps<T extends object> extends Omit<AriaTagGroupProps, \"className\" | \"children\"> {\n  label?: ReactNode;\n  hint?: ReactNode;\n  /** Shown in place of the tags when there are none. */\n  emptyState?: ReactNode;\n  /** 28px tags (default) or 24px. */\n  size?: TagSize;\n  /** Tags from data; render each with the children function. */\n  items?: Iterable<T>;\n  children: ReactNode | ((item: T) => ReactNode);\n  className?: string;\n}\n\nexport function TagGroup<T extends object>({\n  label,\n  hint,\n  emptyState,\n  size = \"medium\",\n  items,\n  children,\n  className,\n  ...props\n}: TagGroupProps<T>) {\n  return (\n    <AriaTagGroup {...props} className={cx(\"flex flex-col items-start gap-1.5\", className)}>\n      {label ? <Label>{label}</Label> : null}\n      <SizeContext.Provider value={size}>\n        <AriaTagList\n          items={items}\n          renderEmptyState={emptyState ? () => <span className=\"py-1 text-body-regular text-text-tertiary\">{emptyState}</span> : undefined}\n          className=\"flex flex-wrap gap-1.5 outline-none\"\n        >\n          {children}\n        </AriaTagList>\n      </SizeContext.Provider>\n      {hint ? <HintText>{hint}</HintText> : null}\n    </AriaTagGroup>\n  );\n}\n\nexport interface TagProps extends Omit<AriaTagProps, \"className\" | \"children\"> {\n  /** Chip's colour pairs. Default neutral. */\n  color?: ChipColor;\n  /** Remix Icon before the label. */\n  icon?: IconComponent;\n  className?: string;\n  children: ReactNode;\n}\n\n// #region critical\nexport function Tag({ color = \"neutral\", icon: Icon, className, children, ...props }: TagProps) {\n  const size = useContext(SizeContext);\n\n  return (\n    <AriaTag\n      {...props}\n      textValue={props.textValue ?? (typeof children === \"string\" ? children : undefined)}\n      className={({ isSelected, selectionMode, allowsRemoving, isHovered, isFocusVisible, isDisabled }) => {\n        const allowsSelection = selectionMode !== \"none\";\n        return cx(\n          \"inline-flex max-w-full items-center gap-1 rounded-lg outline-none\",\n          \"transition-[background-color,color,box-shadow,filter] duration-150 ease-out\",\n          size === \"small\" ? \"h-6 px-1.5 text-caption-1-medium\" : \"h-7 px-2 text-body-medium\",\n          allowsRemoving && (size === \"small\" ? \"pe-0.5\" : \"pe-1\"),\n          isSelected ? \"bg-accent-500 text-white\" : CHIP_COLORS[color],\n          allowsSelection ? \"cursor-pointer\" : \"cursor-default\",\n          allowsSelection && !isSelected && isHovered && (color === \"neutral\" ? \"bg-background-tertiary-hover\" : \"brightness-95\"),\n          isFocusVisible && \"ring-2 ring-border-focus-ring\",\n          isDisabled && \"cursor-not-allowed opacity-50\",\n          className,\n        );\n      }}\n    >\n      {({ allowsRemoving }) => (\n        <>\n          {Icon ? <Icon aria-hidden className={cx(\"shrink-0\", size === \"small\" ? \"size-3.5\" : \"size-4\")} /> : null}\n          <span className=\"truncate\">{children}</span>\n          {allowsRemoving ? (\n            <AriaButton\n              slot=\"remove\"\n              className={cx(\n                \"flex shrink-0 cursor-pointer items-center justify-center rounded-md opacity-60 outline-none\",\n                \"transition-[opacity,background-color] duration-150 ease-out hover:bg-current/15 hover:opacity-100\",\n                size === \"small\" ? \"size-4\" : \"size-5\",\n              )}\n            >\n              <RiCloseLine aria-hidden className={size === \"small\" ? \"size-3\" : \"size-3.5\"} />\n            </AriaButton>\n          ) : null}\n        </>\n      )}\n    </AriaTag>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "tags",
+      "tag-group",
+      "filter",
+      "selection",
+      "react-aria",
+      "boardui"
+    ]
+  }
+}

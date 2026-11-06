@@ -108,11 +108,52 @@ export function UvCoverFit({
   const textureWidth = textureSize.width;
   const textureHeight = textureSize.height;
 
+  /* Sizing is a callback rather than effect-body code because it has to be
+     reachable from BOTH effects, which fire on independent triggers. The
+     camera is constructed at +/-1 and `viewport` starts at 1x1, and the only
+     thing that replaced either was the effect keyed on the observed width and
+     height. So any rebuild without an accompanying size change left the ortho
+     bounds square while the container was not — the exact viewport stretch
+     this component exists to disprove — and left the frame sized against a
+     1x1 world inside a camera spanning aspect*2 by 2, i.e. a sliver. The
+     build effect re-runs on `textureSize` and `paint`, and a caller passing
+     an inline `paint` arrow rebuilds the stage on every parent render, so
+     that state persisted until the user happened to resize the window.
+     Everything below is derived purely from w and h, so calling it from both
+     paths is idempotent. */
+  const fitViewport = useCallback((w: number, h: number) => {
+    const current = stage.current;
+    if (!current || w < 1 || h < 1) return;
+    const aspect = w / h;
+    current.renderer.setPixelRatio(pixelRatio());
+    current.renderer.setSize(w, h, false);
+    // Ortho bounds track the container aspect so a world unit is the same
+    // number of pixels on both axes. Leave them at +/-1 and the quad is
+    // stretched by the viewport, which would fake the exact bug this
+    // component exists to avoid.
+    current.camera.left = -aspect;
+    current.camera.right = aspect;
+    current.camera.top = 1;
+    current.camera.bottom = -1;
+    current.camera.updateProjectionMatrix();
+    viewport.current = { width: aspect * 2, height: 2 };
+  }, []);
+
   useEffect(() => {
     const el = host.current;
     if (!el || !ready) return;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setSupported(false);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(el.clientWidth, el.clientHeight, false);
     renderer.setClearColor(0x000000, 0);
@@ -164,6 +205,12 @@ export function UvCoverFit({
 
     stage.current = { renderer, scene, camera, mesh, geometry, material, texture, uniforms };
 
+    // Fit before the first frame. `ready` guarantees the observed box is real,
+    // and waiting for the resize effect to do it is a bet that the box will
+    // change size again — on a stage that is built once and never reflowed,
+    // that bet never pays out and every frame is drawn against a 1x1 world.
+    fitViewport(width, height);
+
     return () => {
       stage.current = null;
       scene.remove(mesh);
@@ -178,23 +225,11 @@ export function UvCoverFit({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, textureWidth, textureHeight, paint]);
 
+  // Reflow costs a re-fit, never a rebuild. The guard against a stage that
+  // does not exist yet now lives inside `fitViewport`.
   useEffect(() => {
-    const current = stage.current;
-    if (!current || width < 1 || height < 1) return;
-    const aspect = width / height;
-    current.renderer.setPixelRatio(pixelRatio());
-    current.renderer.setSize(width, height, false);
-    // Ortho bounds track the container aspect so a world unit is the same
-    // number of pixels on both axes. Leave them at +/-1 and the quad is
-    // stretched by the viewport, which would fake the exact bug this
-    // component exists to avoid.
-    current.camera.left = -aspect;
-    current.camera.right = aspect;
-    current.camera.top = 1;
-    current.camera.bottom = -1;
-    current.camera.updateProjectionMatrix();
-    viewport.current = { width: aspect * 2, height: 2 };
-  }, [width, height]);
+    fitViewport(width, height);
+  }, [fitViewport, width, height]);
 
   useRaf(
     (dt) => {

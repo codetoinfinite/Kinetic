@@ -15,7 +15,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/lib/damp.ts', type: 'registry:lib', role: 'clamp' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'Some content has no height. A ring of projects, a canvas scene, a stack of captions — one screen of markup that wants to be a page of interaction. The fix is to manufacture the range: a container sized `count x viewports` screens with a sticky viewport inside it, and `scrolled / scrollable` as the single input. One screen of scroll then means exactly one item, with no per-item measurement to keep in sync.',

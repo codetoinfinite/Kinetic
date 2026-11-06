@@ -23,16 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [
-    'webgl',
-    'prng',
-    'damp',
-    'use-raf',
-    'use-in-view',
-    'use-visibility',
-    'use-resize-observer',
-    'use-reduced-motion',
-  ],
 
   summary:
     'Draws a word once into an offscreen 2D canvas with a font the page has already loaded, collects the inked pixels of that raster, and hands them out as destinations to a drifting particle cloud. The stagger is keyed to each destination\'s own horizontal position, so the word assembles left to right — it is written rather than faded in — and then dissolves right to left. Destinations are stored in glyph-box units and scaled by one uniform, so a container resize costs two uniform writes rather than a re-raster. Nothing ships but code: no glyph atlas, no texture, no font file.',

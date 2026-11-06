@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/lib/damp.ts', type: 'registry:lib', role: 'frame-rate-independent interpolation' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'Scroll position says where the page is; scroll velocity says how hard the user is pushing it, and that is the input that gives a list a material. Cards skew and stretch along the direction of travel, trail behind by an amount proportional to speed, and ease back to rest when you stop — the ease-out being a property of the filter rather than a keyframe.',

@@ -36,7 +36,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A vertical rule that fills with scroll while entries alternate either side of it. Entries rest at 50% opacity rather than 0, so the animation adds emphasis to content that is already readable, and each one reverses as it leaves — so scrolling back up replays the sequence instead of showing a column of finished animations.',

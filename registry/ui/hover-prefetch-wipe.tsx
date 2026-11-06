@@ -152,10 +152,20 @@ function resolveLink(event: Event, root: HTMLElement): HTMLAnchorElement | null 
   // intercepting breaks the navigation outright.
   if (anchor.origin !== window.location.origin) return null;
 
-  // Same document, different fragment. Nothing to fetch, and covering the
-  // screen in order to scroll down the page is absurd.
+  // Same document. Nothing to fetch, and covering the screen in order to
+  // scroll down the page is absurd.
+  //
+  // The hash is deliberately not part of this test, and that is the whole
+  // point. Requiring one meant a plain `<a href="/work">` clicked while
+  // already on `/work` — the nav item for the page you are on, the most
+  // common accidental click there is — was treated as a real navigation:
+  // `preventDefault()` suppressed the browser, the wipe covered the screen,
+  // and `onNavigate` was handed the route already showing. `pageKey` then
+  // never changed, so the retract effect below early-returned on
+  // `seenKey.current === pageKey` and nothing else in the component ever
+  // clears `leaving`. The overlay takes `pointer-events: auto` while it
+  // covers, so the site stayed opaque and unclickable until a hard reload.
   if (
-    anchor.hash !== '' &&
     anchor.pathname === window.location.pathname &&
     anchor.search === window.location.search
   ) {

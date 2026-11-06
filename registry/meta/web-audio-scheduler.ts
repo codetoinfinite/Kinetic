@@ -11,7 +11,6 @@ const meta: ComponentMetaInput = {
 
   files: [{ path: 'registry/ui/web-audio-scheduler.tsx', type: 'registry:ui', role: 'hook' }],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'Two clocks, one job each. `AudioContext.currentTime` is a sample counter and never drifts, but it cannot wake you up; `setInterval` can wake you up, but only when the main thread is free. The scheduler runs a 90 ms timer whose only responsibility is to ask which beats fall inside the next 300 ms and hand each one an exact audio time. The timer can fire late, early, or twice in a row and the notes still land in the same place.',

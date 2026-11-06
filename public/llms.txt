@@ -1,146 +1,361 @@
 # Kinetic
 
-> 119 motion components for React. Every component ships its full source, a
+> 316 motion components for React. Every component ships its full source, a
 > shadcn registry item, and a prompt written for coding agents.
 
-Each component has a prompt at http://localhost:8927/prompts/<slug>.md
+Each component has a prompt at https://kinetic.example.com/prompts/<slug>.md
 
 ## Scroll
 
-- [Banded Scrollspy Rail](http://localhost:8927/c/banded-scrollspy-rail): A tick rail whose active mark widens as a section crosses a 7% band through the middle of the screen.
-- [Batched Blur Reveal](http://localhost:8927/c/batched-blur-reveal): Cards that enter together focus in as one staggered group instead of arriving as a slab.
-- [One Reveal Engine, Two Axes](http://localhost:8927/c/container-animation-reveals): The same staggered line reveal fires for vertical sections and for panels on a horizontal track.
-- [Converging Flow Steps](http://localhost:8927/c/converging-flow-steps): A process diagram that closes from both ends while the connectors pop in a third of the way through.
-- [CSS Variable Stagger Reveal](http://localhost:8927/c/css-var-stagger-reveal): Groups reveal as they enter their scroll container; the stagger delay is a CSS calc over an index the JS writes once.
-- [Dataset-Driven Parallax](http://localhost:8927/c/dataset-parallax): Layers drift at a rate written on the element itself, over the widest possible scroll window.
-- [Drag-Throw Scroll](http://localhost:8927/c/drag-throw-scroll): Grab the page and pull it; let go mid-move and it coasts on, decaying, as far as the flick earned.
-- [Drag Mapped To Pin Progress](http://localhost:8927/c/drag-to-pin-progress): Drag a pinned horizontal strip and it moves exactly one pixel per pixel, then throws and settles.
-- [Dual-Direction Scrub Entrance](http://localhost:8927/c/dual-direction-scrub-entrance): Copy rises while a panel slides in from the side, both on one scrub with 600ms of lag.
-- [Inverse Scroll Scale](http://localhost:8927/c/inverse-scroll-scale): Media enters oversized at 1.25x and settles to exactly 1.0 as it rises through the first 60% of the scroller.
-- [IntersectionObserver Reveal](http://localhost:8927/c/io-reveal-lite): One element, one fade-and-rise on entry, no stylesheet and no library — with a single observer shared across every instance.
-- [Single Param Object Timeline](http://localhost:8927/c/keyframe-param-object): One plain object holds every animated value; the scroll story is a table of keyframes anchored to real sections.
-- [Knockout Zoom Pin](http://localhost:8927/c/knockout-zoom-pin): A word the size of the screen shrinks into a headline as you scroll, with the scene showing through its letters.
-- [Lenis On The GSAP Ticker](http://localhost:8927/c/lenis-gsap-ticker): Smooth scroll and ScrollTrigger on one clock, with the lag-smoothing line everyone omits.
-- [Manufactured Scroll Range](http://localhost:8927/c/manufactured-scroll-range): An empty box N screens tall turns a one-screen scene into a scrollable sequence, with progress as a CSS variable and the index as state.
-- [Mixed Scrub Depth Layers](http://localhost:8927/c/mixed-scrub-depth-layers): Layers separate while you scroll and converge when you stop, because each depth has its own scrub.
-- [Pinned Horizontal Track](http://localhost:8927/c/pinned-horizontal-track): A section pins while a strip of panels slides sideways, one scroll pixel per track pixel.
-- [Pre-Scatter Horizontal Gallery](http://localhost:8927/c/prescatter-horizontal-gallery): A pinned strip where each item rests slightly off its slot, flies in from ahead and peels away behind.
-- [Scroll-Scrubbed Video](http://localhost:8927/c/scroll-scrubbed-video): The scroll-to-frame mapping a scrubbed hero actually needs: smoothing, a snap, a frame quantiser and a loop that parks itself.
-- [Scrub Timeline Spine](http://localhost:8927/c/scrub-timeline-spine): A rule that fills as you scroll, with entries alternating either side and reversing on the way back.
-- [Throttled Scrub To State](http://localhost:8927/c/throttled-scrub-state): A scrubbed trigger fires 120x a second; a time, distance and frame gate turns that into a handful of React renders.
-- [Velocity-Deformed Cards](http://localhost:8927/c/velocity-deform-cards): Cards skew, stretch and trail in proportion to scroll speed, then settle on their own with no easing curve anywhere.
+- [Banded Scrollspy Rail](https://kinetic.example.com/c/banded-scrollspy-rail): A tick rail whose active mark widens as a section crosses a 7% band through the middle of the screen.
+- [Batched Blur Reveal](https://kinetic.example.com/c/batched-blur-reveal): Cards that enter together focus in as one staggered group instead of arriving as a slab.
+- [One Reveal Engine, Two Axes](https://kinetic.example.com/c/container-animation-reveals): The same staggered line reveal fires for vertical sections and for panels on a horizontal track.
+- [Converging Flow Steps](https://kinetic.example.com/c/converging-flow-steps): A process diagram that closes from both ends while the connectors pop in a third of the way through.
+- [CSS Variable Stagger Reveal](https://kinetic.example.com/c/css-var-stagger-reveal): Groups reveal as they enter their scroll container; the stagger delay is a CSS calc over an index the JS writes once.
+- [Dataset-Driven Parallax](https://kinetic.example.com/c/dataset-parallax): Layers drift at a rate written on the element itself, over the widest possible scroll window.
+- [Drag-Throw Scroll](https://kinetic.example.com/c/drag-throw-scroll): Grab the page and pull it; let go mid-move and it coasts on, decaying, as far as the flick earned.
+- [Drag Mapped To Pin Progress](https://kinetic.example.com/c/drag-to-pin-progress): Drag a pinned horizontal strip and it moves exactly one pixel per pixel, then throws and settles.
+- [Dual-Direction Scrub Entrance](https://kinetic.example.com/c/dual-direction-scrub-entrance): Copy rises while a panel slides in from the side, both on one scrub with 600ms of lag.
+- [Inverse Scroll Scale](https://kinetic.example.com/c/inverse-scroll-scale): Media enters oversized at 1.25x and settles to exactly 1.0 as it rises through the first 60% of the scroller.
+- [IntersectionObserver Reveal](https://kinetic.example.com/c/io-reveal-lite): One element, one fade-and-rise on entry, no stylesheet and no library — with a single observer shared across every instance.
+- [Single Param Object Timeline](https://kinetic.example.com/c/keyframe-param-object): One plain object holds every animated value; the scroll story is a table of keyframes anchored to real sections.
+- [Knockout Zoom Pin](https://kinetic.example.com/c/knockout-zoom-pin): A word the size of the screen shrinks into a headline as you scroll, with the scene showing through its letters.
+- [Lenis On The GSAP Ticker](https://kinetic.example.com/c/lenis-gsap-ticker): Smooth scroll and ScrollTrigger on one clock, with the lag-smoothing line everyone omits.
+- [Manufactured Scroll Range](https://kinetic.example.com/c/manufactured-scroll-range): An empty box N screens tall turns a one-screen scene into a scrollable sequence, with progress as a CSS variable and the index as state.
+- [Mixed Scrub Depth Layers](https://kinetic.example.com/c/mixed-scrub-depth-layers): Layers separate while you scroll and converge when you stop, because each depth has its own scrub.
+- [Pinned Horizontal Track](https://kinetic.example.com/c/pinned-horizontal-track): A section pins while a strip of panels slides sideways, one scroll pixel per track pixel.
+- [Pre-Scatter Horizontal Gallery](https://kinetic.example.com/c/prescatter-horizontal-gallery): A pinned strip where each item rests slightly off its slot, flies in from ahead and peels away behind.
+- [Scroll-Scrubbed Video](https://kinetic.example.com/c/scroll-scrubbed-video): The scroll-to-frame mapping a scrubbed hero actually needs: smoothing, a snap, a frame quantiser and a loop that parks itself.
+- [Scrub Timeline Spine](https://kinetic.example.com/c/scrub-timeline-spine): A rule that fills as you scroll, with entries alternating either side and reversing on the way back.
+- [Throttled Scrub To State](https://kinetic.example.com/c/throttled-scrub-state): A scrubbed trigger fires 120x a second; a time, distance and frame gate turns that into a handful of React renders.
+- [Velocity-Deformed Cards](https://kinetic.example.com/c/velocity-deform-cards): Cards skew, stretch and trail in proportion to scroll speed, then settle on their own with no easing curve anywhere.
 
 ## WebGL
 
-- [Anti-Aliased Point Discs](http://localhost:8927/c/antialiased-disc-fragment): A phyllotaxis field of dots that stay the same weight at every pixel ratio, with no MSAA and no texture.
-- [Bayer-Quantised Plasma](http://localhost:8927/c/bayer-plasma-hero): An iterated domain-warped plasma crushed to eleven grey levels, so the hero reads as a dot-matrix proof.
-- [Bit-Math Bayer8 Dither](http://localhost:8927/c/bayer8-ordered-dither): A smooth gradient crushed to five levels through an 8x8 ordered matrix derived from six integer ops.
-- [Cursor-Reactive Shader Glow](http://localhost:8927/c/cursor-reactive-shader-glow): A warped-noise atmosphere with a light that trails the cursor, held under a hard luminance ceiling so copy stays readable.
-- [Dot-Cloud Score Cylinder](http://localhost:8927/c/cylinder-dot-score): Two counter-rotating cylinders of dots — rings, bar lines, notes — drawn from one buffer with no depth buffer.
-- [Cylinder Gallery Drum](http://localhost:8927/c/cylinder-gallery): Nineteen planes wrapped around a drum in the vertex shader, spun by wheel or scroll, focus falling off from centre.
-- [Depth Fade And Travelling Pulse](http://localhost:8927/c/depth-pulse-travelling-wave): A dot lattice on an arc: z drives alpha and point size together, and a per-column phase sweeps the pulse across the field.
-- [Domain-Warped FBM Fog](http://localhost:8927/c/domain-warped-fbm): Slow, low-contrast fog that flows rather than fades, with a faint light that trails the cursor.
-- [Dual-Canvas Depth Split](http://localhost:8927/c/dual-canvas-z-split): One particle field rendered twice with the depth sign flipped, so the text sits inside the field rather than on top of it.
-- [Fractional Render Scale](http://localhost:8927/c/fractional-render-scale): A field rendered into a backing store 0.6x its box — 36% of the fragments — with a grid measured in texels so the upscale never shows.
-- [Fullscreen Triangle Pass](http://localhost:8927/c/fullscreen-triangle-pass): One 3-vertex triangle covers the viewport and runs your fragment shader. No three, no ogl, no seam.
-- [GPU Cubic-Bezier Burst](http://localhost:8927/c/gpu-bezier-burst): Rings of dots that burst on click, every particle solving its own cubic-bezier easing in the vertex shader.
-- [Instanced Quad Particles](http://localhost:8927/c/instanced-quad-particles): Up to 1800 drifting particles in one draw call — quads rather than point sprites, so each one has its own size, spin and shape.
-- [Multipass Offscreen Composite](http://localhost:8927/c/multipass-offscreen-composite): Four passes into two render targets — ramp, additive fills, half-size bloom — and one composite that writes the canvas once.
-- [In-Shader Mouse Bulge](http://localhost:8927/c/ndc-mouse-bulge): A soft lens that follows the cursor, measured by projecting every vertex to screen space instead of raycasting.
-- [Single-Draw Orbit Rings](http://localhost:8927/c/orbit-ring-points): Concentric rings of dots, one bright marker travelling each ring, all of it in a single draw call.
-- [Radial Ripple Dot Cloud](http://localhost:8927/c/radial-ripple-dot-cloud): A dot field with a travelling wave running out of one off-centre point, its density drawn by hand as a B-spline.
-- [Realtime Cube EnvMap](http://localhost:8927/c/realtime-cube-envmap): A metal knot reflecting panels that are actually orbiting it, captured six faces at a time every other frame.
-- [Scroll Deformation Wave](http://localhost:8927/c/scroll-deform-wave): An image that ripples with scroll speed and bends the other way on the way back, from two sine terms.
-- [Spring Lattice Field](http://localhost:8927/c/spring-lattice-field): A CPU damped-spring lattice uploaded as a texture each frame, displacing a procedural grid the cursor can push around.
-- [Stepped Film Grain](http://localhost:8927/c/stepped-film-grain): A transparent grain overlay whose pattern jumps twelve times a second instead of every frame, so it reads as film.
-- [Superellipse Text Avoidance](http://localhost:8927/c/superellipse-text-avoidance): A particle field that flows around the headline, held off by a 6-norm superellipse fitted to the measured text box.
-- [Area-Weighted Surface Particles](http://localhost:8927/c/surface-sampled-particles): Any mesh becomes a particle shell of even density, assembling bottom-up, with orbit rings measured off the sampled silhouette.
-- [Text-Target Particle Glyphs](http://localhost:8927/c/text-target-particle-glyphs): A particle cloud gathers into a word rasterised from a font already on the page, written left to right, then lets it go.
-- [Cover-Fit UV Maths](http://localhost:8927/c/uv-cover-fit): object-fit: cover for a textured quad, solved in UV space so the crop follows a frame that reshapes every frame.
-- [Velocity Afterimage Pass](http://localhost:8927/c/velocity-afterimage-pass): Marks that smear into a tail when the pointer moves fast and stay crisp when it slows, from two targets swapping roles.
-- [Vertex Shader Cylinder Bend](http://localhost:8927/c/vertex-cylinder-bend): A flat plane wrapped around a cylinder on the GPU, with the curvature living in a uniform you can animate.
+- [Anti-Aliased Point Discs](https://kinetic.example.com/c/antialiased-disc-fragment): A phyllotaxis field of dots that stay the same weight at every pixel ratio, with no MSAA and no texture.
+- [Bayer-Quantised Plasma](https://kinetic.example.com/c/bayer-plasma-hero): An iterated domain-warped plasma crushed to eleven grey levels, so the hero reads as a dot-matrix proof.
+- [Bit-Math Bayer8 Dither](https://kinetic.example.com/c/bayer8-ordered-dither): A smooth gradient crushed to five levels through an 8x8 ordered matrix derived from six integer ops.
+- [Cursor-Reactive Shader Glow](https://kinetic.example.com/c/cursor-reactive-shader-glow): A warped-noise atmosphere with a light that trails the cursor, held under a hard luminance ceiling so copy stays readable.
+- [Dot-Cloud Score Cylinder](https://kinetic.example.com/c/cylinder-dot-score): Two counter-rotating cylinders of dots — rings, bar lines, notes — drawn from one buffer with no depth buffer.
+- [Cylinder Gallery Drum](https://kinetic.example.com/c/cylinder-gallery): Nineteen planes wrapped around a drum in the vertex shader, spun by wheel or scroll, focus falling off from centre.
+- [Depth Fade And Travelling Pulse](https://kinetic.example.com/c/depth-pulse-travelling-wave): A dot lattice on an arc: z drives alpha and point size together, and a per-column phase sweeps the pulse across the field.
+- [Domain-Warped FBM Fog](https://kinetic.example.com/c/domain-warped-fbm): Slow, low-contrast fog that flows rather than fades, with a faint light that trails the cursor.
+- [Dual-Canvas Depth Split](https://kinetic.example.com/c/dual-canvas-z-split): One particle field rendered twice with the depth sign flipped, so the text sits inside the field rather than on top of it.
+- [Fractional Render Scale](https://kinetic.example.com/c/fractional-render-scale): A field rendered into a backing store 0.6x its box — 36% of the fragments — with a grid measured in texels so the upscale never shows.
+- [Fullscreen Triangle Pass](https://kinetic.example.com/c/fullscreen-triangle-pass): One 3-vertex triangle covers the viewport and runs your fragment shader. No three, no ogl, no seam.
+- [GPU Cubic-Bezier Burst](https://kinetic.example.com/c/gpu-bezier-burst): Rings of dots that burst on click, every particle solving its own cubic-bezier easing in the vertex shader.
+- [Instanced Quad Particles](https://kinetic.example.com/c/instanced-quad-particles): Up to 1800 drifting particles in one draw call — quads rather than point sprites, so each one has its own size, spin and shape.
+- [Multipass Offscreen Composite](https://kinetic.example.com/c/multipass-offscreen-composite): Four passes into two render targets — ramp, additive fills, half-size bloom — and one composite that writes the canvas once.
+- [In-Shader Mouse Bulge](https://kinetic.example.com/c/ndc-mouse-bulge): A soft lens that follows the cursor, measured by projecting every vertex to screen space instead of raycasting.
+- [Single-Draw Orbit Rings](https://kinetic.example.com/c/orbit-ring-points): Concentric rings of dots, one bright marker travelling each ring, all of it in a single draw call.
+- [Radial Ripple Dot Cloud](https://kinetic.example.com/c/radial-ripple-dot-cloud): A dot field with a travelling wave running out of one off-centre point, its density drawn by hand as a B-spline.
+- [Realtime Cube EnvMap](https://kinetic.example.com/c/realtime-cube-envmap): A metal knot reflecting panels that are actually orbiting it, captured six faces at a time every other frame.
+- [Scroll Deformation Wave](https://kinetic.example.com/c/scroll-deform-wave): An image that ripples with scroll speed and bends the other way on the way back, from two sine terms.
+- [Spring Lattice Field](https://kinetic.example.com/c/spring-lattice-field): A CPU damped-spring lattice uploaded as a texture each frame, displacing a procedural grid the cursor can push around.
+- [Stepped Film Grain](https://kinetic.example.com/c/stepped-film-grain): A transparent grain overlay whose pattern jumps twelve times a second instead of every frame, so it reads as film.
+- [Superellipse Text Avoidance](https://kinetic.example.com/c/superellipse-text-avoidance): A particle field that flows around the headline, held off by a 6-norm superellipse fitted to the measured text box.
+- [Area-Weighted Surface Particles](https://kinetic.example.com/c/surface-sampled-particles): Any mesh becomes a particle shell of even density, assembling bottom-up, with orbit rings measured off the sampled silhouette.
+- [Text-Target Particle Glyphs](https://kinetic.example.com/c/text-target-particle-glyphs): A particle cloud gathers into a word rasterised from a font already on the page, written left to right, then lets it go.
+- [Cover-Fit UV Maths](https://kinetic.example.com/c/uv-cover-fit): object-fit: cover for a textured quad, solved in UV space so the crop follows a frame that reshapes every frame.
+- [Velocity Afterimage Pass](https://kinetic.example.com/c/velocity-afterimage-pass): Marks that smear into a tail when the pointer moves fast and stay crisp when it slows, from two targets swapping roles.
+- [Vertex Shader Cylinder Bend](https://kinetic.example.com/c/vertex-cylinder-bend): A flat plane wrapped around a cylinder on the GPU, with the curvature living in a uniform you can animate.
 
 ## Cursor
 
-- [Blend-Difference Cursor](http://localhost:8927/c/blend-difference-cursor): A white dot in difference blend mode inverts whatever it crosses, growing 16 to 44 to 150px on hover.
-- [Cursor Clip-Path Mask](http://localhost:8927/c/cursor-clip-path-mask): A disc of a second layer follows the pointer; hovering the trigger grows it until it covers the panel.
-- [Cursor Repulsion Burst](http://localhost:8927/c/cursor-repulsion-burst): An orbiting particle field the pointer pushes out of the way, and a press detonates into a shock wave with a heat band.
-- [Dither Trail Image Reveal](http://localhost:8927/c/dither-trail-image-reveal): A dimmed image restored through a trail of Bayer-thresholded blocks that smear in the direction the pointer moved.
-- [GSAP Cursor Follower](http://localhost:8927/c/gsap-cursor-follower): A puck that replaces the arrow inside a panel, trailing 0.4s behind and swelling to a label over targets.
-- [Hover List Image Trail](http://localhost:8927/c/hover-list-image-trail): Hovering a row stacks a plate into a column that follows the pointer; the oldest is culled past twenty.
-- [Magnetic Pointer Button](http://localhost:8927/c/magnetic-button): A button that leans toward the cursor and springs back, with the label leading the box.
-- [Pointer Palette Sampling](http://localhost:8927/c/pointer-palette-sampling): Point at the artwork and it names the colour — a clamped pixel read snapped to the nearest palette entry.
-- [Pointer-Variable Gradient](http://localhost:8927/c/pointer-var-gradient): A soft glow tracks the pointer through two CSS custom properties. No rAF, no tween, no string rebuilding.
-- [Pooled Cursor Image Trail](http://localhost:8927/c/pooled-image-trail): Tiles drop behind the cursor from a fixed ring of 22 reused nodes, one every 130px of travel.
-- [quickTo Cursor Preview](http://localhost:8927/c/quickto-cursor-preview): A preview panel drifts a full second behind the pointer, driven by two reused quickTo tweens.
-- [Radial Mask Spotlight](http://localhost:8927/c/radial-mask-spotlight): A layer masked to a soft disc follows the pointer, with a flat core that makes it read as a beam.
-- [Tweened Cursor Uniform](http://localhost:8927/c/tweened-cursor-uniform): A shader grid with a lens under the pointer, whose position is tweened into the uniform so it settles instead of chasing.
+- [Blend-Difference Cursor](https://kinetic.example.com/c/blend-difference-cursor): A white dot in difference blend mode inverts whatever it crosses, growing 16 to 44 to 150px on hover.
+- [Cursor Clip-Path Mask](https://kinetic.example.com/c/cursor-clip-path-mask): A disc of a second layer follows the pointer; hovering the trigger grows it until it covers the panel.
+- [Cursor Repulsion Burst](https://kinetic.example.com/c/cursor-repulsion-burst): An orbiting particle field the pointer pushes out of the way, and a press detonates into a shock wave with a heat band.
+- [Dither Trail Image Reveal](https://kinetic.example.com/c/dither-trail-image-reveal): A dimmed image restored through a trail of Bayer-thresholded blocks that smear in the direction the pointer moved.
+- [GSAP Cursor Follower](https://kinetic.example.com/c/gsap-cursor-follower): A puck that replaces the arrow inside a panel, trailing 0.4s behind and swelling to a label over targets.
+- [Hover List Image Trail](https://kinetic.example.com/c/hover-list-image-trail): Hovering a row stacks a plate into a column that follows the pointer; the oldest is culled past twenty.
+- [Magnetic Pointer Button](https://kinetic.example.com/c/magnetic-button): A button that leans toward the cursor and springs back, with the label leading the box.
+- [Pointer Palette Sampling](https://kinetic.example.com/c/pointer-palette-sampling): Point at the artwork and it names the colour — a clamped pixel read snapped to the nearest palette entry.
+- [Pointer-Variable Gradient](https://kinetic.example.com/c/pointer-var-gradient): A soft glow tracks the pointer through two CSS custom properties. No rAF, no tween, no string rebuilding.
+- [Pooled Cursor Image Trail](https://kinetic.example.com/c/pooled-image-trail): Tiles drop behind the cursor from a fixed ring of 22 reused nodes, one every 130px of travel.
+- [quickTo Cursor Preview](https://kinetic.example.com/c/quickto-cursor-preview): A preview panel drifts a full second behind the pointer, driven by two reused quickTo tweens.
+- [Radial Mask Spotlight](https://kinetic.example.com/c/radial-mask-spotlight): A layer masked to a soft disc follows the pointer, with a flat core that makes it read as a beam.
+- [Tweened Cursor Uniform](https://kinetic.example.com/c/tweened-cursor-uniform): A shader grid with a lens under the pointer, whose position is tweened into the uniform so it settles instead of chasing.
 
 ## Transition
 
-- [A/B Layer Ping-Pong](http://localhost:8927/c/ab-layer-crossfade): Two stacked layers alternate so any change crossfades, however fast you move between rows.
-- [Asymmetric In/Out Staggers](http://localhost:8927/c/asymmetric-stagger): A list that arrives item by item after a hold and leaves twice as fast, from the last row backwards.
-- [Canvas Handoff Transition](http://localhost:8927/c/canvas-handoff-transition): The live WebGL canvas is handed to the next page and flies to its new slot, instead of being destroyed and rebuilt.
-- [CSS Variable Clip-Path Tween](http://localhost:8927/c/clip-path-variable-tween): One tweened custom property drives every clip-path on the panel, and reversing the timeline is the exit.
-- [Delayed-Unmount Loader](http://localhost:8927/c/delayed-unmount-loader): A loading overlay that stays mounted 600ms past the signal so its fade can actually play before it leaves.
-- [Exit Warp Before Navigate](http://localhost:8927/c/exit-warp-navigation): A ring of cards tears itself apart and rushes past the camera, and only then does the route change.
-- [Hinged Container Intro](http://localhost:8927/c/hinged-container-intro): The page body swings up from below the fold, hinged on its own bottom edge, with captions following it in.
-- [Prefetch-On-Hover Wipe](http://localhost:8927/c/hover-prefetch-wipe): Warms the next page on hover, wipes the screen on click, and navigates once the wipe has actually covered.
-- [Idle-Gated Page States](http://localhost:8927/c/idle-gated-page-states): A page entrance that will not start until a floor delay has elapsed and the main thread has reported itself idle.
-- [Key-Replayed Page Reveal](http://localhost:8927/c/page-reveal-overlay): An opaque overlay that fades away on every route change, replayed by nothing more than a changed React key.
-- [Staggered Panel Wipe](http://localhost:8927/c/panel-wipe-preloader): An eased 0-100 counter, a word list and a five-column wipe, all on one timeline so they cannot drift.
-- [Re-Key Caption Replay](http://localhost:8927/c/rekey-caption-replay): A caption block whose staggered entrance replays on every index change, restarted by a changed React key.
-- [Preloader That Cannot Hang](http://localhost:8927/c/safe-preloader): An intro overlay with a hard ceiling, a minimum visible time and a once-per-session flag, so a stalled load cannot trap the page.
-- [Slab Page Transition](http://localhost:8927/c/slab-page-transition): An opaque slab rises through the frame, the route changes under it, and it keeps going — nothing ever reverses.
+- [A/B Layer Ping-Pong](https://kinetic.example.com/c/ab-layer-crossfade): Two stacked layers alternate so any change crossfades, however fast you move between rows.
+- [Asymmetric In/Out Staggers](https://kinetic.example.com/c/asymmetric-stagger): A list that arrives item by item after a hold and leaves twice as fast, from the last row backwards.
+- [Canvas Handoff Transition](https://kinetic.example.com/c/canvas-handoff-transition): The live WebGL canvas is handed to the next page and flies to its new slot, instead of being destroyed and rebuilt.
+- [CSS Variable Clip-Path Tween](https://kinetic.example.com/c/clip-path-variable-tween): One tweened custom property drives every clip-path on the panel, and reversing the timeline is the exit.
+- [Delayed-Unmount Loader](https://kinetic.example.com/c/delayed-unmount-loader): A loading overlay that stays mounted 600ms past the signal so its fade can actually play before it leaves.
+- [Exit Warp Before Navigate](https://kinetic.example.com/c/exit-warp-navigation): A ring of cards tears itself apart and rushes past the camera, and only then does the route change.
+- [Hinged Container Intro](https://kinetic.example.com/c/hinged-container-intro): The page body swings up from below the fold, hinged on its own bottom edge, with captions following it in.
+- [Prefetch-On-Hover Wipe](https://kinetic.example.com/c/hover-prefetch-wipe): Warms the next page on hover, wipes the screen on click, and navigates once the wipe has actually covered.
+- [Idle-Gated Page States](https://kinetic.example.com/c/idle-gated-page-states): A page entrance that will not start until a floor delay has elapsed and the main thread has reported itself idle.
+- [Key-Replayed Page Reveal](https://kinetic.example.com/c/page-reveal-overlay): An opaque overlay that fades away on every route change, replayed by nothing more than a changed React key.
+- [Staggered Panel Wipe](https://kinetic.example.com/c/panel-wipe-preloader): An eased 0-100 counter, a word list and a five-column wipe, all on one timeline so they cannot drift.
+- [Re-Key Caption Replay](https://kinetic.example.com/c/rekey-caption-replay): A caption block whose staggered entrance replays on every index change, restarted by a changed React key.
+- [Preloader That Cannot Hang](https://kinetic.example.com/c/safe-preloader): An intro overlay with a hard ceiling, a minimum visible time and a once-per-session flag, so a stalled load cannot trap the page.
+- [Slab Page Transition](https://kinetic.example.com/c/slab-page-transition): An opaque slab rises through the frame, the route changes under it, and it keeps going — nothing ever reverses.
 
 ## Text
 
-- [Asymmetric Typewriter](http://localhost:8927/c/asymmetric-typewriter): Rotating phrases that delete at twice the speed they type, with a beat of nothing at the empty string.
-- [Char Stagger Then Scale-Up](http://localhost:8927/c/char-stagger-scale-up): Characters resolve left to right, then the whole word scales up with an overshoot as the last one lands.
-- [Converging Headline Words](http://localhost:8927/c/converging-scrub-words): Headline words slide in from opposite margins and lock into a sentence, pinned to scroll position.
-- [Eased Number Counter](http://localhost:8927/c/eased-number-counter): A statistic that counts up on an eased curve and settles on its exact final figure without shifting the layout.
-- [Font-Safe Text Splitting](http://localhost:8927/c/font-safe-text-split): Line splitting gated on document.fonts.ready, re-split on late fonts and on width change, debounced.
-- [Letter Scramble](http://localhost:8927/c/morphsvg-letter-scramble): A word assembles out of noise — each character flips through wrong glyphs, decelerating onto the right one.
-- [Nested Split With True Restore](http://localhost:8927/c/nested-splittext-restore): Splits rich markup into masked lines and restores the original innerHTML byte-for-byte on teardown.
-- [Scrubbed Character Colour Reveal](http://localhost:8927/c/scrub-char-color-reveal): A dim paragraph resolves character by character as it crosses the viewport, tied to scroll position not a clock.
-- [Pixels-Per-Second Marquee](http://localhost:8927/c/seamless-marquee): A marquee whose duration is derived from measured width and a px/second speed, so every strip moves at the same rate.
-- [Step-End Blinking Caret](http://localhost:8927/c/step-end-caret): A text caret that snaps on and off instead of fading, using step-end timing and an uneven blink rhythm.
-- [Stroke-To-Fill Hover Rows](http://localhost:8927/c/stroke-to-fill-hover): An index of outlined type where the hovered row fills in solid, drops its stroke, and steps sideways.
+- [Asymmetric Typewriter](https://kinetic.example.com/c/asymmetric-typewriter): Rotating phrases that delete at twice the speed they type, with a beat of nothing at the empty string.
+- [Char Stagger Then Scale-Up](https://kinetic.example.com/c/char-stagger-scale-up): Characters resolve left to right, then the whole word scales up with an overshoot as the last one lands.
+- [Converging Headline Words](https://kinetic.example.com/c/converging-scrub-words): Headline words slide in from opposite margins and lock into a sentence, pinned to scroll position.
+- [Eased Number Counter](https://kinetic.example.com/c/eased-number-counter): A statistic that counts up on an eased curve and settles on its exact final figure without shifting the layout.
+- [Font-Safe Text Splitting](https://kinetic.example.com/c/font-safe-text-split): Line splitting gated on document.fonts.ready, re-split on late fonts and on width change, debounced.
+- [Letter Scramble](https://kinetic.example.com/c/morphsvg-letter-scramble): A word assembles out of noise — each character flips through wrong glyphs, decelerating onto the right one.
+- [Nested Split With True Restore](https://kinetic.example.com/c/nested-splittext-restore): Splits rich markup into masked lines and restores the original innerHTML byte-for-byte on teardown.
+- [Scrubbed Character Colour Reveal](https://kinetic.example.com/c/scrub-char-color-reveal): A dim paragraph resolves character by character as it crosses the viewport, tied to scroll position not a clock.
+- [Pixels-Per-Second Marquee](https://kinetic.example.com/c/seamless-marquee): A marquee whose duration is derived from measured width and a px/second speed, so every strip moves at the same rate.
+- [Step-End Blinking Caret](https://kinetic.example.com/c/step-end-caret): A text caret that snaps on and off instead of fading, using step-end timing and an uneven blink rhythm.
+- [Stroke-To-Fill Hover Rows](https://kinetic.example.com/c/stroke-to-fill-hover): An index of outlined type where the hovered row fills in solid, drops its stroke, and steps sideways.
 
 ## Layout
 
-- [Auto-Advance Filmstrip](http://localhost:8927/c/auto-advance-filmstrip): A centred strip that steps one panel every few seconds, neighbours dimmed and shrunk, on one CSS transition.
-- [Drag Marquee](http://localhost:8927/c/drag-marquee): An endless row that drifts, takes a drag and a throw, and scatters its cards while your hand is down.
-- [FOV-Derived Row Spacing](http://localhost:8927/c/fov-derived-row-step): A row whose item spacing is solved from a field of view and a camera distance, so it spans the frame exactly at any size.
-- [Height-First Media Stage](http://localhost:8927/c/height-first-media-stage): A media stage sized from its height, with the width derived from the ratio, cross-fading layers and a caption that replays per index.
-- [Layout Lerp Scalar](http://localhost:8927/c/layout-lerp-scalar): Row, stack, drum and fan are one placement function of seven numbers. Switching layout is a tween over an object.
-- [matchMedia Layout Teardown](http://localhost:8927/c/matchmedia-layout-teardown): Two layouts behind one gsap.matchMedia block. Cross the breakpoint and the desktop branch reverts itself.
-- [Percent Slide Carousel](http://localhost:8927/c/percent-slide-carousel): A flex track translated by -100% per slide. One CSS transition, no measurement, no library.
-- [Perspective Coverflow Scroller](http://localhost:8927/c/perspective-coverflow-scroller): Panels turn away from the centre in real 3D as you scroll a native container — no tween, no loop.
-- [Proximity Snap Track](http://localhost:8927/c/proximity-snap-track): A horizontal rail of variable-width cards that snaps only when you stop near one, and never skips past two at once.
-- [Rotary Drag Carousel](http://localhost:8927/c/rotary-drag-carousel): A wheel of cards you grab and spin. Angular drag, projected inertia, and it always lands on a station.
-- [Wrapping Drum Carousel](http://localhost:8927/c/wrapping-drum-carousel): An endless carousel that reads as a rotating drum with no 3D at all — only x, scale and fading opacity.
+- [Auto-Advance Filmstrip](https://kinetic.example.com/c/auto-advance-filmstrip): A centred strip that steps one panel every few seconds, neighbours dimmed and shrunk, on one CSS transition.
+- [Drag Marquee](https://kinetic.example.com/c/drag-marquee): An endless row that drifts, takes a drag and a throw, and scatters its cards while your hand is down.
+- [FOV-Derived Row Spacing](https://kinetic.example.com/c/fov-derived-row-step): A row whose item spacing is solved from a field of view and a camera distance, so it spans the frame exactly at any size.
+- [Height-First Media Stage](https://kinetic.example.com/c/height-first-media-stage): A media stage sized from its height, with the width derived from the ratio, cross-fading layers and a caption that replays per index.
+- [Layout Lerp Scalar](https://kinetic.example.com/c/layout-lerp-scalar): Row, stack, drum and fan are one placement function of seven numbers. Switching layout is a tween over an object.
+- [matchMedia Layout Teardown](https://kinetic.example.com/c/matchmedia-layout-teardown): Two layouts behind one gsap.matchMedia block. Cross the breakpoint and the desktop branch reverts itself.
+- [Percent Slide Carousel](https://kinetic.example.com/c/percent-slide-carousel): A flex track translated by -100% per slide. One CSS transition, no measurement, no library.
+- [Perspective Coverflow Scroller](https://kinetic.example.com/c/perspective-coverflow-scroller): Panels turn away from the centre in real 3D as you scroll a native container — no tween, no loop.
+- [Proximity Snap Track](https://kinetic.example.com/c/proximity-snap-track): A horizontal rail of variable-width cards that snaps only when you stop near one, and never skips past two at once.
+- [Rotary Drag Carousel](https://kinetic.example.com/c/rotary-drag-carousel): A wheel of cards you grab and spin. Angular drag, projected inertia, and it always lands on a station.
+- [Wrapping Drum Carousel](https://kinetic.example.com/c/wrapping-drum-carousel): An endless carousel that reads as a rotating drum with no 3D at all — only x, scale and fading opacity.
 
 ## Primitives
 
-- [Analytic Disc Picking](http://localhost:8927/c/analytic-disc-picking): Hit-test camera-facing discs by intersecting the pointer ray with their plane. Exact, allocation-free, and correct for shader billboards.
-- [Browser Chrome Frame](http://localhost:8927/c/browser-chrome-frame): A macOS window frame with hover-revealed traffic lights and an address pill whose check draws itself on copy.
-- [Chord-Synced Particle Burst](http://localhost:8927/c/burst-audio-sync): Fires an arpeggio and its visual flares off one schedule, so each flash lands on its own note.
-- [Capture-Phase Click Swallow](http://localhost:8927/c/capture-phase-click-swallow): Cancels the single click a finished drag would fire, in the capture phase, without eating the next real click or keyboard activation.
-- [Compound Group Hover Card](http://localhost:8927/c/compound-group-hover): One hover drives four changes on three elements, each with its own duration and curve. Keyboard gets all four.
-- [Conic @property Border](http://localhost:8927/c/conic-property-border): A gradient ring that rotates around a rounded box. Two highlights chase each other; no JavaScript runs.
-- [Raycaster-Free Hover Picking](http://localhost:8927/c/cpu-mirror-picking): Run the GPU's transform again on the CPU and hit-test the result. No raycaster, no rect reads.
-- [Dotted Notepad Surface](http://localhost:8927/c/dotted-notepad-surface): A tiled dot grid that dissolves at the panel edges, with a hard-stopped folded corner.
-- [Drag with a Dead Zone and Pointer Capture](http://localhost:8927/c/drag-deadzone-capture): Captures the pointer on press but only commits to a drag past a distance threshold, so a shaky click stays a click.
-- [Drifting Smoke Layers](http://localhost:8927/c/drifting-smoke-layers): Slow volumetric fog built from blurred radial gradients on three coprime cycles. No texture, no canvas.
-- [Looping Scroll Cue](http://localhost:8927/c/looping-scroll-cue): The hairline that dives down a hero. One keyframe pair, a hard ease, and a seamless loop.
-- [Lottie Ratio Poster](http://localhost:8927/c/lottie-ratio-poster): Reserves the box, holds a drawn poster, fetches the JSON only in view, then corrects the ratio from the animation's own w and h.
-- [Nav Dot Wave](http://localhost:8927/c/nav-dot-wave): Nav dots that lift in sequence. The index is an inline custom property; CSS derives the delay.
-- [Pause, Don't Unmount](http://localhost:8927/c/pause-dont-unmount): React 19's Activity hides a WebGL scene without losing its state. Effects still tear down, so the GL context is genuinely released.
-- [Relaxed Seeded Scatter](http://localhost:8927/c/relaxed-seeded-scatter): Seeded angles around a ring, pushed apart until nothing collides. Ghost ticks mark where they started.
-- [Self-Parking RAF](http://localhost:8927/c/self-parking-raf): An epsilon snap lets a damped value reach its target exactly, so the frame loop hits its exit test and dies.
-- [Slow Idle Float](http://localhost:8927/c/slow-float-idle): A 14px rise and fall over 5 seconds, on the independent translate property so hover transforms still work.
-- [Spring To CSS linear()](http://localhost:8927/c/spring-to-linear-easing): Solves a spring once, samples it into a CSS linear() string, and runs the whole bounce on the compositor.
-- [Web Audio Scheduling Kit](http://localhost:8927/c/web-audio-scheduler): A lookahead sequencer: a coarse timer queues beats onto the sample-accurate audio clock, so tempo never drifts.
-- [Wheel Accumulator Stepper](http://localhost:8927/c/wheel-accumulator-stepper): Wheel input normalised by deltaMode and accumulated to a threshold, so one flick of any device moves exactly one step.
-- [Shortest Signed Ring Offset](http://localhost:8927/c/wrapped-ring-offset): Ten dots on a ring, each showing its wrapped offset and the raw index difference it replaces.
+- [Analytic Disc Picking](https://kinetic.example.com/c/analytic-disc-picking): Hit-test camera-facing discs by intersecting the pointer ray with their plane. Exact, allocation-free, and correct for shader billboards.
+- [Browser Chrome Frame](https://kinetic.example.com/c/browser-chrome-frame): A macOS window frame with hover-revealed traffic lights and an address pill whose check draws itself on copy.
+- [Chord-Synced Particle Burst](https://kinetic.example.com/c/burst-audio-sync): Fires an arpeggio and its visual flares off one schedule, so each flash lands on its own note.
+- [Capture-Phase Click Swallow](https://kinetic.example.com/c/capture-phase-click-swallow): Cancels the single click a finished drag would fire, in the capture phase, without eating the next real click or keyboard activation.
+- [Compound Group Hover Card](https://kinetic.example.com/c/compound-group-hover): One hover drives four changes on three elements, each with its own duration and curve. Keyboard gets all four.
+- [Conic @property Border](https://kinetic.example.com/c/conic-property-border): A gradient ring that rotates around a rounded box. Two highlights chase each other; no JavaScript runs.
+- [Raycaster-Free Hover Picking](https://kinetic.example.com/c/cpu-mirror-picking): Run the GPU's transform again on the CPU and hit-test the result. No raycaster, no rect reads.
+- [Dotted Notepad Surface](https://kinetic.example.com/c/dotted-notepad-surface): A tiled dot grid that dissolves at the panel edges, with a hard-stopped folded corner.
+- [Drag with a Dead Zone and Pointer Capture](https://kinetic.example.com/c/drag-deadzone-capture): Captures the pointer on press but only commits to a drag past a distance threshold, so a shaky click stays a click.
+- [Drifting Smoke Layers](https://kinetic.example.com/c/drifting-smoke-layers): Slow volumetric fog built from blurred radial gradients on three coprime cycles. No texture, no canvas.
+- [Looping Scroll Cue](https://kinetic.example.com/c/looping-scroll-cue): The hairline that dives down a hero. One keyframe pair, a hard ease, and a seamless loop.
+- [Lottie Ratio Poster](https://kinetic.example.com/c/lottie-ratio-poster): Reserves the box, holds a drawn poster, fetches the JSON only in view, then corrects the ratio from the animation's own w and h.
+- [Nav Dot Wave](https://kinetic.example.com/c/nav-dot-wave): Nav dots that lift in sequence. The index is an inline custom property; CSS derives the delay.
+- [Pause, Don't Unmount](https://kinetic.example.com/c/pause-dont-unmount): React 19's Activity hides a WebGL scene without losing its state. Effects still tear down, so the GL context is genuinely released.
+- [Relaxed Seeded Scatter](https://kinetic.example.com/c/relaxed-seeded-scatter): Seeded angles around a ring, pushed apart until nothing collides. Ghost ticks mark where they started.
+- [Self-Parking RAF](https://kinetic.example.com/c/self-parking-raf): An epsilon snap lets a damped value reach its target exactly, so the frame loop hits its exit test and dies.
+- [Slow Idle Float](https://kinetic.example.com/c/slow-float-idle): A 14px rise and fall over 5 seconds, on the independent translate property so hover transforms still work.
+- [Spring To CSS linear()](https://kinetic.example.com/c/spring-to-linear-easing): Solves a spring once, samples it into a CSS linear() string, and runs the whole bounce on the compositor.
+- [Web Audio Scheduling Kit](https://kinetic.example.com/c/web-audio-scheduler): A lookahead sequencer: a coarse timer queues beats onto the sample-accurate audio clock, so tempo never drifts.
+- [Wheel Accumulator Stepper](https://kinetic.example.com/c/wheel-accumulator-stepper): Wheel input normalised by deltaMode and accumulated to a threshold, so one flick of any device moves exactly one step.
+- [Shortest Signed Ring Offset](https://kinetic.example.com/c/wrapped-ring-offset): Ten dots on a ring, each showing its wrapped offset and the raw index difference it replaces.
+
+## Actions
+
+- [Button](https://kinetic.example.com/c/button): Primary, secondary, ghost and danger buttons in three sizes, with gradient fills that fade on hover and a soft press.
+- [Button Group](https://kinetic.example.com/c/button-group): Secondary buttons fused into one bordered strip with hairline dividers, for toolbars, range pickers and pressed toggles.
+- [Close Button](https://kinetic.example.com/c/close-button): Circular dismiss button in four sizes whose X is redrawn per size, so the stroke is a true 1.6 to 2.5px at every scale.
+- [Copy Page Button](https://kinetic.example.com/c/copy-page-button): Docs split button: the main half copies the page as Markdown and flips to Copied, the chevron opens Copy and View as Markdown.
+- [GitHub Star Button](https://kinetic.example.com/c/github-star-button): A star toggle with a glyph, a Star label and a count pill. Starring pops the star and rolls the en-US formatted count by one.
+- [Icon Button](https://kinetic.example.com/c/icon-button): Square bordered icon-only button in 36 and 32px with a fixed 10px radius, plus an anchor twin for navigational actions.
+- [Link Button](https://kinetic.example.com/c/link-button): Container-less text action that renders an anchor with href or a button without, with an underline as its only hover cue.
+- [Notification Bell Badge](https://kinetic.example.com/c/notification-bell-badge): Bell button with a red unread badge that opens a notification popover; mark one or all read and the badge follows.
+- [Quick Search Button](https://kinetic.example.com/c/quick-search-button): A "Search..." field-style trigger with a ⌘K hint that opens the kit command palette, and a global ⌘K / Ctrl+K shortcut that toggles it.
+- [Social Button](https://kinetic.example.com/c/social-button): Sign-in button for 24 named providers: one brand prop supplies logo, colour and label, in colourful, black or outlined styles.
+- [Theme Toggle](https://kinetic.example.com/c/theme-toggle): Light and dark switch that reveals the new theme in a soft circle growing from the click point, using the View Transition API.
+
+## Forms
+
+- [Accent Swatch Picker](https://kinetic.example.com/c/accent-swatch-picker): Glossy colour spheres in one keyboard radio group; the pick becomes one --accent property that re-tints kit controls in its scope.
+- [Agent Creator](https://kinetic.example.com/c/agent-creator): A create-an-agent card: paper avatar with a face ring and shape arc, colour pill, profile, tools and voice fields, then a created summary.
+- [Checkbox](https://kinetic.example.com/c/checkbox): React Aria checkbox in two sizes: a gradient box whose white tick draws itself on, plus an indeterminate dash for partial selections.
+- [Checkbox Card](https://kinetic.example.com/c/checkbox-card): Bordered option card with title and description on the left and the kit checkbox on the right; a click anywhere on it toggles.
+- [Color Picker](https://kinetic.example.com/c/color-picker): A saturation field, hue and opacity rails, a hex field and presets, inline or behind a round swatch that opens a popover.
+- [Combobox](https://kinetic.example.com/c/combobox): Type to filter a list: Input's own field with a chevron toggle, and a field-width menu with sections, a check and a scroll fade.
+- [Composer Attachments](https://kinetic.example.com/c/composer-attachments): 56px attachment tiles for a chat composer: type icon, name, size and remove, with a ring that traces the tile edge while uploading.
+- [Composer Footer](https://kinetic.example.com/c/composer-footer): Bottom bar of a chat composer: attach, tool toggles, a model slot and a key hint, with a send button that becomes stop while replying.
+- [Composer Panel](https://kinetic.example.com/c/composer-panel): Two-row agent composer: a growing prompt over a toolbar with add, permission mode, model and send, plus a status tab with a context ring.
+- [Date Calendar](https://kinetic.example.com/c/date-calendar): An inline month calendar for one date or a range, with a continuous range band, a today dot and struck-through unavailable days.
+- [Date Picker](https://kinetic.example.com/c/date-picker): A trigger button that opens one month in a popover, with an editable DD/MM/YYYY chip and Cancel / Apply so nothing commits early.
+- [Date Range Picker](https://kinetic.example.com/c/date-range-picker): Two adjacent months in a popover with a quick-select sidebar, typed start and end chips, a day count and Cancel / Apply.
+- [Date Range Stepper](https://kinetic.example.com/c/date-range-stepper): A bordered pill with prev/next chevrons that steps a week or month period, with min/max bounds and a label that slides in.
+- [File Upload](https://kinetic.example.com/c/file-upload): A drag-and-drop zone that validates type and size, traces progress around its own border, then reports the finished file.
+- [Image Prompt Composer](https://kinetic.example.com/c/image-prompt-composer): The request form of an image model: style chips, an auto-growing prompt, ratio select, count stepper and a Generate that turns into Stop.
+- [Input](https://kinetic.example.com/c/input): React Aria text field on a filled shell with an inset ring for hover and focus, label with required mark, hint or error line, and icons.
+- [Input OTP](https://kinetic.example.com/c/input-otp): One-time-code field: a monospace box per digit that advances on type, steps back on Backspace, spreads a paste and accepts OS autofill.
+- [Language Select](https://kinetic.example.com/c/language-select): A footer language picker on the kit Select: translate glyph or flag in the trigger, flag emoji, native names with lang and dir per option.
+- [Meeting Scheduler](https://kinetic.example.com/c/meeting-scheduler): A Cal.com-style booking popover: host and meeting summary, a month calendar and a half-hour slot list, committed by "Send meeting".
+- [Model Select](https://kinetic.example.com/c/model-select): Model picker on the kit Select. Rows show a tinted monogram, name, description, New/Pro badges and a check on the current model.
+- [Models Picker](https://kinetic.example.com/c/models-picker): A card of models with provider monograms: pick one with radios, or enable several with switches, a search filter and a live count.
+- [Newsletter Card](https://kinetic.example.com/c/newsletter-card): Email sign-up card with inline validation, a submitting state on a cleaned-up timer, success with reset, and an error path.
+- [Number Field](https://kinetic.example.com/c/number-field): Input's field shell plus minus and plus steppers on React Aria NumberField: locale currency, percent and unit formats, clamped to limits.
+- [Questionnaire](https://kinetic.example.com/c/questionnaire): The questions an agent asks before it plans: one per step, checkbox or numbered rows, a free-text Other and step pills.
+- [Radio](https://kinetic.example.com/c/radio): React Aria radio group with a gradient selected dot that cross-fades in while the white centre scales up, in two sizes.
+- [Radio Card](https://kinetic.example.com/c/radio-card): Bordered option card with title, description and the kit radio dot on the right; inside a RadioGroup a click anywhere selects it.
+- [Search Field](https://kinetic.example.com/c/search-field): Pill or rounded search input on React Aria SearchField: Escape clears, a clear button scales in with text, and the icon fades to a spinner.
+- [Segmented Control](https://kinetic.example.com/c/segmented-control): A pill switcher for Weekly / Monthly / Yearly choices: one white thumb, measured from the DOM, slides under the selected segment.
+- [Select](https://kinetic.example.com/c/select): A React Aria select: bordered trigger with a turning chevron, non-modal popover on the shared menu surface, free-form rows.
+- [Slider](https://kinetic.example.com/c/slider): Single and min/max sliders on React Aria: a gradient fill, thumbs that grow while dragged, and a value bubble above each thumb.
+- [Status Select Cell](https://kinetic.example.com/c/status-select-cell): Table status pill in status-* colours that is also a select: hover reveals a chevron, press or Enter opens the list to change it.
+- [Switch](https://kinetic.example.com/c/switch): React Aria toggle with a gradient track, a white thumb that slides 200ms, and an embossed chip that turns blue when on; 3 sizes, 2 shapes.
+- [Switch Card](https://kinetic.example.com/c/switch-card): Bordered settings row with an optional icon, title and description; a click anywhere on the card flips the kit switch on its trailing edge.
+- [Table Filter Bar](https://kinetic.example.com/c/table-filter-bar): Strip above a data table: "All ..." select filters, a pill search, removable active-filter chips, Clear all and a live result count.
+- [Textarea](https://kinetic.example.com/c/textarea): Multiline sibling of Input on the same filled shell: grows a line at a time up to maxRows, or keeps a resize handle; optional counter.
+- [Time Field](https://kinetic.example.com/c/time-field): A time of day typed segment by segment in the kit's input shell, with 12 or 24 hour cycles, seconds, limits and an accent focus.
+- [Users Access Card](https://kinetic.example.com/c/users-access-card): Workspace members with initials, email and a role select per row, a remove button, and an invite field that validates before adding a row.
+
+## Overlays
+
+- [Command Palette](https://kinetic.example.com/c/command-palette): ⌘K palette of searchable commands with sections, icons and shortcuts, built-in or custom filtering, on React Aria Autocomplete and Menu.
+- [Context Menu](https://kinetic.example.com/c/context-menu): Right-click, long-press and Shift+F10 menu anchored to the pointer, with icons, shortcuts, submenus and checkable rows.
+- [Drawer](https://kinetic.example.com/c/drawer): Panel that slides in from any edge over a dimmed page, for filters, details and bottom sheets, sharing Modal's header, body and actions.
+- [Dropdown](https://kinetic.example.com/c/dropdown): Composable popover menu (trigger, panel, groups, rows, dividers) built on React Aria: the recipe behind the sidebar team and account menus.
+- [Event Detail Popover](https://kinetic.example.com/c/event-detail-popover): Anchored calendar event card: colour key, date and time, location, meeting code with Join, guest RSVPs, edit and delete.
+- [Modal](https://kinetic.example.com/c/modal): Dialog over a dimmed page with a header, scrolling body and actions, plus an alert dialog for destructive confirms.
+- [Notification](https://kinetic.example.com/c/notification): Dismissible notification card with status icon or avatar, actions and a pausable countdown bar, stacked in a corner viewport.
+- [Popover](https://kinetic.example.com/c/popover): Free-form content anchored to a trigger, with an optional arrow, smart positioning and the menu family's motion, built on React Aria.
+- [Pro Upsell Toast](https://kinetic.example.com/c/pro-upsell-toast): A floating Upgrade-to-Pro card with a grainy pastel wash, app tile, dismiss and a full-width CTA; it rises in and returns focus on close.
+- [Row Actions](https://kinetic.example.com/c/row-actions): Kebab menu at the end of a table row with Edit, Duplicate and a red Delete that asks first through the kit AlertDialog.
+- [Toast](https://kinetic.example.com/c/toast): Imperative toast() with success, error, update and dismiss, drawn by one Toaster as a capped, pausable stack of Notification cards.
+- [Tooltip](https://kinetic.example.com/c/tooltip): Light-surface tooltip built on React Aria, with a hand-drawn caret per side and a quick blur-and-scale in and out.
+
+## Navigation
+
+- [Agent List Panel](https://kinetic.example.com/c/agent-list-panel): Agent sidebar list with avatar, live status dot, last message and time, single selection, search and All/Running/Done tabs.
+- [Breadcrumb](https://kinetic.example.com/c/breadcrumb): Ancestor-page trail with auto-inserted chevrons; each item is a link, a button or the current page, with optional 16px icons.
+- [Calendar Toolbar](https://kinetic.example.com/c/calendar-toolbar): Calendar page header: month title, Today, month stepper, Day/Week/Month segments, event search and a New event button.
+- [Dashboard Page Header](https://kinetic.example.com/c/dashboard-page-header): Dashboard page header: breadcrumb with initials crumbs, title, week stepper, unread bell and trailing action buttons.
+- [Docs Pager](https://kinetic.example.com/c/docs-pager): Previous / next cards for the foot of a docs page: arrow and title on top, a one-line summary below, mirrored for RTL.
+- [Docs Sidebar Nav](https://kinetic.example.com/c/docs-sidebar-nav): Floating docs sidebar with collapsible groups, tree rails, New/Pro badges, an active page and a ⌘K filter that highlights matches.
+- [Month Stepper](https://kinetic.example.com/c/month-stepper): A bordered month label between prev/next chevrons, with spinbutton keys: arrows step a month, Page Up/Down a year, Home/End the bounds.
+- [On This Page TOC](https://kinetic.example.com/c/on-this-page-toc): Right-hand "On this page" list that tracks the section you are reading with an IntersectionObserver and a sliding active bar.
+- [Pagination](https://kinetic.example.com/c/pagination): Controlled pager with Previous/Next buttons, 32px page cells and ellipsis collapsing that turns compact below a 420px container.
+- [Repo Tree Nav](https://kinetic.example.com/c/repo-tree-nav): Repository file tree with folder expand/collapse, file-type icons, single file selection and +/− line counts per file.
+- [Tabs](https://kinetic.example.com/c/tabs): React Aria underline tabs with a measured 2px indicator that slides between tabs, plus a pill switcher whose thumb settles with a spring.
+- [Tree View](https://kinetic.example.com/c/tree-view): React Aria file tree with curved guide lines, folder icons that open, and rows that unfold and blur in as branches expand.
+- [Workspace Switcher](https://kinetic.example.com/c/workspace-switcher): Sidebar-top workspace menu: mark, name and plan on the trigger, a checked list of workspaces and a create-workspace row.
+
+## Display
+
+- [Accordion](https://kinetic.example.com/c/accordion): Sections that expand in place in divided, contained and separated styles, with an eased height and a blur-in body, on React Aria.
+- [Activity Rings Card](https://kinetic.example.com/c/activity-rings-card): Watch-style concentric goal rings in SVG with value tiles: the rings draw in on mount, and hovering a ring or tile focuses it.
+- [Agent Detail Panel](https://kinetic.example.com/c/agent-detail-panel): Selected-agent panel: status pill, task, progress, step log and Pause / Resume / Stop actions that change the run state.
+- [Agent Limits Card](https://kinetic.example.com/c/agent-limits-card): An agent budget card: a context window bar split by token bucket, an expandable breakdown, and plan limits with reset times.
+- [Agent Log](https://kinetic.example.com/c/agent-log): Streaming agent-log parts: a reveal ticker, rows that blur in under a soft clipping edge, and a curved tree guide that draws itself.
+- [Agent Progress](https://kinetic.example.com/c/agent-progress): A minimizable step list for multi-step agent work: an overall ring, a timed ring on the running step, check-offs and a completion hand-off.
+- [Agent Thinking](https://kinetic.example.com/c/agent-thinking): The "thinking" line above a chat composer: dot wave, dot spin, stars or infinity, with a shimmering label and an elapsed timer.
+- [Agents Bar Card](https://kinetic.example.com/c/agents-bar-card): One purple bar per agent for a month, grey stubs for idle ones; hover or arrow keys highlight a bar and show its avatar, name and value.
+- [Announcement](https://kinetic.example.com/c/announcement): A compact sidebar card with an icon, title, note and full-width call to action that blurs and shrinks away when dismissed.
+- [Appointments List Card](https://kinetic.example.com/c/appointments-list-card): Upcoming visits as inner tiles: date chip, time window, mode, doctor initials and status, with reschedule slots, cancel and undo.
+- [Area Chart Card](https://kinetic.example.com/c/area-chart-card): A dashboard card of stacked gradient areas with a period switch, a hover tooltip and tiles that follow the hovered month.
+- [Avatar](https://kinetic.example.com/c/avatar): Round photo or initials avatar in four sizes (20 to 36px) and four tints, with a lazy-loaded image that fills the disc.
+- [Avatar Stack](https://kinetic.example.com/c/avatar-stack): Overlapping assignee discs with surface-coloured rings, a +N overflow disc and a name tooltip on every avatar.
+- [Badge](https://kinetic.example.com/c/badge): The small numeric counter on nav items and unread totals: a 16px pill in a selected (blue) or resting (neutral) tone.
+- [Bar List Card](https://kinetic.example.com/c/bar-list-card): Ranked analytics rows on proportional bars behind underline tabs, with a share / count switch and a pill that unfolds long lists.
+- [Blob Avatar](https://kinetic.example.com/c/blob-avatar): Seeded SVG blob with eyes: a name picks its shape, colour and face, the body gently morphs and blinks, six sizes.
+- [Board Empty State](https://kinetic.example.com/c/board-empty-state): Empty board or column: three ticket panels stacked on a soft surface that fan out on hover, with copy and a create button.
+- [Calendar Event Chip](https://kinetic.example.com/c/calendar-event-chip): Tinted calendar event pill in five colour tokens: one-line compact chip for month cells, block variant for time grids, selected ring.
+- [Campaigns Table](https://kinetic.example.com/c/campaigns-table): A marketing campaigns table with channel icons, delivery status, budget-spent progress bars, CTR and sortable columns.
+- [Carousel](https://kinetic.example.com/c/carousel): A gallery you slide through on native scroll-snap: swipe, trackpad and arrow keys for free, plus end-aware arrows and a dot indicator.
+- [Changes Diff Panel](https://kinetic.example.com/c/changes-diff-panel): Uncommitted-changes list with +/− counts, an inline diff per file and accept / reject per file or for all; totals update live.
+- [Channel Tabs Bar List](https://kinetic.example.com/c/channel-tabs-bar-list): A tabbed card of ranked horizontal bars: switch channels, campaigns or pages and each row shows its share of sessions.
+- [Chat Message Bubble](https://kinetic.example.com/c/chat-message-bubble): User and assistant chat rows with avatar, bubble, time and inline code. Hovering shows copy, regenerate and like/dislike actions.
+- [Chip](https://kinetic.example.com/c/chip): Coloured status, delta and role chips in three emphasis levels and ten theme-aware colour pairs on a 6px radius.
+- [Code Block](https://kinetic.example.com/c/code-block): Docs code block with a filename chip, sticky line numbers, a dependency-free TSX highlighter, wrap toggle and one-click copy.
+- [Code Diff Viewer](https://kinetic.example.com/c/code-diff-viewer): Before / after line diff with old and new line numbers, hunk headers, a unified or split layout and folded unchanged lines.
+- [Color](https://kinetic.example.com/c/color): Semantic colour token palette: grouped swatch tables with light and dark values read from the theme, click a token to copy its variable.
+- [Combo Chart Card](https://kinetic.example.com/c/combo-chart-card): A dashboard card with bars on a left axis and a rate line on a right axis; hovering a month spotlights its bar and pops a dot on the line.
+- [Composer Loader](https://kinetic.example.com/c/composer-loader): Wraps a chat composer while the agent works: an iridescent band orbits the pill rim with a soft bloom, fading in and out.
+- [Context Usage Ring](https://kinetic.example.com/c/context-usage-ring): Small ring and percentage for how full a chat context window is. Turns orange, then rose, near the limit; a tooltip breaks the tokens down.
+- [Context Window Card](https://kinetic.example.com/c/context-window-card): An agent's context window as one thin segmented bar by category, with a disclosable legend of token counts and shares.
+- [Contributions Card](https://kinetic.example.com/c/contributions-card): A GitHub-style contributions card: a week by weekday calendar in five intensity steps, stat tiles, month labels and nine accent palettes.
+- [Device Preview Frame](https://kinetic.example.com/c/device-preview-frame): Browser-window frame that lays any content out at a device width and scales it in; a Desktop/Tablet/Mobile toggle resizes it live.
+- [Divider](https://kinetic.example.com/c/divider): Horizontal divider in single-hairline, double-line and filled-strip treatments, with optional start, centre or end content.
+- [Docs Callout](https://kinetic.example.com/c/docs-callout): Docs callout in four variants (note, tip, warning, danger) with a tinted icon chip, title, rich body and an optional collapsing dismiss.
+- [Earnings Chart Card](https://kinetic.example.com/c/earnings-chart-card): An "Earned so far" card of rounded bars in grey tracks; the current or hovered bar darkens, gets an outline ring and drives the headline.
+- [Finance KPI Row](https://kinetic.example.com/c/finance-kpi-row): Balance, income, expense and savings cards with a delta chip coloured by good or bad news and a tiny area sparkline.
+- [Floating Stickers](https://kinetic.example.com/c/floating-stickers): Die-cut SVG characters that bob on seeded floats. Drag one and it lifts above the rest, clamped to the frame. Arrow keys nudge it.
+- [Funnel Chart Card](https://kinetic.example.com/c/funnel-chart-card): A horizontal conversion funnel: tapered SVG bands per stage with share pills, stat tiles and a headline that follows the hovered stage.
+- [Heatmap Chart Card](https://kinetic.example.com/c/heatmap-chart-card): A two-axis heatmap card on a plain CSS grid: cells mix the accent into the chart track, and hovering one rings it and swaps the headline.
+- [Image Gallery Masonry](https://kinetic.example.com/c/image-gallery-masonry): A masonry wall of generated images with hover captions, a favourite toggle, a safe download action and a modal lightbox with paging.
+- [Image Generating Loader](https://kinetic.example.com/c/image-generating-loader): A chat tile for an image still being generated: a rippling halftone ring, a % and stage pill, a seconds countdown and a halftone reveal.
+- [Important Alerts Card](https://kinetic.example.com/c/important-alerts-card): A health dashboard card: weekly alert count, a week pill, and a scrolling feed of tinted-icon alerts that fades under its header.
+- [Install Command Tabs](https://kinetic.example.com/c/install-command-tabs): pnpm, npm, yarn and bun tabs that spell the same install or run command four ways, with copy and numbered docs steps on a rail.
+- [Kanban Card](https://kinetic.example.com/c/kanban-card): Project board ticket: key and area, assignee stack, priority and project tags, title, description, counts and due date.
+- [Kanban Column](https://kinetic.example.com/c/kanban-column): Board column with name, WIP count and add button; cards move by pointer drag, Alt + arrow keys or a per-card move menu.
+- [Kbd](https://kinetic.example.com/c/kbd): A fully rounded keyboard-shortcut pill on a semantic <kbd>, 20px tall, for search triggers, menus and command rows.
+- [Legend Stat Tiles](https://kinetic.example.com/c/legend-stat-tiles): A headline total over a segmented proportion bar and legend tiles with dots, values and percents that toggle series in and out.
+- [Line Chart Card](https://kinetic.example.com/c/line-chart-card): A dashboard card with smooth multi-series lines on a dashed grid, a Weekly/Monthly/Yearly switch and a hover tooltip listing every series.
+- [MCP Install Card](https://kinetic.example.com/c/mcp-install-card): Install card with client tabs (Cursor, Claude Code, VS Code), a highlighted config snippet per client and a copy button with feedback.
+- [Meter](https://kinetic.example.com/c/meter): A level within a known range (storage, seats, quotas) with accent, success, warning and error tones, on React Aria Meter.
+- [Month View Grid](https://kinetic.example.com/c/month-view-grid): Six-week month calendar: muted outside days, event chips per day with "+N more", a selected-day pill and full arrow-key navigation.
+- [Most Active Days Card](https://kinetic.example.com/c/most-active-days-card): A scrolling year calendar where each day is a mini activity ring, with a month pill that follows the scroll and selectable days.
+- [Orders Chart Card](https://kinetic.example.com/c/orders-chart-card): A dashboard card of monthly orders as paired bars, this year beside last, whose count-up headline follows the hovered month.
+- [Patient Info Card](https://kinetic.example.com/c/patient-info-card): A medical-dashboard profile card: a 66px avatar with an add-photo button, the patient's name and four icon label/value rows.
+- [Patients Table](https://kinetic.example.com/c/patients-table): A clinic patient list: initials, age, admission select, status pill, conditions, next and last visit, row selection, sort, filter, pages.
+- [Plan Usage Card](https://kinetic.example.com/c/plan-usage-card): A plan's rolling limits as thin meters with reset times, turning amber then red as they fill, plus renewal date and upgrade.
+- [Preview Code Tabs](https://kinetic.example.com/c/preview-code-tabs): Docs Preview / Code switcher: a pill tab track with a sliding thumb over a bordered live stage and a highlighted, copyable source.
+- [Priority Badge](https://kinetic.example.com/c/priority-badge): Urgent, high, medium and low ticket pills with a signal-bars glyph, in tinted, plain and icon-only looks.
+- [Pro Access Card](https://kinetic.example.com/c/pro-access-card): Pro-locked component placeholder: metallic lock tile, a blurred inert preview, upsell copy and a get-access action that lifts the veil.
+- [Profile Cover Header](https://kinetic.example.com/c/profile-cover-header): Profile identity card: gradient cover, overlapping initials avatar, name, handle and badges, Follow or Edit actions and underline tabs.
+- [Profile Stat Tiles](https://kinetic.example.com/c/profile-stat-tiles): A rolling headline figure with a trend chip over a row of grey stat tiles (value, label, trend) that can act as toggles.
+- [Progress](https://kinetic.example.com/c/progress): Progress bar and ring, determinate or indeterminate, with an eased translate fill and a layered light sweep, on React Aria.
+- [Props Table](https://kinetic.example.com/c/props-table): API props table with code-styled names, types and defaults; long unions collapse, and narrow slots stack each prop into a card.
+- [Radar Chart Card](https://kinetic.example.com/c/radar-chart-card): A "Visitors" card with a lime radar on a hexagon grid; hovering an axis pulses its vertex and counts the header to that month.
+- [Radar Comparison Card](https://kinetic.example.com/c/radar-comparison-card): Desktop and Mobile as lime and blue radar outlines on one grid, with a live legend whose entries toggle each series on and off.
+- [Radial Chart Card](https://kinetic.example.com/c/radial-chart-card): Concentric radial bars in the dashboard card shell, with a tooltip on the arc tip, a count-up headline that follows hover, and stat tiles.
+- [Recent Hires Card](https://kinetic.example.com/c/recent-hires-card): A recent hires card: team switcher, headline count and a paged grid of tiles with initials, status, start date and role.
+- [Revenue Chart Card](https://kinetic.example.com/c/revenue-chart-card): A dashboard card that draws a year of revenue as a filled area over last year's dashed line, with a hover-following count-up headline.
+- [Sankey Chart Card](https://kinetic.example.com/c/sankey-chart-card): Source-to-sink flows as tinted SVG ribbons in a dashboard card: hover a node or ribbon to isolate its path while the headline follows.
+- [Scatter Chart Card](https://kinetic.example.com/c/scatter-chart-card): A dashboard scatter card: records grouped into coloured series, sized by a third measure, with a hover headline, readout and average tiles.
+- [Skeleton](https://kinetic.example.com/c/skeleton): Content-shaped placeholders with a layered light sheen that size themselves to real content and blur it in once loaded.
+- [Sleep Score Card](https://kinetic.example.com/c/sleep-score-card): A segmented SVG ring that sums sleep sub-scores to a total out of 100, with a week switcher and metric rows that focus their arc.
+- [Speedometer Chart Card](https://kinetic.example.com/c/speedometer-chart-card): A 220° half gauge in the dashboard card shell: stacked segments with the main share in the centre, or a value arc and needle.
+- [Spinner](https://kinetic.example.com/c/spinner): An orbiting light in three layers (crisp arc, tight glow, wide bloom) in five sizes and any text colour, announced as loading.
+- [Stacked Card Fan](https://kinetic.example.com/c/stacked-card-fan): A fanned stack of tilted cards: hover spreads the fan, clicking or arrow keys bring the next card forward, and a pill lays them all out.
+- [Stage Bars Card](https://kinetic.example.com/c/stage-bars-card): A funnel as rounded stage pills with value and share, optional stacked parts with a legend, stat tiles and a headline that follows hover.
+- [Stat Cards](https://kinetic.example.com/c/stat-cards): A responsive row of KPI cards in two looks: a compact tile with a delta chip, or a gradient icon tile over a caption band and delta pill.
+- [Status Dot](https://kinetic.example.com/c/status-dot): A 12px status indicator: a solid 6px dot centred on a tinted halo, in green, yellow and indigo, for selects and table cells.
+- [Steps Card](https://kinetic.example.com/c/steps-card): Seven daily step bars with a week switcher, a total that counts up, and an outline on the hovered bar that rolls the headline to that day.
+- [Support CTA Card](https://kinetic.example.com/c/support-cta-card): A "Still have a question?" card: stacked initials avatars, a line of copy, one contact action and an accent beam on the top border.
+- [Table](https://kinetic.example.com/c/table): Semantic table on React Aria with a scroll container, an md/sm density flag and dashboard styling from one scoped stylesheet.
+- [Tag Group](https://kinetic.example.com/c/tag-group): Selectable or removable tags in Chip's colours, with grid keyboard navigation and an empty state, on React Aria's TagGroup.
+- [Task List](https://kinetic.example.com/c/task-list): A streaming agent log: task headers and their steps blur in one unit at a time down a curved guide, then each task settles and folds.
+- [Tech Badges Row](https://kinetic.example.com/c/tech-badges-row): A "built with" strip of monogram glyphs, names and versions; each badge lifts on hover or focus and names itself in a tooltip.
+- [Tokens Chart Card](https://kinetic.example.com/c/tokens-chart-card): Daily token usage as a sharp purple line over a soft area, idle days dashed on the baseline, with a period switch and day scrubbing.
+- [Transactions Table](https://kinetic.example.com/c/transactions-table): A finance transactions table with sortable headers, category and status pills, signed currency amounts, search and pagination.
+- [Trend Badge](https://kinetic.example.com/c/trend-badge): Up, down or flat change pill for dashboard KPIs: one rotating arrow, a signed percent, lime, rose or grey, in three sizes.
+- [Typewriter Install](https://kinetic.example.com/c/typewriter-install): An install command that types itself behind a caret; pnpm, npm, yarn and bun tabs restart the typing and a copy button takes the full line.
+- [Typography](https://kinetic.example.com/c/typography): Type-scale specimen of the 13 kit text families in four weights, with size and line height read from the live CSS and copyable class names.
+- [Vitals Chart Card](https://kinetic.example.com/c/vitals-chart-card): A weekly vital-sign card: track-and-fill columns, a dashed normal-range band, pink out-of-range bars and a period stepper.
+- [Web Search](https://kinetic.example.com/c/web-search): The research half of an agent log: each query lands on a curved guide, and a step that found something branches into overlapping site marks.
+- [Week View Grid](https://kinetic.example.com/c/week-view-grid): Seven-day time grid: hour gutter, day columns, events placed by start and duration, overlaps side by side, a fixed now-line.
+
+## Blocks
+
+- [Agent Chat](https://kinetic.example.com/c/agent-chat): A full AI chat screen on the AI SDK: sidebar, a chat card whose replies blur in line by line, and a local thread history rail.
+- [AI Chat](https://kinetic.example.com/c/ai-chat): A coding-agent workspace: chat history sidebar, a thread with a live step checklist and streamed replies, and a changes panel with diffs.
+- [AI Image Generation](https://kinetic.example.com/c/ai-image-generation): Three-pane image studio: repo sidebar, prompt thread with a pill composer and live generating tiles, and a masonry gallery with styles.
+- [AI Profile](https://kinetic.example.com/c/ai-profile): AI usage profile page: cover header with tabs, stat tiles, an activity heatmap, and agent and token charts beside a workspace sidebar.
+- [App Shell](https://kinetic.example.com/c/app-shell): Page frame for the chat starter: sidebar, phone drawer, breadcrumb and heading over a 1300px column, with a notification bell.
+- [Auth Card](https://kinetic.example.com/c/auth-card): Sign-in, sign-up and code-verify cards with social providers stacked, inline or in a grid, and an optional split layout with artwork.
+- [Calendar](https://kinetic.example.com/c/calendar): A full calendar page: Day, Week and Month views, anchored event popovers with guests and RSVP, new events, and an invitation inbox.
+- [Chat Starter](https://kinetic.example.com/c/chat-starter): Empty AI chat screen with a greeting, suggestion chips that fill the pill composer, and an "Add an API key to start" setup card.
+- [CTA Section](https://kinetic.example.com/c/cta-section): Closing call-to-action: a faded stack of product cards, a large headline, copy and buttons that rise in one after another on scroll.
+- [Data Grid](https://kinetic.example.com/c/data-grid): A virtualized spreadsheet with range selection, validated in-cell edits, block paste, undo and redo, filters, summaries and CSV export.
+- [Data Table](https://kinetic.example.com/c/data-table): A customers table where TanStack owns sorting, selection and pages, filters narrow the rows, and React Aria renders the grid.
+- [FAQ Section](https://kinetic.example.com/c/faq-section): Landing FAQ: heading block plus the kit accordion tray, two-column at wide container widths, with arrow-key navigation.
+- [Feature Card Grid](https://kinetic.example.com/c/feature-card-grid): Landing grid of feature cards, each topped by a small illustration built from kit parts that plays a state change on hover or focus.
+- [Finance Dashboard](https://kinetic.example.com/c/finance-dashboard): A full finance dashboard page: in-block sidebar views, KPI cards, cash flow, spending, portfolio, daily spend and a live transactions table.
+- [GitHub Stars CTA](https://kinetic.example.com/c/github-stars-cta): Open-source free tier section: copy and checklist beside a repo card with a counting star total, star button and repo facts.
+- [Home Dashboard](https://kinetic.example.com/c/home-dashboard): A full home dashboard page: in-block sidebar views, hires, earnings, revenue, contributions, key numbers and a working customers table.
+- [Marketing Dashboard](https://kinetic.example.com/c/marketing-dashboard): A full marketing dashboard page: in-block sidebar views, key metrics, funnel, channel spend, traffic, ad spend, visitors and campaigns.
+- [Medical Profile](https://kinetic.example.com/c/medical-profile): A full patient dashboard page: profile, steps, sleep, a day picker driving activity rings, alerts and a filterable patients table.
+- [Multi Agent Chat](https://kinetic.example.com/c/multi-agent-chat): A group chat with a team of agents who reply in turn, plus a workspace switcher and a panel to edit agents and browse files.
+- [Not Found Page](https://kinetic.example.com/c/not-found-page): A 404 block: big error code, the missing path, home and browse actions, suggested page cards and an agent footnote, staggered in.
+- [Notification Center](https://kinetic.example.com/c/notification-center): Tabbed activity inbox with unread counts, avatars or status icons, inline action buttons and a mark-all-read control.
+- [Plan Comparison Table](https://kinetic.example.com/c/plan-comparison-table): Feature-by-plan table with a sticky plan header, collapsible groups, check, dash and text cells, and a tinted highlighted column.
+- [Pricing Plan Cards](https://kinetic.example.com/c/pricing-plan-cards): Plan cards with a monthly/yearly switch that rolls the prices, shows yearly savings, highlights one plan and lists features with icons.
+- [Project Board](https://kinetic.example.com/c/project-board): A full kanban page: drag tickets across five columns, open a side panel to edit them, create, sort and filter, with an activity inbox.
+- [Rotating Word Hero](https://kinetic.example.com/c/rotating-word-hero): Landing hero whose key word slides and blurs through a list while the line glides to each new width, with CTAs and a stack badges row.
+- [Settings Modal](https://kinetic.example.com/c/settings-modal): A controlled settings dialog with a section rail and General, Profile, Tools and Storage pages. It scales in from 85% with a light blur.
+- [Sidebar](https://kinetic.example.com/c/sidebar): A floating dashboard sidebar that folds from 260px to a 60px icon rail, with ⌘L nav search, team and account menus and a settings entry.
+- [Site Footer](https://kinetic.example.com/c/site-footer): Marketing footer: logo, tagline and socials, six link columns with View all counts, then a language, theme, swatch and legal bar.
+- [Site Header](https://kinetic.example.com/c/site-header): Marketing header with a menu link, a ⌘K search pill, a GitHub star pill and the theme toggle, folding into a drawer in narrow containers.
+- [Template Showcase Tabs](https://kinetic.example.com/c/template-showcase-tabs): Landing section with a framed card of template tabs: a pill slides to the chosen tab and miniature app layouts crossfade below it.
+- [Testimonial Carousel](https://kinetic.example.com/c/testimonial-carousel): A centred quote carousel with faded neighbours, initials avatars, prev / next, progress dots and autoplay that pauses on hover and focus.

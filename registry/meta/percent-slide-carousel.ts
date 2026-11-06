@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/percent-slide-carousel.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion', 'damp', 'wrap'],
 
   summary:
     'The simplest slide carousel that is still correct. A flex track holds one full-width slide per child and translates by `-100% * index`; because a percentage translate resolves against the translated element\'s own width, and the track is exactly one viewport-box wide, one step is exactly one slide. Nothing is measured, so nothing goes stale on resize.',

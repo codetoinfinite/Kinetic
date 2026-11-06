@@ -443,12 +443,21 @@ export function SpringLatticeField({
   };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const el = host.current;
+    if (!el) return;
     if (!hasWebGL()) {
       setSupported(false);
       return;
     }
+
+    // Built here rather than rendered by React, because cleanup hands the
+    // context back through `WEBGL_lose_context` and a canvas that has been
+    // through that never yields another one — `getContext` returns the same
+    // lost object. StrictMode's double invoke re-gave React's element to the
+    // second run, whose `createPass` then compiled against a dead context and
+    // demoted the component to its fallback for good.
+    const canvas = document.createElement('canvas');
+    canvas.className = 'block h-full w-full';
 
     const gl = canvas.getContext('webgl2', {
       antialias: false,
@@ -468,12 +477,29 @@ export function SpringLatticeField({
       setSupported(false);
       return;
     }
+    el.append(canvas);
+    canvasRef.current = canvas;
     passRef.current = pass;
     setSupported(true);
 
+    // Left unhandled the lattice simply vanishes — a blank canvas that never
+    // recovers and never falls back — so a loss demotes the component to its
+    // static stand-in. `preventDefault` keeps a later restore possible.
+    const onLost = (event: Event): void => {
+      event.preventDefault();
+      // Detached too: the fallback renders as a sibling in normal flow, and a
+      // canvas left in place would sit on top of it.
+      canvas.remove();
+      setSupported(false);
+    };
+    canvas.addEventListener('webglcontextlost', onLost);
+
     return () => {
+      canvas.removeEventListener('webglcontextlost', onLost);
       passRef.current = null;
+      canvasRef.current = null;
       disposePass(pass);
+      canvas.remove();
     };
   }, []);
 
@@ -566,9 +592,8 @@ export function SpringLatticeField({
 
   return (
     <div ref={host} className={cn('relative h-full w-full overflow-hidden', className)}>
-      {supported ? (
-        <canvas ref={canvasRef} className="block h-full w-full" />
-      ) : (
+      {/* The canvas is appended by the effect above, not rendered here. */}
+      {!supported && (
         <div
           aria-hidden
           className="h-full w-full bg-bg"
@@ -578,6 +603,7 @@ export function SpringLatticeField({
           }}
         />
       )}
+
     </div>
   );
 }

@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/hover-list-image-trail.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['prng'],
 
   summary:
     'Each row entered adds a plate to a column beside the list, and the column follows the pointer vertically with `quickTo`. Every plate is a masked-reveal pair — a clipping wrapper sliding up while the canvas inside slides down — and the stack is bounded by culling the oldest node rather than by pooling.',

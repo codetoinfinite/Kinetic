@@ -11,9 +11,9 @@
     "gsap@^3.15.0"
   ],
   "registryDependencies": [
-    "http://localhost:8927/r/pinned-horizontal-track.json",
-    "http://localhost:8927/r/prng.json",
-    "http://localhost:8927/r/use-reduced-motion.json"
+    "https://kinetic.example.com/r/pinned-horizontal-track.json",
+    "https://kinetic.example.com/r/prng.json",
+    "https://kinetic.example.com/r/use-reduced-motion.json"
   ],
   "files": [
     {
@@ -25,6 +25,7 @@
   ],
   "meta": {
     "category": "scroll",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "gsap",

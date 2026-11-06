@@ -17,7 +17,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: ['use-reduced-motion'],
 
   summary:
     'Every hand-rolled preloader eventually ships the same bug: a signal that never arrives — a 404 on a font, a decode that fails on iOS, an image behind a dead CDN — and the site is a permanent opaque rectangle nobody can see through or tab past. This inverts the contract. A hard ceiling guarantees the page is visible by a fixed time and the load signal only ever makes it sooner; a floor stops a warm cache turning the overlay into a two-frame flash; a session flag keeps it an introduction rather than a toll booth.',

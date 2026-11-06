@@ -18,19 +18,19 @@ const meta: ComponentMetaInput = {
     },
     {
       path: 'registry/lib/prng.ts',
-      target: 'lib/motion/prng.ts',
+      target: 'lib/prng.ts',
       type: 'registry:lib',
       role: 'seeded random — mulberry32, hashSeed, createRng',
     },
     {
       path: 'registry/lib/wrap.ts',
-      target: 'lib/motion/wrap.ts',
+      target: 'lib/wrap.ts',
       type: 'registry:lib',
       role: 'true modulo for gap measurement across the wrap',
     },
     {
       path: 'registry/lib/easing.ts',
-      target: 'lib/motion/easing.ts',
+      target: 'lib/easing.ts',
       type: 'registry:lib',
       role: 'easing functions for the settle',
     },
@@ -54,7 +54,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'Half the points sit on an exact lattice and half are seeded noise; fifteen relaxation sweeps then push the noisy ones apart until no neighbour pair is closer than 40% of the mean spacing. The result keeps the liveliness of random placement without the clusters that read as a bug. The visualiser leaves a dashed ghost at each point\'s pre-relaxation angle, so the displacement is legible, and prints the smallest gap before and after.',

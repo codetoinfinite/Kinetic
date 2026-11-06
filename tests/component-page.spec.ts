@@ -46,18 +46,20 @@ for (const entry of sample()) {
       const expectedTargets = await resolveTargets(page.request, entry.slug);
       expect(expectedTargets.length).toBeGreaterThan(0);
 
-      const tabs = page.getByRole('tab');
+      // Scoped to the code viewer: a demo may render tabs of its own (the
+      // `tabs` component does), and those are not files.
+      const tabs = page.getByRole('tablist', { name: 'Files' }).getByRole('tab');
       await expect(tabs).toHaveCount(expectedTargets.length);
 
       const panelTargets = await page
-        .locator('[role="tabpanel"]')
+        .locator('[role="tabpanel"][data-file]')
         .evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-file')));
       expect([...panelTargets].sort()).toEqual(expectedTargets);
 
       // Every tab shows highlighted source, not an empty panel. Panels are
       // matched positionally rather than by `#id`: React's useId values are not
       // valid CSS identifiers.
-      const panels = page.locator('[role="tabpanel"]');
+      const panels = page.locator('[role="tabpanel"][data-file]');
       for (let index = 0; index < expectedTargets.length; index += 1) {
         const tab = tabs.nth(index);
         await tab.click();

@@ -30,7 +30,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'Elements marked with a depth index get two things from that index: how far they travel, and how much they lag. The travel is ordinary parallax; the lag — a different `scrub` value per depth — is what keeps the planes visibly apart while the eye is moving and lets them converge at rest. Works on a vertical page and, given a horizontal strip\'s tween, along that strip instead.',

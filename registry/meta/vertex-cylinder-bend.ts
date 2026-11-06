@@ -23,7 +23,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [],
 
   summary:
     'The bend on its own, with no gallery attached. A flat `PlaneGeometry` is fed to a vertex shader that reads each vertex\'s x coordinate as an arc parameter and re-emits it on the surface of a cylinder. Because curvature is a uniform rather than a mesh, the same buffer is flat, bowed or nearly closed between two frames — no `CylinderGeometry`, no rebuild, no re-upload.',

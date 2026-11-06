@@ -16,7 +16,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/hooks/use-reduced-motion.ts', type: 'registry:hook', role: 'motion preference' },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'A panel reveal that tweens a CSS custom property instead of a CSS property. The stage clips itself with `inset(var(--kx-clip))`, and because custom properties inherit, any descendant carrying `.kx-clip-follow` clips with the same value in its own box — one tween, several clip boxes, no possible drift. The media pushes from 1.4 to 1 over half again the clip duration and the lines slide up on a stagger; the exit is the same timeline reversed, which turns the positive stagger into a last-line-first peel and the scale-down back into a push.',

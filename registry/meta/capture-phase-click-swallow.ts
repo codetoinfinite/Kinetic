@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/capture-phase-click-swallow.tsx', type: 'registry:ui', role: 'hook' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'Throw a drag carousel and let go over a card, and the browser dispatches a `click` on it — `mousedown` and `mouseup` landed in the same subtree, so that is exactly what the spec asks for. The result is that flinging the track navigates somewhere. One listener on the drag surface in the capture phase, which runs before any descendant handler, calls `stopPropagation` and `preventDefault` and the click is gone. The work is in the two edges: it has to swallow exactly one, and it has to let keyboard activation through, because Enter and Space fire a click with no pointer sequence behind it.',

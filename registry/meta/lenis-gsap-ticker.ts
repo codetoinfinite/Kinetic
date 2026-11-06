@@ -15,7 +15,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/hooks/use-reduced-motion.ts', type: 'registry:hook', role: 'reduced-motion query, SSR-safe' },
   ],
   dependencies: ['gsap@^3.15.0', 'lenis@^1.3.11'],
-  registryDependencies: [],
 
   summary:
     'Lenis and ScrollTrigger each work alone and tear together, because each runs its own clock: Lenis advances the scroll position on its rAF, ScrollTrigger samples it on GSAP\'s, and a pinned section ends up a frame behind the page it is pinned to. Mounted once near the root, this hands Lenis to `gsap.ticker`, updates ScrollTrigger on Lenis\'s scroll event rather than per frame, and disables lag smoothing so the two agree about how much time passed.',

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "search-field",
+  "type": "registry:ui",
+  "title": "Search Field",
+  "description": "Pill or rounded search input on React Aria SearchField: Escape clears, a clear button scales in with text, and the icon fades to a spinner.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "@remixicon/react@^4.9.0",
+    "react-aria-components@^1.22.1"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/close-button.json",
+    "https://kinetic.example.com/r/input.json",
+    "https://kinetic.example.com/r/spinner.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/template-copy.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/search-field.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/search-field.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/search-field/search-field.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport { useRef, useState } from \"react\";\nimport type { ComponentType, ReactNode } from \"react\";\nimport { SearchField as AriaSearchField } from \"react-aria-components\";\nimport type { SearchFieldProps as AriaSearchFieldProps } from \"react-aria-components\";\nimport { RiSearchLine } from \"@remixicon/react\";\nimport { CloseButton } from \"@/components/motion/close-button\";\nimport { HintText } from \"@/components/motion/hint-text\";\nimport { InputBase } from \"@/components/motion/input\";\nimport type { InputSize } from \"@/components/motion/input\";\nimport { Label } from \"@/components/motion/label\";\nimport { SpinnerGlyph } from \"@/components/motion/spinner\";\nimport { useTemplateCopy } from \"@/lib/template-copy\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Search field — a text field for a query: filter a list, search a table,\n * look something up.\n *\n *   <SearchField aria-label=\"Search teammates\" placeholder=\"Search\" value={query} onChange={setQuery} />\n *\n * Input's field (surface, hover and focus rings, invalid and disabled states,\n * two sizes) with a search icon and a small clear button that fades in once\n * there is text. It is a pill by default, like the tables' and the docs\n * sidebar's search; `shape=\"rounded\"` matches Input in a form. `isLoading`\n * turns the icon into Spinner's orbiting light while results load.\n *\n * Built on React Aria's SearchField: Escape clears the text, Enter calls\n * `onSubmit`, and the clear button stays out of the tab order, since Escape\n * does its job from the keyboard.\n */\n\ntype IconComponent = ComponentType<{ className?: string; \"aria-hidden\"?: boolean | \"true\" | \"false\" }>;\n\nexport interface SearchFieldProps extends Omit<AriaSearchFieldProps, \"className\" | \"children\"> {\n  label?: ReactNode;\n  hint?: ReactNode;\n  placeholder?: string;\n  /** 36px (default) or 32px. */\n  size?: InputSize;\n  /** `pill` (default) or `rounded`, Input's corners. */\n  shape?: \"pill\" | \"rounded\";\n  /** Show Spinner's light in place of the icon while results load. */\n  isLoading?: boolean;\n  /** Replaces the search icon. */\n  icon?: IconComponent;\n  /** Accessible name of the clear button. Default \"Clear search\". */\n  clearLabel?: string;\n  className?: string;\n  fieldClassName?: string;\n}\n\n// #region critical\nexport function SearchField({\n  label,\n  hint,\n  placeholder,\n  size = \"medium\",\n  shape = \"pill\",\n  isLoading = false,\n  icon: Icon = RiSearchLine,\n  clearLabel = \"Clear search\",\n  value: controlledValue,\n  defaultValue = \"\",\n  onChange,\n  onClear,\n  \"aria-label\": ariaLabel,\n  className,\n  fieldClassName,\n  ...props\n}: SearchFieldProps) {\n  const localize = useTemplateCopy();\n  const inputRef = useRef<HTMLInputElement>(null);\n  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);\n  const value = controlledValue ?? uncontrolledValue;\n\n  const change = (next: string) => {\n    setUncontrolledValue(next);\n    onChange?.(next);\n  };\n\n  const clear = () => {\n    change(\"\");\n    onClear?.();\n    inputRef.current?.focus();\n  };\n\n  return (\n    <AriaSearchField\n      {...props}\n      value={value}\n      onChange={change}\n      onClear={onClear}\n      aria-label={ariaLabel ?? (!label ? placeholder : undefined)}\n      className={cx(\"group flex w-full flex-col items-start gap-1\", className)}\n    >\n      {({ isEmpty, isDisabled, isInvalid }) => (\n        <>\n          {label ? (\n            <Label isRequired={props.isRequired} isInvalid={isInvalid}>\n              {label}\n            </Label>\n          ) : null}\n          <InputBase\n            ref={inputRef}\n            size={size}\n            placeholder={placeholder}\n            fieldClassName={cx(shape === \"pill\" && \"rounded-full\", fieldClassName)}\n            className=\"[&::-webkit-search-cancel-button]:hidden\"\n            leadingAddon={\n              // The icon and the light share one 20px box and cross-fade.\n              <span aria-hidden className=\"relative ms-1 size-5 shrink-0\">\n                <Icon\n                  className={cx(\n                    \"absolute inset-0 size-5 transition-[opacity,scale] duration-200 ease-out\",\n                    isLoading && \"scale-75 opacity-0\",\n                  )}\n                />\n                <span\n                  className={cx(\n                    \"absolute inset-0 flex items-center justify-center transition-[opacity,scale] duration-200 ease-out\",\n                    // Hidden, the light stays mounted for the fade but stops turning.\n                    !isLoading && \"scale-75 opacity-0 [&_*]:[animation-play-state:paused]\",\n                  )}\n                >\n                  <SpinnerGlyph size=\"sm\" />\n                </span>\n              </span>\n            }\n            trailingAddon={\n              <CloseButton\n                size=\"2xs\"\n                aria-label={localize(clearLabel)}\n                aria-hidden={isEmpty || undefined}\n                tabIndex={-1}\n                disabled={isDisabled}\n                // Keep focus in the input while the pointer clears it.\n                onMouseDown={(event) => event.preventDefault()}\n                onClick={clear}\n                className={cx(\n                  \"me-0.5 bg-background-tertiary-hover transition-[opacity,scale,color] duration-150 ease-out\",\n                  isEmpty || isDisabled ? \"pointer-events-none scale-50 opacity-0\" : \"scale-100 opacity-100\",\n                )}\n              />\n            }\n          />\n          {hint ? <HintText isInvalid={isInvalid}>{hint}</HintText> : null}\n        </>\n      )}\n    </AriaSearchField>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "search",
+      "filter",
+      "input",
+      "clear-button",
+      "loading",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

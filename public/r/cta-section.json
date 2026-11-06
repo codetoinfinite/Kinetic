@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cta-section",
+  "type": "registry:ui",
+  "title": "CTA Section",
+  "description": "Closing call-to-action: a faded stack of product cards, a large headline, copy and buttons that rise in one after another on scroll.",
+  "categories": [
+    "block"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/stacked-card-fan.json",
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/use-in-view.json",
+    "https://kinetic.example.com/r/use-reduced-motion.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/cta-section.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/cta-section.tsx",
+      "content": "/*\n * Built for Kinetic from scratch after the public preview of BoardUI's \"CTA Section\" (boardui.com/).\n * No BoardUI source was used.\n */\n\"use client\";\n\nimport { useId, useRef } from \"react\";\nimport type { CSSProperties, ReactNode } from \"react\";\nimport { cx } from \"@/lib/cx\";\nimport { useInView } from \"@/hooks/use-in-view\";\nimport { useReducedMotion } from \"@/hooks/use-reduced-motion\";\nimport { StackedCardFan } from \"@/components/motion/stacked-card-fan\";\nimport type { StackedCardFanItem, StackedCardFanProps } from \"@/components/motion/stacked-card-fan\";\n\nexport interface CtaSectionProps {\n  /** Headline, rendered as an `h2` that labels the section. */\n  title: ReactNode;\n  /** Supporting copy under the headline. */\n  description?: ReactNode;\n  /** Buttons or links, laid out in a wrapping row. */\n  actions?: ReactNode;\n  /** Cards for the stacked-card visual above the headline. Omit for a text-only CTA. */\n  cards?: StackedCardFanItem[];\n  /** Extra props for the card stack (the bottom fade is on by default). */\n  fanProps?: Omit<StackedCardFanProps, \"items\">;\n  className?: string;\n}\n\n// #region critical\n/**\n * Entrance: the visual, headline, copy and actions rise 16px, unblur and fade\n * in one after another the first time a quarter of the section is on screen.\n * Each part waits `order * STAGGER_MS` before starting, so one shared flag on\n * the root (`data-shown`) drives the whole sequence with CSS transitions only.\n * Hidden styles are keyed to `data-shown=\"false\"`, so a reduced-motion visitor,\n * for whom the flag starts true, never sees a hidden frame.\n */\nconst STAGGER_MS = 90;\n\nconst REVEAL =\n  \"transition-[opacity,translate,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none \" +\n  \"group-data-[shown=false]/cta:translate-y-4 group-data-[shown=false]/cta:opacity-0 group-data-[shown=false]/cta:blur-sm\";\n\nfunction revealDelay(order: number): CSSProperties {\n  return { transitionDelay: `${order * STAGGER_MS}ms` };\n}\n// #endregion\n\n/**\n * Closing call-to-action: an optional stacked-card visual, a large headline,\n * supporting copy and a row of actions, centred on a full-width surface.\n */\nexport function CtaSection({ title, description, actions, cards, fanProps, className }: CtaSectionProps) {\n  const rootRef = useRef<HTMLElement>(null);\n  const headingId = useId();\n  const reduced = useReducedMotion();\n  const { inView } = useInView(rootRef, { once: true, threshold: 0.25 });\n  const shown = reduced || inView;\n  let order = 0;\n\n  return (\n    <section\n      ref={rootRef}\n      aria-labelledby={headingId}\n      data-shown={shown}\n      className={cx(\n        \"group/cta @container/cta flex w-full flex-col items-center bg-background-primary-default px-4 py-16\",\n        className,\n      )}\n    >\n      {cards && cards.length > 0 ? (\n        <div className={cx(\"mb-8 w-full max-w-[680px]\", REVEAL)} style={revealDelay(order++)}>\n          <StackedCardFan items={cards} fade cardWidth={320} cardHeight={280} aria-label=\"Preview cards\" {...fanProps} />\n        </div>\n      ) : null}\n\n      <h2\n        id={headingId}\n        className={cx(\n          \"max-w-[18ch] text-center text-display-4-medium text-balance text-text-primary @2xl/cta:text-display-2-medium\",\n          REVEAL,\n        )}\n        style={revealDelay(order++)}\n      >\n        {title}\n      </h2>\n\n      {description ? (\n        <p\n          className={cx(\n            \"mt-4 max-w-[580px] text-center text-body-regular text-pretty text-text-secondary @2xl/cta:text-headline-regular\",\n            REVEAL,\n          )}\n          style={revealDelay(order++)}\n        >\n          {description}\n        </p>\n      ) : null}\n\n      {actions ? (\n        <div className={cx(\"mt-7 flex flex-wrap items-center justify-center gap-2.5\", REVEAL)} style={revealDelay(order++)}>\n          {actions}\n        </div>\n      ) : null}\n    </section>\n  );\n}\n"
+    }
+  ],
+  "meta": {
+    "category": "block",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "cta",
+      "landing",
+      "marketing",
+      "section",
+      "cards",
+      "boardui"
+    ]
+  }
+}

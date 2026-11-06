@@ -31,7 +31,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['use-gsap', 'use-reduced-motion'],
 
   summary:
     'A page entrance is the one animation guaranteed to run at the worst possible moment: hydration, font swap, image decode and the first layout pass all land in the same few hundred milliseconds. Start a stagger there and it does not look slow, it looks broken — three elements arrive, the thread blocks, the rest snap in. This gates the entrance on two conditions at once, a floor delay resolved on a frame boundary and at least one report of an idle main thread, and starts only when the slower of the two finishes. Enter and leave are one paused timeline played forward and reversed.',

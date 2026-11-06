@@ -42,7 +42,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: ['pinned-horizontal-track'],
 
   summary:
     'A drag surface laid over a pinned horizontal section. Instead of a tuned drag multiplier it reads the pin\'s live geometry — the scroll span it occupies and the pixels the strip travels — and converts one into the other, so a pixel of thumb is a pixel of track regardless of panel widths or zoom. Release throws it, and the throw decays in wall-clock time rather than per frame.',

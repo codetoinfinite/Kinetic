@@ -127,14 +127,24 @@ export function MultipassOffscreenComposite({
     const el = host.current;
     if (!el || !ready) return;
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      // Opaque. Pass 4 covers every pixel with alpha 1, so an alpha channel
-      // would only cost bandwidth and force the compositor to blend.
-      alpha: false,
-      depth: false,
-      stencil: false,
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        // Opaque. Pass 4 covers every pixel with alpha 1, so an alpha channel
+        // would only cost bandwidth and force the compositor to blend.
+        alpha: false,
+        depth: false,
+        stencil: false,
+      });
+    } catch {
+      // A context can still be refused between the probe and the construction —
+      // the tab may have hit the browser's live-context ceiling in between. three
+      // throws rather than returning null, and an uncaught throw here takes the
+      // page with it.
+      setSupported(false);
+      return;
+    }
     renderer.setPixelRatio(pixelRatio(maxDpr));
     renderer.setSize(el.clientWidth, el.clientHeight, false);
     renderer.setClearColor(0x000000, 1);

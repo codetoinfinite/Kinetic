@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { CATEGORY_LABEL, MANIFEST, type ManifestEntry } from '@/__generated__/manifest';
+import { PlateLink } from '@/components/home/plate-link';
 import { PreviewHost } from '@/components/preview/preview-host';
 import { cn } from '@/lib/cn';
 import type { Category, Cost, Motif } from '@/scripts/schema';
@@ -8,8 +9,9 @@ import type { Category, Cost, Motif } from '@/scripts/schema';
 /* ==========================================================================
    Featured spreads.
    --------------------------------------------------------------------------
-   Seven items — one per category, so no family of technique is missing from
-   the first screen after the hero. They used to be seven cells of a mosaic,
+   Seven items — one per motion category, so no family of technique is missing
+   from the first screen after the hero. The BoardUI interface categories are
+   left to the index at the foot of the page. They used to be seven cells of a mosaic,
    which is the layout every component library on the internet already has, and
    at seven cells it is also the layout that gives each piece of work a 300px
    window and two lines of type.
@@ -110,10 +112,8 @@ function Plate({ tile, className }: { tile: ResolvedTile; className?: string }) 
   const { entry } = tile;
 
   return (
-    <Link
+    <PlateLink
       href={`/c/${entry.slug}`}
-      aria-hidden="true"
-      tabIndex={-1}
       className={cn(
         'plate relative block overflow-clip bg-bg-subtle',
         tile.frame,
@@ -124,9 +124,11 @@ function Plate({ tile, className }: { tile: ResolvedTile; className?: string }) 
         slug={entry.slug}
         cost={entry.cost}
         motif={entry.motif as Motif}
+        kit={entry.kit}
+        category={entry.category}
         className="absolute inset-0 h-full w-full"
       />
-    </Link>
+    </PlateLink>
   );
 }
 

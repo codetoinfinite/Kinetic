@@ -15,7 +15,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/shaders/ndc-mouse-bulge.ts', type: 'registry:lib', role: 'shader' },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: [],
 
   summary:
     'The pointer is a screen-space quantity and the mesh is a world-space one, so something has to convert between them. Instead of unprojecting the pointer on the CPU with a raycaster, every vertex projects ITSELF once, compares its own normalised device position against the pointer, and displaces by the result. Each vertex gets an exact distance, the cost is one extra matrix multiply per vertex, and nothing about it depends on the CPU knowing the mesh\'s real shape.',

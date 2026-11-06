@@ -9,12 +9,12 @@
   ],
   "dependencies": [],
   "registryDependencies": [
-    "http://localhost:8927/r/easing.json",
-    "http://localhost:8927/r/prng.json",
-    "http://localhost:8927/r/use-in-view.json",
-    "http://localhost:8927/r/use-raf.json",
-    "http://localhost:8927/r/use-reduced-motion.json",
-    "http://localhost:8927/r/wrap.json"
+    "https://kinetic.example.com/r/easing.json",
+    "https://kinetic.example.com/r/prng.json",
+    "https://kinetic.example.com/r/use-in-view.json",
+    "https://kinetic.example.com/r/use-raf.json",
+    "https://kinetic.example.com/r/use-reduced-motion.json",
+    "https://kinetic.example.com/r/wrap.json"
   ],
   "files": [
     {
@@ -26,6 +26,7 @@
   ],
   "meta": {
     "category": "primitive",
+    "kit": "kinetic",
     "cost": "dom",
     "tags": [
       "prng",

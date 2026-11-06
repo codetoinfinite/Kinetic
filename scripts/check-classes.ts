@@ -127,7 +127,9 @@ async function main(): Promise<void> {
   const css = readFileSync(ENTRY, 'utf8');
 
   const compiler = await compile(css, {
-    base: ROOT,
+    // The entry's own directory: its relative `@import`s (the BoardUI theme at
+    // `../registry/styles/…`) resolve against app/, not the repo root.
+    base: dirname(ENTRY),
     // Second argument is the importing stylesheet's *base directory*, not its
     // path, and the resolver is awaited — returning a plain object type-checks
     // under tsx but not under `tsc`.

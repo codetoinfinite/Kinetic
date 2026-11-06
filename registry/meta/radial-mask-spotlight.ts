@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/radial-mask-spotlight.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: ['use-raf', 'use-smooth-pointer'],
 
   summary:
     'A stacked layer is masked by a radial gradient whose centre follows the pointer, so content is lit rather than uncovered. The mask string is rewritten once per animation frame from a damped pointer position, and both the prefixed and unprefixed `mask-image` properties are set.',

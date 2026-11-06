@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "divider",
+  "type": "registry:ui",
+  "title": "Divider",
+  "description": "Horizontal divider in single-hairline, double-line and filled-strip treatments, with optional start, centre or end content.",
+  "categories": [
+    "display"
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/divider.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/divider.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/divider/divider.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\nimport type { HTMLAttributes, ReactNode, Ref } from \"react\";\nimport { cx, sortCx } from \"@/lib/cx\";\n\nexport type DividerVariant = \"single\" | \"double\" | \"fill\";\nexport type DividerAlign = \"start\" | \"center\" | \"end\";\n\nexport interface DividerProps\n  extends Omit<HTMLAttributes<HTMLDivElement>, \"children\"> {\n  /** Single hairline, two framing hairlines, or a soft filled strip. */\n  variant?: DividerVariant;\n  /** Positions the divider content while keeping the remaining line flexible. */\n  align?: DividerAlign;\n  /** Text, a button, or any compact control placed in the divider. */\n  children?: ReactNode;\n  /** Extra classes for the content wrapper. */\n  contentClassName?: string;\n  ref?: Ref<HTMLDivElement>;\n}\n\n// #region critical\nconst styles = sortCx({\n  root: \"w-full\",\n  line: \"h-px min-w-0 flex-1 bg-separator-border\",\n  content: \"shrink-0 text-body-medium text-text-secondary\",\n  align: {\n    start: \"justify-start\",\n    center: \"justify-center\",\n    end: \"justify-end\",\n  },\n  withContent: {\n    single: \"flex items-center gap-3\",\n    double: \"flex items-center border-y border-separator-border py-2.5\",\n    fill: \"flex items-center rounded-2lg bg-background-secondary-default px-4 py-2.5\",\n  },\n  empty: {\n    single: \"h-px bg-separator-border\",\n    double: \"h-2 border-y border-separator-border\",\n    fill: \"h-2 rounded-full bg-background-secondary-default\",\n  },\n});\n\n/**\n * Horizontal content divider with three BoardUI surface treatments.\n *\n * `single` places content within one continuous hairline, `double` frames it\n * with a line above and below, and `fill` uses the secondary surface color.\n * Children stay completely composable, so labels, buttons, and small controls\n * can share the same primitive.\n */\nexport function Divider({\n  variant = \"single\",\n  align = \"center\",\n  children,\n  contentClassName,\n  className,\n  ref,\n  ...props\n}: DividerProps) {\n  const hasContent = children !== undefined && children !== null;\n\n  if (!hasContent) {\n    return (\n      <div\n        ref={ref}\n        role=\"separator\"\n        aria-orientation=\"horizontal\"\n        data-variant={variant}\n        className={cx(styles.root, styles.empty[variant], className)}\n        {...props}\n      />\n    );\n  }\n\n  const showLeadingLine = variant === \"single\" && align !== \"start\";\n  const showTrailingLine = variant === \"single\" && align !== \"end\";\n\n  return (\n    <div\n      ref={ref}\n      data-variant={variant}\n      data-align={align}\n      className={cx(\n        styles.root,\n        styles.withContent[variant],\n        styles.align[align],\n        className,\n      )}\n      {...props}\n    >\n      {showLeadingLine ? <span aria-hidden className={styles.line} /> : null}\n      <div className={cx(styles.content, contentClassName)}>{children}</div>\n      {showTrailingLine ? <span aria-hidden className={styles.line} /> : null}\n    </div>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "display",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "divider",
+      "separator",
+      "hairline",
+      "layout",
+      "boardui"
+    ]
+  }
+}

@@ -14,7 +14,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/fov-derived-row-step.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: ['use-in-view', 'use-raf', 'use-reduced-motion', 'use-resize-observer', 'damp'],
 
   summary:
     'A perspective row that never guesses its spacing. Given a vertical field of view and a camera distance, it computes the visible width on the row plane, divides it across the gaps between item centres, and converts to pixels once at the end. The outermost item centres land on the frame edges by construction, at any aspect ratio, with no breakpoint table and no tuned magic number. It is the flat pre-intro layout of a three.js drum, done in the DOM with the identical arithmetic.',

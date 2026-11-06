@@ -24,7 +24,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['three@^0.185.1'],
-  registryDependencies: ['webgl', 'prng', 'use-raf', 'use-resize-observer', 'use-reduced-motion'],
 
   summary:
     'A score wrapped around a cylinder and drawn entirely in dots: measure rings, vertical bar dividers, and note clusters that light as a playhead sweeps them. Two cylinders are stacked and turned to different yaws so they never present the same face at once, and both live in one buffer. Nothing uses a depth buffer — every dot is flattened to z = 0 before projection, and solidity comes from alpha and point size falling off with the model-space z.',

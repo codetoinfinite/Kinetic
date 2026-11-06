@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-calendar",
+  "type": "registry:ui",
+  "title": "Date Calendar",
+  "description": "An inline month calendar for one date or a range, with a continuous range band, a today dot and struck-through unavailable days.",
+  "categories": [
+    "form"
+  ],
+  "dependencies": [
+    "react-aria-components@^1.22.1",
+    "@internationalized/date@^3.12.4"
+  ],
+  "registryDependencies": [
+    "https://kinetic.example.com/r/boardui-theme.json",
+    "https://kinetic.example.com/r/cx.json",
+    "https://kinetic.example.com/r/date-picker-shared.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/date-calendar.tsx",
+      "type": "registry:ui",
+      "target": "components/motion/date-calendar.tsx",
+      "content": "/*\n * Adapted from BoardUI — https://github.com/BoardUI/boardui (components/base/date-picker/date-calendar.tsx)\n * Copyright (c) 2026 Mertcan Dundar Esmergul (BoardUI). MIT License.\n * SPDX-License-Identifier: MIT\n */\n\"use client\";\n\nimport { Calendar as AriaCalendar, RangeCalendar as AriaRangeCalendar } from \"react-aria-components\";\nimport type {\n  CalendarProps as AriaCalendarProps,\n  DateValue,\n  RangeCalendarProps as AriaRangeCalendarProps,\n} from \"react-aria-components\";\nimport { MonthPanel } from \"@/lib/date-picker-shared\";\nimport { cx } from \"@/lib/cx\";\n\n/**\n * Date calendar — a month on the page rather than in a popover: pick a day\n * for a booking, a deadline, a range of nights.\n *\n *   <DateCalendar aria-label=\"Delivery date\" value={date} onChange={setDate} />\n *   <DateRangeCalendar aria-label=\"Stay\" value={range} onChange={setRange} />\n *\n * Date Picker's month panel, as is: the card, the 16px month chevrons, the\n * 32px day cells 12px apart with the selected day's accent pill and the\n * range band that bridges the gaps. Today carries a small accent dot, and\n * days ruled out by `isDateUnavailable` are struck through.\n *\n * Built on React Aria's Calendar and RangeCalendar: arrows move by day,\n * Page Up and Page Down by month (with Shift, by year), Home and End to the\n * month's first and last day, and Enter picks. `minValue` and `maxValue`\n * fade the days outside them. Values are dates from @internationalized/date.\n */\n\nexport interface DateCalendarProps<T extends DateValue> extends Omit<AriaCalendarProps<T>, \"className\" | \"children\" | \"visibleDuration\"> {\n  /** Mark today with a dot. Default true. */\n  showToday?: boolean;\n  className?: string;\n}\n\n// #region critical\nexport function DateCalendar<T extends DateValue>({ showToday = true, className, ...props }: DateCalendarProps<T>) {\n  return (\n    <AriaCalendar {...props} className={cx(\"inline-flex outline-none\", className)}>\n      <MonthPanel offset={0} showPrev showNext showToday={showToday} />\n    </AriaCalendar>\n  );\n}\n\nexport interface DateRangeCalendarProps<T extends DateValue>\n  extends Omit<AriaRangeCalendarProps<T>, \"className\" | \"children\" | \"visibleDuration\"> {\n  /** One month, or two side by side (default). They stack when the space is narrow. */\n  visibleMonths?: 1 | 2;\n  /** Mark today with a dot. Default true. */\n  showToday?: boolean;\n  className?: string;\n}\n\nexport function DateRangeCalendar<T extends DateValue>({\n  visibleMonths = 2,\n  showToday = true,\n  className,\n  ...props\n}: DateRangeCalendarProps<T>) {\n  return (\n    <AriaRangeCalendar\n      {...props}\n      visibleDuration={{ months: visibleMonths }}\n      className={cx(\"inline-flex outline-none\", className)}\n    >\n      <div className=\"flex flex-wrap justify-center gap-2\">\n        {visibleMonths === 2 ? (\n          <>\n            <MonthPanel offset={0} showPrev showToday={showToday} />\n            <MonthPanel offset={1} showNext showToday={showToday} />\n          </>\n        ) : (\n          <MonthPanel offset={0} showPrev showNext showToday={showToday} />\n        )}\n      </div>\n    </AriaRangeCalendar>\n  );\n}\n// #endregion\n"
+    }
+  ],
+  "meta": {
+    "category": "form",
+    "kit": "boardui",
+    "cost": "css",
+    "tags": [
+      "calendar",
+      "date",
+      "range",
+      "react-aria",
+      "form",
+      "boardui"
+    ]
+  }
+}

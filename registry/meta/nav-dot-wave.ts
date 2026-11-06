@@ -13,7 +13,6 @@ const meta: ComponentMetaInput = {
     { path: 'registry/ui/nav-dot-wave.tsx', type: 'registry:ui', role: 'component' },
   ],
   dependencies: [],
-  registryDependencies: [],
 
   summary:
     'One keyframe block and N elements. Each nav item writes its own index into an inline `--i`, and the stylesheet turns that index into an animation delay, so a crest travels along the row. Adding a nav item requires no change to the CSS and no JavaScript at all.',

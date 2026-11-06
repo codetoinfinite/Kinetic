@@ -30,7 +30,6 @@ const meta: ComponentMetaInput = {
     },
   ],
   dependencies: ['gsap@^3.15.0'],
-  registryDependencies: [],
 
   summary:
     'Two elements arrive on the same scrubbed trigger from different directions — the copy rises 60px, the panel slides in from the side by 55% of its own width. Because both tweens sit at position 0 of one timeline, their progress is identical at every scroll position, so the pair reads as one composed arrival. The 0.6s scrub lets them keep moving briefly after the wheel stops, which is the difference between weighted and welded.',

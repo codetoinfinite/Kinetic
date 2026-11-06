@@ -103,6 +103,11 @@ export function AsymmetricStagger({
      `show={false}` plays an invisible exit and fires `onExited` — and under
      StrictMode the double-invoked effect fires it a second time. */
   const hasShown = useRef(show);
+  /* One exit per hide. `reduced` is in the effect's dep list because the OS
+     setting is live, so flipping it while the list is already hidden re-entered
+     the exit branch and fired `onExited` a second time — at which point a
+     parent that unmounts its data on that callback unmounts it twice. */
+  const exitPlayed = useRef(false);
 
   // Before paint, not after. A passive effect can land on the far side of the
   // first frame, so a list that starts closed would flash its items once.
@@ -122,17 +127,32 @@ export function AsymmetricStagger({
 
       if (!show && !hasShown.current) return;
 
+      // Re-entering the exit branch for a list that has already gone. The
+      // `revert()` this hook runs before every re-execution has just undone the
+      // exit tween's styles, so the list is visible again and has to be put
+      // back — but it must not animate and must not report a second exit.
+      if (!show && exitPlayed.current) {
+        gsap.set(items, { autoAlpha: 0 });
+        return;
+      }
+
       if (reduced) {
         // No travel and no stagger, but the state change still has to happen
         // or the list is stuck in whichever position it was left in.
         gsap.set(items, { autoAlpha: show ? 1 : 0, y: 0 });
-        if (show) hasShown.current = true;
-        else exited.current?.();
+        if (show) {
+          hasShown.current = true;
+          exitPlayed.current = false;
+        } else {
+          exitPlayed.current = true;
+          exited.current?.();
+        }
         return;
       }
 
       if (show) {
         hasShown.current = true;
+        exitPlayed.current = false;
         // autoAlpha, not opacity: at 0 it also sets visibility:hidden, so a
         // faded-out row cannot still swallow a click meant for what is
         // underneath it.
@@ -152,17 +172,31 @@ export function AsymmetricStagger({
         return;
       }
 
-      gsap.to(items, {
-        autoAlpha: 0,
-        y: -outDistance,
-        duration: outDuration,
-        ease: 'power2.in',
-        // `from: 'end'` reverses the wave. Same-direction staggers on the way
-        // out read as the list re-entering backwards.
-        stagger: { each: outStagger, from: 'end' },
-        overwrite: 'auto',
-        onComplete: () => exited.current?.(),
-      });
+      exitPlayed.current = true;
+      // `fromTo`, not `to`, and the start state is stated rather than read off
+      // the element. This hook reverts its context before every re-run, and
+      // revert restores the inline styles that were on the node BEFORE the
+      // entrance tween — which, for a list that mounted with `show={false}`,
+      // are the `visibility: hidden; opacity: 0` written by the pre-paint set
+      // above. A `to()` therefore tweened a list that was already invisible:
+      // it vanished on the frame the hide was requested and `onExited` still
+      // arrived `outDuration` later. Reaching here at all means the entrance
+      // has run, so fully visible is the honest place to leave from.
+      gsap.fromTo(
+        items,
+        { autoAlpha: 1, y: 0 },
+        {
+          autoAlpha: 0,
+          y: -outDistance,
+          duration: outDuration,
+          ease: 'power2.in',
+          // `from: 'end'` reverses the wave. Same-direction staggers on the way
+          // out read as the list re-entering backwards.
+          stagger: { each: outStagger, from: 'end' },
+          overwrite: 'auto',
+          onComplete: () => exited.current?.(),
+        },
+      );
     },
     root,
     [show, reduced],
